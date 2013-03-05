@@ -1,4 +1,4 @@
-CREATE  TABLE `#__atlete` (
+CREATE IF NOT EXISTS TABLE `#__atlete` (
   `id` VARCHAR(200) NOT NULL COMMENT 'Id' ,
   `first_name` VARCHAR(50) NULL COMMENT 'First name' ,
   `last_name` VARCHAR(50) NULL COMMENT 'Last name' ,
@@ -11,9 +11,9 @@ CREATE  TABLE `#__atlete` (
   `city` VARCHAR(50) NULL COMMENT 'City' ,
   `phone` VARCHAR(50) NULL COMMENT 'Phone' ,
   `email` VARCHAR(50) NULL COMMENT 'Email' ,
-  `other_num_tes` VARCHAR(20) NULL ,
-  `other_ass_name` VARCHAR(50) NULL ,
-  `registration_datetime` DATETIME NULL ,
+  `other_num_tes` VARCHAR(20) NULL COMMENT 'Other federation number',
+  `other_ass_name` VARCHAR(50) NULL COMMENT 'Other federation name',
+  `registration_datetime` DATETIME NULL COMMENT 'Regsitration date time',
   `payment_type` ENUM('bank_transfer','money_order','paypal') NULL COMMENT 'Payment type' ,
   `payment_datetime` DATETIME NULL COMMENT 'Payment datetime, in null not sucesfull' ,
   `payment_confirm_datetime` DATETIME NULL COMMENT 'Payment confirm date time, in null not confirmed' ,

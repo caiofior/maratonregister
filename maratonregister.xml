@@ -52,8 +52,14 @@
 			<!-- Admin Main File Copy Section -->
 			<filename>index.html</filename>
 			<filename>maratonregister.php</filename>
-			<!-- SQL files section -->
-			<folder>sql</folder>
+                        <filename>controller.php</filename>
+                        <folder>sql</folder>
+                        <folder>tables</folder>
+                        <folder>models</folder>
+                        <!-- views files section -->
+                        <folder>views</folder>
+                        <!-- controllers files section -->
+                        <folder>controllers</folder>
 		</files>
 	</administration>
 

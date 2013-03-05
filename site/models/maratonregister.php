@@ -1,5 +1,6 @@
 <?php
 /**
+ * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
  * @version 0.1
  */
@@ -11,7 +12,9 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.modelitem');
 
 /**
- * HelloWorld Model
+ * Maraton Register Model
+ * @author Claudio Fior <caiofior@gmail.com>
+ * @version 0.1
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -77,7 +80,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                     $query
                         ->select('COUNT(id)')
                         ->from('#__atlete')
-                        ->where('id = '. $db->Quote($data['id']));
+                        ->where('removed <> 1 AND id = '. $db->Quote($data['id']));
                     $db->setQuery($query);
                     $db->query();
                     $id = intval($db->loadResult());
