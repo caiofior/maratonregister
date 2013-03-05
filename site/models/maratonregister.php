@@ -126,6 +126,109 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             ->values(implode(',', $values));
                         $db->setQuery($query);
                         $db->query();
+                        $mailer = JFactory::getMailer();
+                        $config = JFactory::getConfig();
+                        $sender = array( 
+                            $config->getValue( 'config.mailfrom' ),
+                            $config->getValue( 'config.fromname' )
+                        );
+                        $mailer->setSender($sender);
+                        $mailer->addRecipient($sender);
+                        $body   = <<<EOT
+<p>Nuova iscrizione alla maratonia dei Borghi</p>
+<table>
+    <tr>
+        <th>Nome e cognome</th>
+        <td>{$data['first_name']} {$data['first_name']}</th>
+    </tr>
+    <tr>
+        <th>Data di nascita</th>
+        <td>{$data['date_of_birth']}</th>
+    </tr>
+    <tr>
+        <th>Sesso</th>
+        <td>{$data['sex']}</th>
+    </tr>
+    <tr>
+        <th>Cittadinanza</th>
+        <td>{$data['citizenship']}</th>
+    </tr>
+    <tr>
+        <th>Indirizzo</th>
+        <td>{$data['address']} {$data['zip']} {$data['city']}</th>
+    </tr>
+    <tr>
+        <th>Telefono</th>
+        <td>{$data['phone']}</th>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{$data['email']}</th>
+    </tr>
+    <tr>
+        <th>Tessera FIDAS</th>
+        <td>{$data['num_tes']}</th>
+    </tr>
+</table>
+<p>Accedi al sito per confermare l'iscrizione, il pagamento e il certificato medico.</p>
+EOT;
+                        $mailer->setSubject('Nuova iscrizione '.$data['first_name'].' '.$data['last_name']);
+                        $mailer->isHTML(true);
+                        $mailer->setBody($body);
+                        $mailer->Send();
+                        if ($data['email'] != '') {
+                             $mailer = JFactory::getMailer();
+                        $config = JFactory::getConfig();
+                        $sender = array( 
+                            $config->getValue( 'config.mailfrom' ),
+                            $config->getValue( 'config.fromname' )
+                        );
+                        $mailer->setSender($sender);
+                        $mailer->addRecipient($data['email']);
+                        $body   = <<<EOT
+<p>Grazie per esserti iscritto alla maratonia dei Borghi, questi sono i dati da te forniti</p>
+<table>
+    <tr>
+        <th>Nome e cognome</th>
+        <td>{$data['first_name']} {$data['first_name']}</th>
+    </tr>
+    <tr>
+        <th>Data di nascita</th>
+        <td>{$data['date_of_birth']}</th>
+    </tr>
+    <tr>
+        <th>Sesso</th>
+        <td>{$data['sex']}</th>
+    </tr>
+    <tr>
+        <th>Cittadinanza</th>
+        <td>{$data['citizenship']}</th>
+    </tr>
+    <tr>
+        <th>Indirizzo</th>
+        <td>{$data['address']} {$data['zip']} {$data['city']}</th>
+    </tr>
+    <tr>
+        <th>Telefono</th>
+        <td>{$data['phone']}</th>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>{$data['email']}</th>
+    </tr>
+    <tr>
+        <th>Tessera FIDAS</th>
+        <td>{$data['num_tes']}</th>
+    </tr>
+</table>
+<p>Per errori o inessattezze contatta l'organizzazione della maratone.</p>
+EOT;
+                        $mailer->setSubject('Grazie per esserti iscritto alla maratonia dei Borghi');
+                        $mailer->isHTML(true);
+                        $mailer->setBody($body);
+                        $mailer->Send();
+                        }
+                        
                     }
                     
             }
