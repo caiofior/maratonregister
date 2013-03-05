@@ -224,7 +224,7 @@ EOT;
         <td>{$data['num_tes']}</th>
     </tr>
 </table>
-<p>Per errori o inessattezze contatta l'organizzazione della maratone.</p>
+<p>Per errori o inesattezze contatta l'organizzazione della maratone.</p>
 EOT;
                         $mailer->setSubject('Grazie per esserti iscritto alla maratonia dei Borghi');
                         $mailer->isHTML(true);

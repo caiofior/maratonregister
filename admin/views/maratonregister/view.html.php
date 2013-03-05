@@ -20,16 +20,29 @@ class MaratonRegisterViewMaratonRegister extends JView
          */
         function display($tpl = null) 
         {
+            
+                if(key_exists('submit',$_REQUEST)) {
+                    $model = $this->getModel();
+                    if (key_exists('xhr', $_REQUEST)) {
+                        $model->checkData($_REQUEST);
+                        header('Cache-Control: no-cache, must-revalidate');
+                        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+                        header('Content-type: application/json');
+                        echo json_encode($model->getErrors());
+                        exit;
+                    } else {
+                        $model->setData($_REQUEST);
+                    }
+                }
+                $item = $this->get('Item');
+                if (key_exists('id', $_REQUEST))
+                    $item->load($_REQUEST['id']);
+                $this->item = $item;
                 // Get data from the model
                 $items = $this->get('Items');
                 $pagination = $this->get('Pagination');
  
-                // Check for errors.
-                if (count($errors = $this->get('Errors'))) 
-                {
-                        JError::raiseError(500, implode('<br />', $errors));
-                        return false;
-                }
+                
                 // Assign data to the view
                 $this->items = $items;
                 $this->pagination = $pagination;
@@ -37,14 +50,13 @@ class MaratonRegisterViewMaratonRegister extends JView
                 // Display the template
                 parent::display($tpl);
         }
+
         /**
          * Setting the toolbar
          */
         protected function addToolBar() 
         {
                 JToolBarHelper::title('Iscritti');
-                JToolBarHelper::deleteList('', 'maratonregister.delete');
-                JToolBarHelper::editList('maratonregister.edit');
                 JToolBarHelper::addNew('maratonregister.add');
                 JToolBarHelper::custom('maratonregister.export','test','','Esporta',false);
         }

@@ -57,4 +57,5 @@ class MaratonRegisterControllerMaratonRegister extends JControllerForm
         }
         exit;
     }
+
 }
