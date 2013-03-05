@@ -40,12 +40,12 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                     $this->errors['medical_certificate']=array(
                     'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
                     );
-                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/',$_FILES['medical_certificate']['name']))
+                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['medical_certificate']['name']))
                     $this->errors['medical_certificate']=array(
                      'message'=>'Puoi inviare il certificato come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
                     );
                 else {
-                    $filename = preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name']));
+                    $filename = time().'_'.preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name']));
                     $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'medical_certificate';
                     if(!is_dir($destination)) {
                         if(!mkdir ($destination, 0777))
@@ -53,6 +53,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                          'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
                         );
                     }
+                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
                     $destination .= DIRECTORY_SEPARATOR.$filename;
                     if (!move_uploaded_file($_FILES['medical_certificate']['tmp_name'], $destination))
                         $this->errors['medical_certificate']=array(
@@ -66,10 +67,10 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
             }
             if (sizeof($this->errors) == 0) {
                     if ($data['num_tes'] == '')
-                        $data['id']=$data['first_name'].'_'.$data['last_name'].'_'.$data['date_of_birth'];
+                        $data['id']=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
                     else
                         $data['id']=$data['num_tes'];
-                    $data['id']=  preg_replace('/[^a-z_0-9\.]/','_',strtolower($data['id']));
+                    $data['id']=  preg_replace('/[^a-z_0-9\.\-]/','_',strtolower($data['id']));
                     $data['registration_datetime']='NOW()';
                     $db = JFactory::getDbo();
                     $query = $db->getQuery(true);
@@ -135,6 +136,8 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
          * @param array $data
          */
         public function checkData($data) {
+            foreach ($data as $key=>$value)
+                $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
             if ($data['num_tes'] != '') {
                 if (strlen($data['num_tes']) <> 8)
                   $errors['num_tes']=array(
@@ -150,9 +153,17 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                   $errors['first_name']=array(
                       'message'=>'Il nome è richiesto'
                   );
+                else if (strlen($data['first_name'])>50)
+                    $errors['first_name']=array(
+                      'message'=>'Il nome può avere al massimo 50 caratteri'
+                  );
                 if ($data['last_name'] == '')
                   $errors['last_name']=array(
                       'message'=>'Il cognome è richiesto'
+                  );
+                else if (strlen($data['last_name'])>50)
+                    $errors['last_name']=array(
+                      'message'=>'Il cognome può avere al massimo 50 caratteri'
                   );
                 if ($data['sex'] == '')
                   $errors['female']=array(
@@ -162,21 +173,41 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                   $errors['citizenship']=array(
                       'message'=>'La cittadinanza è richiesta'
                   );
+                else if (strlen($data['citizenship'])>50)
+                    $errors['citizenship']=array(
+                      'message'=>'La cittadinanaza può avere al massimo 50 caratteri'
+                  );
                 if ($data['address'] == '')
                   $errors['address']=array(
                       'message'=>'La via è richiesta'
+                  );
+                else if (strlen($data['address'])>50)
+                    $errors['address']=array(
+                      'message'=>'L\'indirizzo può avere al massimo 50 caratteri'
                   );
                 if ($data['zip'] == '')
                   $errors['zip']=array(
                       'message'=>'Il CAP è richiesto'
                   );
+                else if (!preg_match('/^[0-9]{5}$/', $data['zip']))
+                    $errors['zip']=array(
+                      'message'=>'Il CAP è errato'
+                  );
                 if ($data['city'] == '')
                   $errors['city']=array(
                       'message'=>'La città è richiesta'
                   );
+                else if (strlen($data['city'])>50)
+                    $errors['city']=array(
+                      'message'=>'La città può avere al massimo 50 caratteri'
+                  );
                 if ($data['phone'] == '')
                   $errors['phone']=array(
                       'message'=>'Il telefono è richiesto'
+                  );
+                else if (!preg_match('/^[ \+0-9]+$/', $data['phone']))
+                    $errors['phone']=array(
+                      'message'=>'Il telefono può contenere numeri, spazi e +'
                   );
                 if ($data['medical_certificate'] == '' && sizeof($_FILES) ==0)
                   $errors['medical_certificate']=array(
@@ -192,7 +223,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                       'message'=>'La modalità di pagamento è richiesta'
                   );
             if ($data['email'] != '') {
-                if (!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/', $_REQUEST['email']))
+                if (!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/', $data['email']))
                   $errors['email']=array(
                       'message'=>'La mail non è valida'
                   );  
