@@ -20,7 +20,7 @@ class MaratonRegisterController extends JController
          *
          * @return void
          */
-        function display($cachable = false) 
+        public function display($cachable = false) 
         {
                 // set default view if not set
                 $input = JFactory::getApplication()->input;
@@ -28,5 +28,29 @@ class MaratonRegisterController extends JController
                 
                 // call parent behavior
                 parent::display($cachable);
+        }
+        /**
+         * Manages fidal task
+         * @param type $cachable
+         */
+        public function fidal($cachable = false)  {
+               // set default view if not set
+                $input = JFactory::getApplication()->input;
+                $input->set('view', 'fidal');
+
+                // call parent behavior
+                parent::display($cachable);
+        }
+
+        public function import () {
+                            
+                // set default view if not set
+                $input = JFactory::getApplication()->input;
+                $input->set('view', 'import');
+                // call parent behavior
+                parent::display($cachable);
+        }
+        public function stats($cachable = false)  {
+            die('HI');
         }
 }

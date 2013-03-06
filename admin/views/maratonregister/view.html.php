@@ -1,5 +1,6 @@
 <?php
 /**
+ * Maraton Register View
  * @author Claudio Fior <caiofior@gmail.com>
  * @version 0.1
  */
@@ -10,12 +11,14 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.view');
  
 /**
- * HelloWorlds View
+ * Maraton Register View
+ * @author Claudio Fior <caiofior@gmail.com>
+ * @version 0.1
  */
 class MaratonRegisterViewMaratonRegister extends JView
 {
         /**
-         * HelloWorlds view display method
+         * Maraton Register view display method
          * @return void
          */
         function display($tpl = null) 

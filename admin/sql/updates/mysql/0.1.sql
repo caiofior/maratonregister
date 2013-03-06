@@ -4,6 +4,7 @@ CREATE IF NOT EXISTS  TABLE `#__atlete` (
   `last_name` VARCHAR(50) NULL COMMENT 'Last name' ,
   `date_of_birth` DATE NULL COMMENT 'Date of birth' ,
   `num_tes` VARCHAR(8) NULL COMMENT 'Fidal id' ,
+  `num_tes_datetime_confirmed` datetime DEFAULT NULL COMMENT 'Fidal confirmation datetime',
   `sex` VARCHAR(1) NULL ,
   `citizenship` VARCHAR(50) NULL COMMENT 'Citizenship' ,
   `address` VARCHAR(50) NULL COMMENT 'Address' ,
@@ -33,3 +34,18 @@ CREATE IF NOT EXISTS  TABLE `#__atlete` (
   INDEX `city` (`city` ASC) )
 ENGINE = InnoDB
 COMMENT = 'Atlete table';
+
+CREATE TABLE IF NOT EXISTS `#__fidal_fella` (
+  `num_tes` VARCHAR(8) NOT NULL COMMENT 'Card number',
+  `categ` VARCHAR(4) NULL COMMENT 'Category',
+  `cod_soc` VARCHAR(5) NULL COMMENT 'Code society',
+  `denom` VARCHAR(50) NULL COMMENT 'Society name',
+  `dat_mov` DATE NULL COMMENT 'Date',
+  `cogn` VARCHAR(50) NULL COMMENT 'Last name',
+  `nome` VARCHAR(50) NULL COMMENT 'First name',
+  `dat_nas` DATE NULL COMMENT 'Date of birth',
+  `stran` VARCHAR(1) NULL COMMENT 'Stranger',
+  `cod_reg` VARCHAR(3) NULL COMMENT 'Region code',
+  PRIMARY KEY (`num_tes`) )
+ENGINE = InnoDB
+COMMENT = 'Data of fidal fella';
