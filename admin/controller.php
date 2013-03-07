@@ -41,7 +41,22 @@ class MaratonRegisterController extends JController
                 // call parent behavior
                 parent::display($cachable);
         }
+        /**
+         * Manages fidal task
+         * @param type $cachable
+         */
+        public function statistics($cachable = false)  {
+               // set default view if not set
+                $input = JFactory::getApplication()->input;
+                $input->set('view', 'statistics');
 
+                // call parent behavior
+                parent::display($cachable);
+        }
+        /**
+         * Manages import task
+         * @param type $cachable
+         */
         public function import () {
                             
                 // set default view if not set
@@ -50,7 +65,16 @@ class MaratonRegisterController extends JController
                 // call parent behavior
                 parent::display($cachable);
         }
-        public function stats($cachable = false)  {
-            die('HI');
+        /**
+         * Gets the new pectoral number
+         */
+        public function generate_pectoral() {
+            $model = $this->getModel();
+            $table = $model->getTable();
+            header('Cache-Control: no-cache, must-revalidate');
+            header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+            header('Content-type: application/json');
+            echo json_encode($table->getPectoral());
+            exit;
         }
 }

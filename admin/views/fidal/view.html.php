@@ -18,7 +18,7 @@ jimport('joomla.application.component.view');
 class MaratonRegisterViewFidal extends JView
 {
         /**
-         * HelloWorlds view display method
+         * Fidal view display method
          * @return void
          */
         function display($tpl = null) 

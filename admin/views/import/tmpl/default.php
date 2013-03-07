@@ -46,9 +46,11 @@ if (key_exists('submit', $_REQUEST) && key_exists('file', $_REQUEST)) {
             );
             $n =0;
             $db = JFactory::getDbo();
-
+            $query = $db->getQuery(true);
+            $db->setQuery('START TRANSACTION;');
+            $db->query();
             while (($row = fgetcsv($file, 1000, ';')) !== false) {
-                
+                set_time_limit(0);
                 if ($n == 0) {
                     foreach ($row as $key=>$value)
                         $headers[$key] =  strtolower ($value); 
@@ -79,10 +81,14 @@ if (key_exists('submit', $_REQUEST) && key_exists('file', $_REQUEST)) {
                     ob_flush();
                     flush();
                     echo '<p>Elaborazione in corso '.intval(ftell($file)/$last*100).' %</p>';
+                    echo str_repeat(' ', 1000);
                     ob_flush();
                     flush();
                 }
             }
+            $query = $db->getQuery(true);
+            $db->setQuery('COMMIT;');
+            $db->query();
             }
 
         }

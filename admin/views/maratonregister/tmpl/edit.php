@@ -64,21 +64,33 @@ JHtml::_('behavior.tooltip');
         <?php if (key_exists('phone', $errors)) echo '<p class="error">'.$errors['phone']['message'].'</p>';?>
     </fieldset>
     <fieldset id="medical_certificate_container">
+    <?php
+        $medical_certificate_fname = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
+                'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'medical_certificate'.DIRECTORY_SEPARATOR.
+                $this->item->medical_certificate_fname;
+        if (is_file($medical_certificate_fname)) : ?>
+        <a target="_blank" href="<?php echo 
+                '../components/com_maratonregister/medical_certificate/'.
+                $this->item->medical_certificate_fname; ?>">Certificato medico</a></br>
+    <label for="medical_certificate_confirm_datetime">Conferma certificato medico</label>
+    <input <?php echo ($this->item->medical_certificate_confirm_datetime != '' ? 'checked="checked"' : ''); ?> type="checkbox" id="medical_certificate_confirm_datetime" name="medical_certificate_confirm_datetime" value ="1" />
+    <?php else : ?>
     <label for="medical_certificate">Certificato Medico</label>
     <input type="file" id="medical_certificate" name="medical_certificate" value ="" />
         <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
-    <label for="medical_certificate_confirm_datetime">Conferma certificato medico</label>
-    <input <?php echo ($this->item->medical_certificate_confirm_datetime != '' ? 'checked="checked"' : ''); ?> type="checkbox" id="medical_certificate_confirm_datetime" name="medical_certificate_confirm_datetime" value ="1" />
-
+    <?php endif; ?>
     </fieldset>
     <fieldset id="payment_type_container">
     <legend>Modalità di pagamento</legend>
+    <?php $disabled= ''; 
+    if ($this->item->payment_confirm_datetime != '')
+        $disabled= 'disabled="disabled"';  ?>
     <label for="bank_transfer">Bonifico bancario</label>
-    <input <?php echo ($this->item->payment_type == 'bank_transfer' ? 'checked="checked"' : ''); ?> type="radio" id="bank_transfer" name="payment_type" value ="bank_transfer" />
+    <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'bank_transfer' ? 'checked="checked"' : ''); ?> type="radio" id="bank_transfer" name="payment_type" value ="bank_transfer" />
     <label for="money_order">Bollettino postale</label>
-    <input <?php echo ($this->item->payment_type == 'money_order' ? 'checked="checked"' : ''); ?> type="radio" id="money_order" name="payment_type" value ="money_order" />
+    <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'money_order' ? 'checked="checked"' : ''); ?> type="radio" id="money_order" name="payment_type" value ="money_order" />
     <label for="paypal">Paypal</label>
-    <input <?php echo ($this->item->payment_type == 'paypal' ? 'checked="checked"' : ''); ?> type="radio" id="paypal" name="payment_type" value="paypal" />
+    <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'paypal' ? 'checked="checked"' : ''); ?> type="radio" id="paypal" name="payment_type" value="paypal" />
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
     <label for="payment_confirm_datetime">Conferma pagamento</label>
     <input <?php echo ($this->item->payment_confirm_datetime != '' ? 'checked="checked"' : ''); ?> type="checkbox" id="payment_confirm_datetime" name="payment_confirm_datetime" value ="1" />
@@ -90,9 +102,10 @@ JHtml::_('behavior.tooltip');
     </fieldset>
     <fieldset id="pectoral_container">
     <label for="pectoral">Pettorale</label>
-    <input id="pectoral" name="pectoral" value ="<?php echo $this->item->getPectoral(); ?>" />
+    <input id="pectoral" name="pectoral" value ="<?php echo $this->item->pectoral; ?>" /><br/>
+    <a id="generate_pectoral" href="#">Genera un pettorale</a>
     </fieldset>    
-    <input type="submit" id="submit" name="submit" value="Registrati"/>
+    <input type="submit" id="submit" name="submit" value="Salva"/>
 </form>
 <script type="text/javascript">
     $("fidal").addEvent("click", function(){
@@ -128,12 +141,21 @@ JHtml::_('behavior.tooltip');
         $("num_tes_container").setStyle("display", "none");
         return false;
     });
+    $("generate_pectoral").addEvent("click", function(){
+        new Request.JSON({
+            url:"index.php?option=com_maratonregister&task=generate_pectoral",
+            onSuccess: function (responseJSON) {
+                $("pectoral").setProperty("value",responseJSON);
+            }
+         }).send();
+        return false;
+    });
     $("submit").addEvent("click", function(){
          status = true;
          el = $("registration").getElements("p").destroy();
          new Request.JSON({
             async:false,
-            url:$("registration").get("action")+"&submit=1&xhr=1&medical_certificate="+$("medical_certificate").get("value"),
+            url:$("registration").get("action")+"&submit=1&xhr=1",
             data: $("registration").toQueryString(),
             onSuccess: function (responseJSON) {
                 Object.each(responseJSON,function(object,id) {

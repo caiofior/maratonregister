@@ -58,7 +58,7 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 // Select some fields
                 $query->select('id,first_name,last_name,date_of_birth,num_tes,city,registration_datetime');
                 // From the hello table
-                $query->from('#__atlete');
+                $query->from('#__atlete')->where('removed =0');
                 return $query;
         }
         /**
@@ -67,7 +67,14 @@ class MaratonRegisterModelMaratonRegister extends JModelList
          */
         public function setData($data) {
             $this->checkData($data);
-            if ( $data['num_tes'] == '' && !key_exists('medical_certificate',$_FILES)) {
+            $atlete = $this->getTable();
+            if(key_exists('id', $data) && $data['id']!='')
+                $atlete->load($data['id']);
+            if ( 
+                    $data['num_tes'] == '' &&
+                    !key_exists('medical_certificate',$_FILES) &&
+                    $atlete->medical_certificate_fname == ''
+                    ) {
                 $this->errors['medical_certificate']=array(
                     'message'=>'Il certificato medico è richiesto'
                 );
@@ -80,8 +87,11 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                     $this->errors['medical_certificate']=array(
                      'message'=>'Puoi inviare il certificato come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
                     );
-                else {
+                else if (key_exists('medical_certificate',$_FILES)) {
                     $filename = time().'_'.preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name']));
+                    
+                    $medical_certificate_fname = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
+                    'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'medical_certificate';
                     $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'medical_certificate';
                     if(!is_dir($destination)) {
                         if(!mkdir ($destination, 0777))
@@ -101,16 +111,56 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                     
                 }
             }
+            if ($data['medical_certificate_confirm_datetime'] == 1)
+                $data['medical_certificate_confirm_datetime']='NOW()';
+            else 
+                unset ($data['medical_certificate_confirm_datetime']);
+            
+            if ($data['payment_confirm_datetime'] == 1)
+                $data['payment_confirm_datetime']='NOW()';
+            else 
+                unset ($data['payment_confirm_datetime']);
+            
+            if ($data['num_tes_datetime_confirmed'] == 1)
+                $data['num_tes_datetime_confirmed']='NOW()';
+            else 
+                unset ($data['num_tes_datetime_confirmed']);
+            
             if (sizeof($this->errors) == 0) {
-                    if ($data['num_tes'] == '')
-                        $data['id']=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
-                    else
-                        $data['id']=$data['num_tes'];
-                    $data['id']=  preg_replace('/[^a-z_0-9\.\-]/','_',strtolower($data['id']));
-                    $data['registration_datetime']='NOW()';
+                $columns = array(
+                            'id',
+                            'first_name' ,
+                            'last_name',
+                            'date_of_birth',
+                            'num_tes' ,
+                            'num_tes_datetime_confirmed' ,
+                            'sex' ,
+                            'citizenship' ,
+                            'address' ,
+                            'zip' ,
+                            'city' ,
+                            'phone' ,
+                            'email' ,
+                            'registration_datetime',
+                            'other_num_tes' ,
+                            'other_ass_name' ,
+                            'payment_type' ,
+                            'payment_confirm_datetime' ,
+                            'medical_certificate_fname',
+                            'medical_certificate_datetime',
+                            'medical_certificate_confirm_datetime',
+                            'pectoral'
+                        );
                     $db = JFactory::getDbo();
                     $query = $db->getQuery(true);
-                    $query
+                    if ($atlete->id == '') {
+                        if ($data['num_tes'] == '')
+                            $data['id']=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
+                        else
+                            $data['id']=$data['num_tes'];
+                         $data['id']=  preg_replace('/[^a-z_0-9\.\-]/','_',strtolower($data['id']));
+                        $data['registration_datetime']='NOW()';
+                        $query
                         ->select('COUNT(id)')
                         ->from('#__atlete')
                         ->where('removed <> 1 AND id = '. $db->Quote($data['id']));
@@ -124,32 +174,15 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                     }
                     else {
                         $query = $db->getQuery(true);
-                        $columns = array(
-                            'id',
-                            'first_name' ,
-                            'last_name',
-                            'date_of_birth',
-                            'num_tes' ,
-                            'sex' ,
-                            'citizenship' ,
-                            'address' ,
-                            'zip' ,
-                            'city' ,
-                            'phone' ,
-                            'email' ,
-                            'registration_datetime',
-                            'other_num_tes' ,
-                            'other_ass_name' ,
-                            'payment_type' ,
-                            'medical_certificate_fname',
-                            'medical_certificate_datetime'
-                        );
                         $values = array();
                         foreach ($columns as $column) {
                             if (!key_exists($column, $data)) continue;
                             if (
                                     $column == 'registration_datetime' ||
-                                    $column == 'medical_certificate_datetime'
+                                    $column == 'medical_certificate_datetime' ||
+                                    $column == 'medical_certificate_confirm_datetime' ||
+                                    $column == 'num_tes_datetime_confirmed' ||
+                                    $column == 'payment_confirm_datetime'
                                 )
                                 $values[$column]=$data[$column];
                             else
@@ -162,9 +195,18 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                             ->values(implode(',', $values));
                         $db->setQuery($query);
                         $db->query();
-                        
-                        
                     }
+
+                } else {
+                    $query->update('#__atlete');
+                    foreach ($data as $column=>$value) {
+                        if (!in_array($column, $columns) || $column == 'id') continue;
+                        $query->set($db->quoteName($column).' = '.$db->quote($value));
+                    }
+                    $query->where('id='.$db->quote($atlete->id));
+                    $db->setQuery($query);
+                    $db->query();
+                }
                     
             }
             
@@ -174,6 +216,9 @@ class MaratonRegisterModelMaratonRegister extends JModelList
          * @param array $data
          */
         public function checkData($data) {
+            $atlete = $this->getTable();
+            if(key_exists('id', $data) && $data['id']!='')
+                $atlete->load($data['id']);
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
             if ($data['num_tes'] != '') {
@@ -247,7 +292,10 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                     $errors['phone']=array(
                       'message'=>'Il telefono può contenere numeri, spazi e +'
                   );
-                if ($data['medical_certificate'] == '' && sizeof($_FILES) ==0)
+                if (
+                        $data['medical_certificate'] == '' &&
+                        sizeof($_FILES) ==0 && 
+                        $atlete->medical_certificate_fname == '' )
                   $errors['medical_certificate']=array(
                       'message'=>'Il certificato medico è richiesto'
                   );
@@ -256,7 +304,10 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                   $errors['date_of_birth']=array(
                       'message'=>'La data di nascita è richiesta'
                   );
-            if ($data['payment_type'] == '')
+            if (
+                    $data['payment_type'] == '' &&
+                    $atlete->payment_confirm_datetime == ''
+                    )
                   $errors['paypal']=array(
                       'message'=>'La modalità di pagamento è richiesta'
                   );

@@ -43,7 +43,11 @@
 
 	<administration>
 		<!-- Administration Menu Section -->
-		<menu>Maraton Register</menu>
+		<menu link="option=com_maratonregister">Maraton Register</menu>
+                <submenu>
+                    <menu link="com_maratonregister&task=fidal" >Iscritti FIDAL</menu>
+                    <menu link="com_maratonregister&task=statistics" >Statistiche</menu>
+                </submenu>
 		<!-- Administration Main File Copy Section -->
 		<!-- Note the folder attribute: This attribute describes the folder
 			to copy FROM in the package to install therefore files copied

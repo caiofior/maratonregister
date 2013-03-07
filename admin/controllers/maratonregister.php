@@ -25,7 +25,7 @@ class MaratonRegisterControllerMaratonRegister extends JControllerForm
         $query->select('*');
 
         // From the hello table
-        $query->from('#__atlete');
+        $query->from('#__atlete')->where('removed=0');
         $db->setQuery($query);
         $atletes = $db->query();
         header('Content-type: application/ms-excel');

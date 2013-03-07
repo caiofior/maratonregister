@@ -15,18 +15,18 @@ jimport('joomla.application.component.view');
  * @author Claudio Fior <caiofior@gmail.com>
  * @version 0.1
  */
-class MaratonRegisterViewImport extends JView
+class MaratonRegisterViewStatistics extends JView
 {
         /**
-         * Import view display method
+         * Statistic view display method
          * @return void
          */
         function display($tpl = null) 
         {
+            
                 // Display the template
                 parent::display($tpl);
         }
-
 
 
 }
