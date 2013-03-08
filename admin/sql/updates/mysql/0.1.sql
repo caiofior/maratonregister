@@ -1,4 +1,4 @@
-CREATE IF NOT EXISTS  TABLE `#__atlete` (
+CREATE TABLE  IF NOT EXISTS `#__atlete` (
   `id` VARCHAR(200) NOT NULL COMMENT 'Id' ,
   `first_name` VARCHAR(50) NULL COMMENT 'First name' ,
   `last_name` VARCHAR(50) NULL COMMENT 'Last name' ,
@@ -24,19 +24,19 @@ CREATE IF NOT EXISTS  TABLE `#__atlete` (
   `pectoral` INT NULL COMMENT 'Pectoral number' ,
   `removed` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'Removed items' ,
   PRIMARY KEY (`id`, `removed`) COMMENT 'Id must be unique',
-  UNIQUE KEY `pectoral` (`pectoral`,`removed`) COMMENT 'Pectoral must be unique' ,
-INDEX `first_name` (`first_name` ASC) ,
+  INDEX `first_name` (`first_name` ASC) ,
   INDEX `last_name` (`last_name` ASC) ,
   INDEX `date_of_birt` (`date_of_birth` ASC) ,
   INDEX `phone` (`phone` ASC) ,
   INDEX `email` (`email` ASC) ,
-  INDEX `city` (`city` ASC) ),
-  INDEX `num_tes` (`num_tes`),
-  INDEX `pectoral` (`pectoral`)
+  INDEX `city` (`city` ASC),
+  INDEX `num_tes` (`num_tes` ASC),
+  INDEX `pectoral` (`pectoral` ASC)
+)
 ENGINE = InnoDB
 COMMENT = 'Atlete table';
 
-CREATE TABLE IF NOT EXISTS `#__fidal_fella` (
+CREATE TABLE  IF NOT EXISTS`#__fidal_fella` (
   `num_tes` VARCHAR(8) NOT NULL COMMENT 'Card number',
   `categ` VARCHAR(4) NULL COMMENT 'Category',
   `cod_soc` VARCHAR(5) NULL COMMENT 'Code society',
