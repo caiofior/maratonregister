@@ -23,8 +23,11 @@ class MaratonRegisterViewMaratonRegister extends JView
          */
         function display($tpl = null) 
         {
-            
-                if(key_exists('submit',$_REQUEST)) {
+                if(
+                        key_exists('submit',$_REQUEST) || (
+                        key_exists('task', $_REQUEST) &&
+                        $_REQUEST['task']=='save'
+                        )) {
                     $model = $this->getModel();
                     if (key_exists('xhr', $_REQUEST)) {
                         $model->checkData($_REQUEST);
@@ -38,8 +41,46 @@ class MaratonRegisterViewMaratonRegister extends JView
                     }
                 }
                 $item = $this->get('Item');
-                if (key_exists('id', $_REQUEST))
+                if (
+                        key_exists('task', $_REQUEST) &&
+                        $_REQUEST['task']=='trash' && 
+                        key_exists('cid', $_REQUEST)
+                        ) {
+                    if (!is_array($_REQUEST['cid']))
+                        $_REQUEST['cid']=array($_REQUEST['cid']);
+                    foreach($_REQUEST['cid'] as $id) {
+                        $db = JFactory::getDbo();
+                        $query = $db->getQuery(true);
+                        $query->delete('#__atlete')->where(' id='.$db->quote($id).' AND removed = 1');
+                        $db->setQuery($query);
+                        $db->query();
+                        $query = $db->getQuery(true);
+                        $query->update('#__atlete')
+                                ->set('removed=1')
+                                ->where('id='.$db->quote($id).' AND removed <> 1');
+                        $db->setQuery($query);
+                        $db->query();
+                    }
+
+                }
+                
+                if (key_exists('id', $_REQUEST)) {
                     $item->load($_REQUEST['id']);
+                }
+                if (
+                        key_exists('layout',$_REQUEST) &&
+                        $_REQUEST['layout'] == 'edit'
+                 ){
+                    JToolBarHelper::title('Iscritti');
+                    JToolBarHelper::save('save');
+                    JToolBarHelper::cancel('cancel');
+                    
+                } else {
+                    JToolBarHelper::title('Iscritti');
+                    JToolBarHelper::addNew('maratonregister.add');
+                    JToolBarHelper::trash('maratonregister.trash');
+                    JToolBarHelper::custom('maratonregister.export','icon-32-edit','','Esporta',false);
+                }
                 $this->item = $item;
                 // Get data from the model
                 $items = $this->get('Items');
@@ -49,18 +90,9 @@ class MaratonRegisterViewMaratonRegister extends JView
                 // Assign data to the view
                 $this->items = $items;
                 $this->pagination = $pagination;
-                $this->addToolBar();
                 // Display the template
                 parent::display($tpl);
         }
 
-        /**
-         * Setting the toolbar
-         */
-        protected function addToolBar() 
-        {
-                JToolBarHelper::title('Iscritti');
-                JToolBarHelper::addNew('maratonregister.add');
-                JToolBarHelper::custom('maratonregister.export','test','','Esporta',false);
-        }
+
 }

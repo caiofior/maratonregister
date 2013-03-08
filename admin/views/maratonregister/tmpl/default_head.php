@@ -7,7 +7,7 @@ defined('_JEXEC') or die('Restricted Access');
                 Identificativo
         </th>
         <th width="20">
-                <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />
+                <input type="checkbox" name="checkall-toggle" value="" alt="Seleziona tutti" onclick="Joomla.checkAll(this);" />
         </th>                   
         <th>
                 Nome e Cognome
@@ -25,6 +25,6 @@ defined('_JEXEC') or die('Restricted Access');
                 Data regsitrazione
         </th>
         <th>
-                Azioni
+                Modifica
         </th>
 </tr>

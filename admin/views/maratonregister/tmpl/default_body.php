@@ -26,8 +26,9 @@ defined('_JEXEC') or die('Restricted Access');
                         <?php echo $item->registration_datetime; ?>
                 </td>
                 <td>
-                    <a href="<?php echo JRoute::_('?option=com_maratonregister&view=maratonregister&layout=edit&id='.$item->id); ?>">
-							Modifica</a>
+                    <a  class="toolbar" href="<?php echo JRoute::_('?option=com_maratonregister&view=maratonregister&layout=edit&id='.$item->id); ?>">
+                        <span style="display: block; width: 32px; height: 32px;" class="icon-32-edit"></span>
+                    </a>
                 </td>
         </tr>
 <?php endforeach; ?>

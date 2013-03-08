@@ -22,7 +22,15 @@ class MaratonRegisterController extends JController
          */
         public function display($cachable = false) 
         {
-                // set default view if not set
+                if (
+                        key_exists('task', $_REQUEST) &&
+                        $_REQUEST['task']=='cancel'
+                        ) {
+                            unset($_REQUEST['layout']);
+                            $input = JFactory::getApplication()->input;
+                            $input->set('view', 'MaratonRegister');
+                            
+                        }
                 $input = JFactory::getApplication()->input;
                 $input->set('view', $input->getCmd('view', 'MaratonRegister'));
                 

@@ -334,7 +334,21 @@ EOT;
                       'message'=>'La mail non è valida'
                   );  
             }
-            
+            if ($data['num_tes'] != '') {
+                $db = JFactory::getDbo();
+                $query = $db->getQuery(true);
+                    $query
+                    ->select('COUNT(id)')
+                    ->from('#__atlete')
+                    ->where('removed <> 1 AND num_tes = '. $db->Quote($data['num_tes']));
+                    $db->setQuery($query);
+                    $db->query();
+                    if (intval($db->loadResult()) > 0) {
+                        $errors['num_tes']=array(
+                            'message'=>'Risulti gà iscritto'
+                        ); 
+                        }
+            }
             if (sizeof($errors) ==0) {
                 $this->data = $data;
             }

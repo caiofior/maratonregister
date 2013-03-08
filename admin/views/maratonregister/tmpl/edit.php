@@ -4,7 +4,7 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('behavior.tooltip');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_maratonregister&layout=edit&id='.$this->item->id); ?>"
-      method="post" id="registration" name="registration" enctype="multipart/form-data" >
+      method="post" id="adminForm" name="adminForm" enctype="multipart/form-data" >
     <a id="fidal" href="?option=com_maratonregister">Tesserato Fidal</a>
     <a id="other_ass" href="?option=com_maratonregister">Tesserato altra federazione</a>
     <a id="amateur" href="?option=com_maratonregister">Amatore</a>
@@ -105,7 +105,7 @@ JHtml::_('behavior.tooltip');
     <input id="pectoral" name="pectoral" value ="<?php echo $this->item->pectoral; ?>" /><br/>
     <a id="generate_pectoral" href="#">Genera un pettorale</a>
     </fieldset>    
-    <input type="submit" id="submit" name="submit" value="Salva"/>
+    <input type="hidden" id="task" name="task" value="maratonregister.add" />
 </form>
 <script type="text/javascript">
     $("fidal").addEvent("click", function(){
@@ -150,13 +150,19 @@ JHtml::_('behavior.tooltip');
          }).send();
         return false;
     });
-    $("submit").addEvent("click", function(){
+    $("adminForm").addEvent("submit", function(){
+         if ($("task").get("value") !== "save")
+             return;
          status = true;
-         el = $("registration").getElements("p").destroy();
+         el = this.getElements("p").destroy();
+         mc = "";
+         mc_el = $("medical_certificate");
+         if (typeof mc_el == "object")
+            mc = "&medical_certificate="+mc_el.get("value");
          new Request.JSON({
             async:false,
-            url:$("registration").get("action")+"&submit=1&xhr=1",
-            data: $("registration").toQueryString(),
+            url:this.get("action")+"&submit=1&xhr=1"+mc,
+            data: this.toQueryString(),
             onSuccess: function (responseJSON) {
                 Object.each(responseJSON,function(object,id) {
                     status = false;
@@ -168,6 +174,8 @@ JHtml::_('behavior.tooltip');
                 
             }
          }).send();
-        return status;
-    });
+         if (status == false)
+            throw new Error("Not valid");
+
+});
     </script> 

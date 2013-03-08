@@ -24,14 +24,15 @@ CREATE IF NOT EXISTS TABLE `#__atlete` (
   `pectoral` INT NULL COMMENT 'Pectoral number' ,
   `removed` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'Removed items' ,
   PRIMARY KEY (`id`, `removed`) COMMENT 'Id must be unique',
-  UNIQUE KEY `pectoral` (`pectoral`,`removed`) COMMENT 'Pectoral must be unique' ,
-  UNIQUE INDEX `num_tes` (`num_tes` ASC, `removed` ASC)  COMMENT ' Fidal id must be unique' ,
+  
   INDEX `first_name` (`first_name` ASC) ,
   INDEX `last_name` (`last_name` ASC) ,
   INDEX `date_of_birt` (`date_of_birth` ASC) ,
   INDEX `phone` (`phone` ASC) ,
   INDEX `email` (`email` ASC) ,
-  INDEX `city` (`city` ASC) )
+  INDEX `city` (`city` ASC) ),
+  INDEX `num_tes` (`num_tes`),
+  INDEX `pectoral` (`pectoral`)
 ENGINE = InnoDB
 COMMENT = 'Atlete table';
 

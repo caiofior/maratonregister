@@ -17,6 +17,9 @@ jimport('joomla.application.component.controllerform');
  */
 class MaratonRegisterControllerMaratonRegister extends JControllerForm
 {
+    /**
+     * Managges export data
+     */
     public function export () {
         $db = JFactory::getDBO();
         $query = $db->getQuery(true);
@@ -25,7 +28,7 @@ class MaratonRegisterControllerMaratonRegister extends JControllerForm
         $query->select('*');
 
         // From the hello table
-        $query->from('#__atlete')->where('removed=0');
+        $query->from('#__atlete')->where('removed=0 OR removed IS NULL');
         $db->setQuery($query);
         $atletes = $db->query();
         header('Content-type: application/ms-excel');
