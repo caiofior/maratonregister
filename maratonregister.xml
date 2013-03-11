@@ -3,14 +3,14 @@
 
 	<name>Maraton Register</name>
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>2013-03-01</creationDate>
+	<creationDate>2013-03-11</creationDate>
 	<author>Claudio Fior</author>
 	<authorEmail>caiofior@gmail.com</authorEmail>
 	<authorUrl>http://digilander.libero.it/caiofior/</authorUrl>
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>0.1</version>
+	<version>0.2</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>Registration to Pordenone Maratonina ...</description>
         <install> <!-- Runs on install -->
@@ -45,8 +45,8 @@
 		<!-- Administration Menu Section -->
 		<menu link="option=com_maratonregister">Maraton Register</menu>
                 <submenu>
-                    <menu link="com_maratonregister&amp;=fidal" >Iscritti FIDAL</menu>
-                    <menu link="com_maratonregister&amp;=statistics" >Statistiche</menu>
+                    <menu link="option=com_maratonregister&amp;task=fidal" >Iscritti FIDAL</menu>
+                    <menu link="option=com_maratonregister&amp;task=statistics" >Statistiche</menu>
                 </submenu>
 		<!-- Administration Main File Copy Section -->
 		<!-- Note the folder attribute: This attribute describes the folder
@@ -57,8 +57,11 @@
 			<filename>index.html</filename>
 			<filename>maratonregister.php</filename>
                         <filename>controller.php</filename>
+                        <filename>upload.php</filename>
+                        <filename>import.php</filename>
                         <folder>sql</folder>
                         <folder>tables</folder>
+                        <folder>plupload</folder>
                         <folder>models</folder>
                         <!-- views files section -->
                         <folder>views</folder>

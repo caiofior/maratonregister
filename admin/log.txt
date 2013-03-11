@@ -1,5 +1,0 @@
-array (
-  'name' => 'p17l03oojqiut7hm1ki5s102hf3.csv',
-  'chunk' => '85',
-  'chunks' => '86',
-)
