@@ -1,5 +1,4 @@
 <?php
-file_put_contents(__DIR__.DIRECTORY_SEPARATOR.'log.txt', var_export($_POST, true));
 /**
  * upload.php
  *
