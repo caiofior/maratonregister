@@ -2,7 +2,7 @@
 /**
  * Fidal View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.2
+ * @version 0.3
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.application.component.view');
 /**
  * Fidal View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.2
+ * @version 0.3
  */
 class MaratonRegisterViewFidal extends JView
 {

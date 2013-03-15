@@ -2,7 +2,7 @@
 
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.2
+ * @version 0.3
  */
 
 // No direct access to this file

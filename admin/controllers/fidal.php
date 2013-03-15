@@ -2,7 +2,7 @@
 /**
  * General Controller of Fidal component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.2
+ * @version 0.3
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.application.component.controllerform');
 /**
  * General Controller of Fidal component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.2
+ * @version 0.3
  */
 class MaratonRegisterControllerFidal extends JControllerForm
 {
