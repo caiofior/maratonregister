@@ -5,9 +5,13 @@ JHtml::_('behavior.tooltip');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_maratonregister&layout=edit&id='.$this->item->id); ?>"
       method="post" id="adminForm" name="adminForm" enctype="multipart/form-data" >
-    <a id="fidal" href="?option=com_maratonregister">Tesserato Fidal</a>
-    <a id="other_ass" href="?option=com_maratonregister">Tesserato altra federazione</a>
-    <a id="amateur" href="?option=com_maratonregister">Amatore</a>
+    <?php if ( $this->item->num_tes != '') : ?>
+    <h1>Tesserato Fidal</h1>
+    <?php elseif ( $this->item->other_num_tes != '') : ?>
+    <h1>Tesserato altra federazione</h1>
+    <?php else: ?>
+    <h1>Amatore</h1>
+    <?php endif; ?>
     <fieldset id="name_container">
     <label for="first_name">Nome</label>
     <input id="first_name" name="first_name" value ="<?php echo $this->item->first_name; ?>" />
@@ -16,12 +20,14 @@ JHtml::_('behavior.tooltip');
     <input id="last_name" name="last_name" value ="<?php echo $this->item->last_name; ?>" />
     <?php if (key_exists('last_name', $errors)) echo '<p class="error">'.$errors['last_name']['message'].'</p>';?>
     </fieldset>
-    <fieldset id="num_tes_container" style="display: none;">
+    <fieldset id="num_tes_container" >
+    <legend>Tesserato FIDAL</legend>
     <label for="num_tes">N° Tessera Fidal</label>
     <input id="num_tes" name="num_tes" value ="<?php echo $this->item->num_tes; ?>" />
     <?php if (key_exists('num_tes', $errors)) echo '<p class="error">'.$errors['num_tes']['message'].'</p>';?>
     </fieldset>
-    <fieldset id="other_num_tes_container" style="display: none;">
+    <fieldset id="other_num_tes_container" >
+    <legend>Tesserato altra associazione</legend>
     <label for="other_ass_name">Nome Associazione</label>
     <input id="other_ass_name" name="other_ass_name" value ="<?php echo $this->item->other_ass_name; ?>" />
     <?php if (key_exists('other_ass_name', $errors)) echo '<p class="error">'.$errors['other_ass_name']['message'].'</p>';?>
@@ -106,6 +112,7 @@ JHtml::_('behavior.tooltip');
     <a id="generate_pectoral" href="#">Genera un pettorale</a>
     </fieldset>    
     <input type="hidden" id="task" name="task" value="maratonregister.add" />
+    <?php echo JHtml::_('form.token'); ?>
 </form>
 <script type="text/javascript">
     $("fidal").addEvent("click", function(){

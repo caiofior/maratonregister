@@ -24,16 +24,20 @@ class MaratonRegisterViewFidal extends JView
         function display($tpl = null) 
         {
             
-                // Get data from the model
-                $items = $this->get('Items');
-                $pagination = $this->get('Pagination');
- 
-                
                 // Assign data to the view
-                $this->items = $items;
-                $this->pagination = $pagination;
+                $item = $this->get('Item');
+                if (key_exists('num_tes', $_REQUEST)) {
+                    $item->load($_REQUEST['num_tes']);
+                }
+                $this->item = $item;
+                $this->items = $this->get('Items');
+                $this->pagination = $this->get('Pagination');;
+                $this->state	= $this->get('State');
                 JToolBarHelper::title('Fidal');
-                JToolBarHelper::custom('fidal.import','test','','Importa',false);
+                if (key_exists('num_tes', $_REQUEST))
+                    JToolBarHelper::back ();
+                else
+                    JToolBarHelper::custom('fidal.import','test','','Importa',false);
                 // Display the template
                 parent::display($tpl);
         }

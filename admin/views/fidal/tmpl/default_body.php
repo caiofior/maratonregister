@@ -20,8 +20,9 @@ defined('_JEXEC') or die('Restricted Access');
                         <?php echo $item->dat_nas; ?>
                 </td>
                 <td>
-                    <a href="<?php echo JRoute::_('?option=com_maratonregister&task=fidal&view=maratonregister&layout=edit&id='.$item->id); ?>">
-							Modifica</a>
+                    <a  class="toolbar" href="<?php echo JRoute::_('?option=com_maratonregister&task=fidal&view=fidal&layout=edit&num_tes='.$item->num_tes); ?>"title="Dettagli">
+                        <span style="display: block; width: 32px; height: 32px;" class="icon-32-forward"></span>
+                    </a>
                 </td>
         </tr>
 <?php endforeach; ?>

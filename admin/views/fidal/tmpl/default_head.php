@@ -4,7 +4,7 @@ defined('_JEXEC') or die('Restricted Access');
 ?>
 <tr>
         <th width="5">
-                Numero tessera FIDAS
+                Numero tessera FIDAL
         </th>
         <th width="20">
                 <input type="checkbox" name="toggle" value="" onclick="checkAll(<?php echo count($this->items); ?>);" />

@@ -9,9 +9,15 @@ $errors = $this->getModel()->getErrors();
 ?>
 <h1>Registrati</h1>
 <form action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
-    <a id="fidal" href="?option=com_maratonregister">Tesserato Fidal</a>
-    <a id="other_ass" href="?option=com_maratonregister">Tesserato altra federazione</a>
-    <a id="amateur" href="?option=com_maratonregister">Amatore</a>
+    <a id="fidal" href="?option=com_maratonregister" title="Tesserato Fidal">
+        <img style="opacity:0.4; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="200" height="100" alt="Tesserato Fidal"/>
+    </a>
+    <a id="other_ass" href="?option=com_maratonregister" title="Tesserato altra federazione">
+        <img style="opacity:0.4; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="200" height="100" alt="Tesserato altra federazione"/>
+    </a>
+    <a id="amateur" href="?option=com_maratonregister" title="Amatore">
+        <img  src="components/com_maratonregister/images/amatore.png" width="200" height="100" alt="Amatore"/>
+    </a>
     <fieldset id="name_container">
     <label for="first_name">Nome</label>
     <input id="first_name" name="first_name" value ="" />
@@ -91,6 +97,11 @@ $errors = $this->getModel()->getErrors();
     </form>
     <script type="text/javascript">
     $("fidal").addEvent("click", function(){
+        $("registration").getElements("img").setStyles({
+            opacity:"0.4",
+            filter:"alpha(opacity=40)"
+        });
+        $(this).getElements("img").removeProperty("style");
         $("name_container").setStyle("display", "none");
         $("sex_container").setStyle("display", "none");
         $("citizenship_container").setStyle("display", "none");
@@ -102,6 +113,11 @@ $errors = $this->getModel()->getErrors();
         return false;
     });
     $("other_ass").addEvent("click", function(){
+        $("registration").getElements("img").setStyles({
+            opacity:"0.4",
+            filter:"alpha(opacity=40)"
+        });
+        $(this).getElements("img").removeProperty("style");
         $("name_container").setStyle("display", "block");
         $("sex_container").setStyle("display", "block");
         $("citizenship_container").setStyle("display", "block");
@@ -113,6 +129,11 @@ $errors = $this->getModel()->getErrors();
         return false;
     });
     $("amateur").addEvent("click", function(){
+       $("registration").getElements("img").setStyles({
+            opacity:"0.4",
+            filter:"alpha(opacity=40)"
+        });
+        $(this).getElements("img").removeProperty("style");
         $("name_container").setStyle("display", "block");
         $("sex_container").setStyle("display", "block");
         $("citizenship_container").setStyle("display", "block");

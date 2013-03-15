@@ -34,6 +34,8 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
          */
         public function setData($data) {
             $this->checkData($data);
+            foreach ($data as $key=>$value)
+                $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
             if ( $data['num_tes'] == '' && !key_exists('medical_certificate',$_FILES)) {
                 $this->errors['medical_certificate']=array(
                     'message'=>'Il certificato medico è richiesto'
@@ -112,8 +114,12 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             'medical_certificate_datetime'
                         );
                         $values = array();
+                        $rcolumns = array_flip($columns);
+                        $rcolumns = array_intersect_key($rcolumns, $data);
+                        $columns = array_flip($rcolumns);
                         foreach ($columns as $column) {
-                            if (!key_exists($column, $data)) continue;
+                            if (!key_exists($column, $data)) 
+                                continue;
                             if (
                                     $column == 'registration_datetime' ||
                                     $column == 'medical_certificate_datetime'
@@ -122,11 +128,12 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             else
                                 $values[$column]=$db->quote($data[$column]);
                         }
-
+                        
                         $query
                             ->insert($db->quoteName('#__atlete'))
                             ->columns($db->quoteName($columns))
                             ->values(implode(',', $values));
+
                         $db->setQuery($query);
                         $db->query();
                         $mailer = JFactory::getMailer();
@@ -169,7 +176,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
         <td>{$data['email']}</th>
     </tr>
     <tr>
-        <th>Tessera FIDAS</th>
+        <th>Tessera FIDAL</th>
         <td>{$data['num_tes']}</th>
     </tr>
 </table>
@@ -220,7 +227,7 @@ EOT;
         <td>{$data['email']}</th>
     </tr>
     <tr>
-        <th>Tessera FIDAS</th>
+        <th>Tessera FIDAL</th>
         <td>{$data['num_tes']}</th>
     </tr>
 </table>

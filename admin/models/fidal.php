@@ -59,6 +59,20 @@ class MaratonRegisterModelFidal extends JModelList
                 $query->select('num_tes,cogn,nome,dat_nas');
                 // From the hello table
                 $query->from('#__fidal_fella');
+                $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
+                if($search != '') {
+                    $search = explode(' ', $search);
+                    foreach($search as $word) {
+                        $query->where('(
+                            LOWER(num_tes) LIKE "%'.strtolower($word).'%" OR
+                            LOWER(cogn) LIKE "%'.strtolower($word).'%" OR
+                            LOWER(nome) LIKE "%'.strtolower($word).'%" OR
+                            dat_nas LIKE "%'.strtolower($word).'%"
+                            ) '
+                            , 'AND');
+                    }
+                }
+                
                 return $query;
         }
 

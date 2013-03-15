@@ -6,6 +6,15 @@ defined('_JEXEC') or die('Restricted Access');
 JHtml::_('behavior.tooltip');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_maratonregister'); ?>" method="post" name="adminForm" id="adminForm" >
+        <fieldset id="filter-bar">
+		<div class="filter-search fltlft">
+			<label class="filter-search-lbl" for="filter_search">Filtra:</label>
+			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($_REQUEST['filter_search']); ?>" title="Filtra" />
+			<button type="submit" class="btn">Filtra</button>
+			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();">Pulisci</button>
+		</div>
+        </fieldset>
+        <div class="clr"> </div>
         <table class="adminlist">
                 <thead><?php echo $this->loadTemplate('head');?></thead>
                 <tfoot><?php echo $this->loadTemplate('foot');?></tfoot>

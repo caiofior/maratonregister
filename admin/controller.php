@@ -45,7 +45,6 @@ class MaratonRegisterController extends JController
                // set default view if not set
                 $input = JFactory::getApplication()->input;
                 $input->set('view', 'fidal');
-
                 // call parent behavior
                 parent::display($cachable);
         }

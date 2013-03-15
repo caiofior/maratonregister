@@ -16,13 +16,13 @@ defined('_JEXEC') or die('Restricted Access');
                 Data di nascita
         </th>
         <th>
-                Numero tessera FIDAS
+                Numero tessera FIDAL
         </th>
         <th>
                 Città
         </th>
         <th>
-                Data regsitrazione
+                Data registrazione
         </th>
         <th>
                 Modifica

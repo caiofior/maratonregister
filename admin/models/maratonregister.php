@@ -58,7 +58,24 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 // Select some fields
                 $query->select('id,first_name,last_name,date_of_birth,num_tes,city,registration_datetime');
                 // From the hello table
-                $query->from('#__atlete')->where('removed =0 OR removed IS NULL');
+                $query->from('#__atlete')->where(' (removed =0 OR removed IS NULL) ');
+                $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
+                if($search != '') {
+                    $search = explode(' ', $search);
+                    foreach($search as $word) {
+                        $query->where('(
+                            LOWER(first_name) LIKE "%'.strtolower($word).'%" OR
+                            LOWER(last_name) LIKE "%'.strtolower($word).'%" OR
+                            LOWER(email) LIKE "%'.strtolower($word).'%" OR
+                            LOWER(phone) LIKE "%'.strtolower($word).'%" OR
+                            LOWER(city) LIKE "%'.strtolower($word).'%" OR
+                            LOWER(num_tes) LIKE "%'.strtolower($word).'%" OR    
+                            pectoral LIKE "%'.strtolower($word).'%" OR
+                            date_of_birth LIKE "%'.strtolower($word).'%"
+                            ) '
+                            , 'AND');
+                    }
+                }
                 return $query;
         }
         /**

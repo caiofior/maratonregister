@@ -82,14 +82,12 @@ class MaratonRegisterViewMaratonRegister extends JView
                     JToolBarHelper::custom('maratonregister.export','icon-32-edit','','Esporta',false);
                 }
                 $this->item = $item;
-                // Get data from the model
-                $items = $this->get('Items');
-                $pagination = $this->get('Pagination');
  
                 
                 // Assign data to the view
-                $this->items = $items;
-                $this->pagination = $pagination;
+                $this->items = $this->get('Items');
+                $this->pagination = $this->get('Pagination');
+                $this->state	= $this->get('State');
                 // Display the template
                 parent::display($tpl);
         }
