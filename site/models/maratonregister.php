@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -50,7 +50,8 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                      'message'=>'Puoi inviare il certificato come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
                     );
                 else {
-                    $filename = time().'_'.preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name']));
+                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name'])),-30);
+                    $filename = time().'_'.$filename;
                     $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'medical_certificate';
                     if(!is_dir($destination)) {
                         if(!mkdir ($destination, 0777))
@@ -71,11 +72,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                 }
             }
             if (sizeof($this->errors) == 0) {
-                    if ($data['num_tes'] == '')
-                        $data['id']=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
-                    else
-                        $data['id']=$data['num_tes'];
-                    $data['id']=  preg_replace('/[^a-z_0-9\.\-]/','_',strtolower($data['id']));
+                    $data['id']=  $this->generateKey($data);
                     $data['registration_datetime']='NOW()';
                     $db = JFactory::getDbo();
                     $query = $db->getQuery(true);
@@ -238,7 +235,7 @@ EOT;
                         $mailer->setBody($body);
                         $mailer->Send();
                         }
-                        
+                        $_REQUEST['message']='La tua registrazione è avvenuta con successo';
                     }
                     
             }
@@ -341,25 +338,38 @@ EOT;
                       'message'=>'La mail non è valida'
                   );  
             }
-            if ($data['num_tes'] != '') {
-                $db = JFactory::getDbo();
-                $query = $db->getQuery(true);
-                    $query
-                    ->select('COUNT(id)')
-                    ->from('#__atlete')
-                    ->where('removed <> 1 AND num_tes = '. $db->Quote($data['num_tes']));
-                    $db->setQuery($query);
-                    $db->query();
-                    if (intval($db->loadResult()) > 0) {
-                        $errors['num_tes']=array(
-                            'message'=>'Risulti gà iscritto'
-                        ); 
-                        }
+            
+            $db = JFactory::getDbo();
+            $query = $db->getQuery(true);
+            $query
+                ->select('COUNT(id)')
+                ->from('#__atlete')
+                ->where('removed <> 1 AND id = '. $db->Quote($this->generateKey($data)));
+            $db->setQuery($query);
+            $db->query();
+            $id = intval($db->loadResult());
+            if ($id > 0) {
+                $errors['first_name']=array(
+                 'message'=>'Atleta già registrato'
+                );
             }
+            
             if (sizeof($errors) ==0) {
                 $this->data = $data;
             }
             $this->errors = $errors;
+        }
+        /**
+         * Generates a new key
+         * @param type $data
+         * @return type
+         */
+        private function generateKey($data) {
+             if ($data['num_tes'] == '')
+                    $id=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
+            else
+                $id=$data['num_tes'];
+            return preg_replace('/[^a-z_0-9\.\-]/','_',strtolower($id));
         }
         /**
          * Return form errors

@@ -47,6 +47,10 @@ CREATE TABLE  IF NOT EXISTS`#__fidal_fella` (
   `dat_nas` DATE NULL COMMENT 'Date of birth',
   `stran` VARCHAR(1) NULL COMMENT 'Stranger',
   `cod_reg` VARCHAR(3) NULL COMMENT 'Region code',
-  PRIMARY KEY (`num_tes`) )
+  PRIMARY KEY (`num_tes`) ,
+  KEY `nome` (`nome`),
+  KEY `cogn` (`cogn`),
+  KEY `dat_nas` (`dat_nas`)
+)
 ENGINE = InnoDB
 COMMENT = 'Data of fidal fella';

@@ -2,7 +2,7 @@
 /**
  * Fidal Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Fidal Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 class MaratonRegisterModelFidal extends JModelList
 {
@@ -82,5 +82,33 @@ class MaratonRegisterModelFidal extends JModelList
          */
         public function getErrors() {
             return $this->errors;
+        }
+        /**
+         * Load data from its code
+         * @param type $code
+         * @return type
+         */
+        public function loadFromCode($code) {
+            $table = false;
+            $db = JFactory::getDBO();
+            $query = $db->getQuery(true);
+            $query->select('num_tes');
+            $query->from('#__fidal_fella');
+            $query->where('LOWER(num_tes)=LOWER("'.addslashes($code).'")');
+            $code = $db->setQuery($query)->loadResult();
+            if ($code != '') {
+                $table = $this->getTable();
+                $table->load($code);
+            }
+            return $table;
+        }
+        /**
+         * Emtipes the table
+         */
+        public function deleteAll() {
+            
+            $db = JFactory::getDBO();
+            $db->setQuery('DELETE FROM #__fidal_fella');
+            $db->query();
         }
 }

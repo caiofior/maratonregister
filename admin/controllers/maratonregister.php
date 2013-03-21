@@ -2,7 +2,7 @@
 /**
  * General Controller of MaratonRegister component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.application.component.controllerform');
 /**
  * General Controller of MaratonRegister component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 class MaratonRegisterControllerMaratonRegister extends JControllerForm
 {

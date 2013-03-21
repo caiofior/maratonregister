@@ -1,13 +1,16 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 $errors = $this->getModel()->getErrors();
 ?>
 <h1>Registrati</h1>
+<?php if (key_exists('message', $_REQUEST)) : ?>
+<p><?php echo $_REQUEST['message']; ?></p>
+<?php endif; ?>
 <form action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
     <a id="fidal" href="?option=com_maratonregister" title="Tesserato Fidal">
         <img style="opacity:0.4; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="200" height="100" alt="Tesserato Fidal"/>

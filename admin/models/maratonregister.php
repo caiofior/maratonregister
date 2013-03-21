@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -106,8 +106,8 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                      'message'=>'Puoi inviare il certificato come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
                     );
                 else if (key_exists('medical_certificate',$_FILES)) {
-                    $filename = time().'_'.preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name']));
-                    
+                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name'])),-30);
+                    $filename = time().'_'.$filename;
                     $destination = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
                     'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'medical_certificate';
      
@@ -128,7 +128,8 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                         $data['medical_certificate_datetime']='NOW()';
                     
                 }
-            }
+            } 
+            
             
             if (
                     $data['medical_certificate_confirm_datetime'] == 1 &&
@@ -183,30 +184,34 @@ EOT;
                 unset ($data['payment_confirm_datetime']);
             
             if (
-                    $data['num_tes_datetime_confirmed'] == 1 &&
-                    $atlete->num_tes_datetime_confirmed == ''
+                    $atlete->num_tes != '' && 
+                    $atlete->date_of_birth == '' &&
+                    $data['date_of_birth'] != ''
                     ) {
                 $data['num_tes_datetime_confirmed']='NOW()';
                 if ($data['email'] != '') {
-                $mailer = JFactory::getMailer();
-                $config = JFactory::getConfig();
-                $sender = array( 
-                    $config->getValue( 'config.mailfrom' ),
-                    $config->getValue( 'config.fromname' )
-                );
-                $mailer->setSender($sender);
-                $mailer->addRecipient($data['email']);
-                $body   = <<<EOT
-<p>La tua iscrizione è stata confermata</p>
+                        $mailer = JFactory::getMailer();
+                        $config = JFactory::getConfig();
+                        $sender = array( 
+                            $config->getValue( 'config.mailfrom' ),
+                            $config->getValue( 'config.fromname' )
+                        );
+                        $mailer->setSender($sender);
+                        $mailer->addRecipient($data['email']);
+                        $body   = <<<EOT
+        <p>La tua iscrizione è stata confermata</p>
 EOT;
-                $mailer->setSubject('Conferma iscrizione maratonina dei borghi');
-                $mailer->isHTML(true);
-                $mailer->setBody($body);
-                $mailer->Send();
-                }
+                        $mailer->setSubject('Conferma iscrizione maratonina dei borghi');
+                        $mailer->isHTML(true);
+                        $mailer->setBody($body);
+                        $mailer->Send();
+                        }
                     }
             else 
                 unset ($data['num_tes_datetime_confirmed']);
+            if ($data['pectoral'] == '' || $data['pectoral'] == 0)
+                $data['pectoral']='NULL';
+
             if (sizeof($this->errors) == 0) {
                 $columns = array(
                             'id',
@@ -235,11 +240,7 @@ EOT;
                     $db = JFactory::getDbo();
                     $query = $db->getQuery(true);
                     if ($atlete->id == '') {
-                        if ($data['num_tes'] == '')
-                            $data['id']=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
-                        else
-                            $data['id']=$data['num_tes'];
-                         $data['id']=  preg_replace('/[^a-z_0-9\.\-]/','_',strtolower($data['id']));
+                        $data['id']=  $this->generateKey($data);
                         $data['registration_datetime']='NOW()';
                         $query
                         ->select('COUNT(id)')
@@ -265,7 +266,8 @@ EOT;
                                     $column == 'medical_certificate_datetime' ||
                                     $column == 'medical_certificate_confirm_datetime' ||
                                     $column == 'num_tes_datetime_confirmed' ||
-                                    $column == 'payment_confirm_datetime'
+                                    $column == 'payment_confirm_datetime' ||
+                                    $data[$column] == 'NULL'
                                 )
                                 $values[$column]=$data[$column];
                             else
@@ -278,19 +280,21 @@ EOT;
                             ->columns($db->quoteName($columns))
                             ->values(implode(',', $values));
                         $db->setQuery($query);
-                        $db->query();
+                        var_dump($db->query());
                     }
 
                 } else {
                     $query->update('#__atlete');
+                    $data['id']=$this->generateKey($data);
                     foreach ($data as $column=>$value) {
-                        if (!in_array($column, $columns) || $column == 'id') continue;
+                        if (!in_array($column, $columns) ) continue;
                         if (
                                     $column == 'registration_datetime' ||
                                     $column == 'medical_certificate_datetime' ||
                                     $column == 'medical_certificate_confirm_datetime' ||
                                     $column == 'num_tes_datetime_confirmed' ||
-                                    $column == 'payment_confirm_datetime'
+                                    $column == 'payment_confirm_datetime' ||
+                                    $data[$column] == 'NULL'
                                 )
                             $query->set($db->quoteName($column).' = '.$value);
                         else
@@ -440,11 +444,38 @@ EOT;
                         ); 
                         }
             }
-            
+            if ($atlete->id == '') {
+                    $db = JFactory::getDbo();
+                    $query = $db->getQuery(true);
+                    $query
+                        ->select('COUNT(id)')
+                        ->from('#__atlete')
+                        ->where('removed <> 1 AND id = '. $db->Quote($this->generateKey($data)));
+                    $db->setQuery($query);
+                    $db->query();
+                    $id = intval($db->loadResult());
+                    if ($id > 0) {
+                        $this->errors['first_name']=array(
+                         'message'=>'Atleta già registrato'
+                        );
+                    }
+            }
             if (sizeof($errors) ==0) {
                 $this->data = $data;
             }
             $this->errors = $errors;
+        }
+        /**
+         * Generates a new key
+         * @param type $data
+         * @return type
+         */
+        private function generateKey($data) {
+             if ($data['num_tes'] == '')
+                    $id=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
+            else
+                $id=$data['num_tes'];
+            return preg_replace('/[^a-z_0-9\.\-]/','_',strtolower($id));
         }
         /**
          * Return form errors

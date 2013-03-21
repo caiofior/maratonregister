@@ -24,6 +24,47 @@ JHtml::_('behavior.tooltip');
     <legend>Tesserato FIDAL</legend>
     <label for="num_tes">N° Tessera Fidal</label>
     <input id="num_tes" name="num_tes" value ="<?php echo $this->item->num_tes; ?>" />
+    <?php if ($this->item->num_tes != '') :
+        $fidal =  JModel::getInstance('fidal', 'MaratonRegisterModel');
+        $fidal = $fidal->loadFromCode($this->item->num_tes);
+        if ($fidal === false) : ?>
+        <br/>
+        <p> Codice tesserato non presente in archivio</p>
+        <?php elseif($this->item->num_tes_datetime_confirmed) : ?>
+        <br/>
+        <p>La tessera è intestata a:</p>
+        <ul>
+            <li >Nome: <span id="nome"><?php echo $fidal->nome; ?></span></li>
+            <li >Cognome: <span id="cogn"><?php echo $fidal->cogn; ?></span></li>
+            <li >Data di nascita: <span id="dat_nas"><?php echo $fidal->dat_nas; ?></span></li>
+            <li>Società: <?php echo $fidal->denom; ?></li>
+            <li>Regione: <?php echo $fidal->cod_reg; ?></li>
+            <li>Categoria: <?php echo $fidal->categ; ?></li>
+        </ul>   
+        <p>L'escrizione è stata confermata il <?php echo $this->item->num_tes_datetime_confirmed;?></p> 
+        <?php else: ?>
+        <br/>
+        <p>La tessera è intestata a:</p>
+        <ul>
+            <li >Nome: <span id="nome"><?php echo $fidal->nome; ?></span></li>
+            <li >Cognome: <span id="cogn"><?php echo $fidal->cogn; ?></span></li>
+            <li >Data di nascita: <span id="dat_nas"><?php echo $fidal->dat_nas; ?></span></li>
+            <li>Società: <?php echo $fidal->denom; ?></li>
+            <li>Regione: <?php echo $fidal->cod_reg; ?></li>
+            <li>Categoria: <?php echo $fidal->categ; ?></li>
+        </ul>
+        <a id="confirm_fidal" href="#">Conferma la registrazione</a>
+        <script type="text/javascript">
+            $("confirm_fidal").addEvent("click", function(){
+            $("first_name").setProperty("value",$("nome").get("text"));
+            $("last_name").setProperty("value",$("cogn").get("text"));
+            $("date_of_birth").setProperty("value",$("dat_nas").get("text"));
+            return false;
+    });
+        </script>
+        
+        <?php endif; ?>
+    <?php endif; ?>
     <?php if (key_exists('num_tes', $errors)) echo '<p class="error">'.$errors['num_tes']['message'].'</p>';?>
     </fieldset>
     <fieldset id="other_num_tes_container" >
@@ -109,45 +150,15 @@ JHtml::_('behavior.tooltip');
     <fieldset id="pectoral_container">
     <label for="pectoral">Pettorale</label>
     <input id="pectoral" name="pectoral" value ="<?php echo $this->item->pectoral; ?>" /><br/>
+    <?php if ($this->item->pectoral == '') : ?>
     <a id="generate_pectoral" href="#">Genera un pettorale</a>
+    <?php endif; ?>
     </fieldset>    
     <input type="hidden" id="task" name="task" value="maratonregister.add" />
     <?php echo JHtml::_('form.token'); ?>
 </form>
 <script type="text/javascript">
-    $("fidal").addEvent("click", function(){
-        $("name_container").setStyle("display", "none");
-        $("sex_container").setStyle("display", "none");
-        $("citizenship_container").setStyle("display", "none");
-        $("address_container").setStyle("display", "none");
-        $("phone_container").setStyle("display", "none");
-        $("other_num_tes_container").setStyle("display", "none");
-        $("medical_certificate_container").setStyle("display", "none");
-        $("num_tes_container").setStyle("display", "block");
-        return false;
-    });
-    $("other_ass").addEvent("click", function(){
-        $("name_container").setStyle("display", "block");
-        $("sex_container").setStyle("display", "block");
-        $("citizenship_container").setStyle("display", "block");
-        $("address_container").setStyle("display", "block");
-        $("phone_container").setStyle("display", "block");
-        $("medical_certificate_container").setStyle("display", "block");
-        $("other_num_tes_container").setStyle("display", "block");
-        $("num_tes_container").setStyle("display", "none");
-        return false;
-    });
-    $("amateur").addEvent("click", function(){
-        $("name_container").setStyle("display", "block");
-        $("sex_container").setStyle("display", "block");
-        $("citizenship_container").setStyle("display", "block");
-        $("address_container").setStyle("display", "block");
-        $("phone_container").setStyle("display", "block");
-        $("medical_certificate_container").setStyle("display", "block");
-        $("other_num_tes_container").setStyle("display", "none");
-        $("num_tes_container").setStyle("display", "none");
-        return false;
-    });
+    
     $("generate_pectoral").addEvent("click", function(){
         new Request.JSON({
             url:"index.php?option=com_maratonregister&task=generate_pectoral",
@@ -157,14 +168,14 @@ JHtml::_('behavior.tooltip');
          }).send();
         return false;
     });
-    $("adminForm").addEvent("submit", function(){
+    $$("form").addEvent("submit", function(){
          if ($("task").get("value") !== "save")
              return;
          status = true;
          el = this.getElements("p").destroy();
          mc = "";
          mc_el = $("medical_certificate");
-         if (typeof mc_el == "object")
+         if (mc_el !== null)
             mc = "&medical_certificate="+mc_el.get("value");
          new Request.JSON({
             async:false,

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 defined('_JEXEC') or die('Restricted access');
  
@@ -11,7 +11,7 @@ jimport('joomla.application.component.controller');
 /**
  * General Controller of MaratonRegister component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.3
+ * @version 0.4
  */
 class MaratonRegisterController extends JController
 {
@@ -42,6 +42,19 @@ class MaratonRegisterController extends JController
          * @param type $cachable
          */
         public function fidal($cachable = false)  {
+               // set default view if not set
+                $input = JFactory::getApplication()->input;
+                $input->set('view', 'fidal');
+                // call parent behavior
+                parent::display($cachable);
+        }
+         /**
+         * Manages fidal_deleteall task
+         * @param type $cachable
+         */
+        public function fidal_deleteall($cachable = false)  {
+                $fidal = $this->getModel("fidal");
+                $fidal->deleteAll();
                // set default view if not set
                 $input = JFactory::getApplication()->input;
                 $input->set('view', 'fidal');

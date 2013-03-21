@@ -1,7 +1,6 @@
 <?php
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
- 
 // load tooltip behavior
 JHtml::_('behavior.tooltip');
 ?>
@@ -26,3 +25,11 @@ JHtml::_('behavior.tooltip');
                 <?php echo JHtml::_('form.token'); ?>
         </div>
 </form>
+<script type="text/javascript">
+    $$('form').addEvent("submit",function () {
+        if(this.task.get("value") == "fidal_deleteall") {
+            if (!confirm("Stai per cancellare tutti gli iscritti alla federazione FIDAL. Sei sicuro?"))
+                throw new Error("Not valid");
+        }
+    });
+</script>
