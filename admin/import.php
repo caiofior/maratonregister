@@ -15,7 +15,11 @@ header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Content-type: application/json');
 $jconfig = new JConfig();
-$mysqli = new mysqli($jconfig->host, $jconfig->user, $jconfig->password, $jconfig->db);
+if (function_exists('mysqli_connect'))
+  $db = mysqli_connect($jconfig->host, $jconfig->user, $jconfig->password, $jconfig->db);
+else
+  $db = mysql_connect($jconfig->host, $jconfig->user, $jconfig->password, $jconfig->db);
+
 $table_name = $jconfig->dbprefix.'fidal_fella';
 $targetDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'plupload'.DIRECTORY_SEPARATOR;
 $file = fopen($targetDir.$_REQUEST['filename'].'.csv','r');
@@ -54,7 +58,13 @@ else {
 
 $n =0;
 $row = fgetcsv($file, 1000, ';');
-$mysqli->autocommit(false);
+
+if (function_exists('mysqli_connect'))
+     mysqli_autocommit($db,false);
+else
+     mysql_query($db, 'SET AUTOCOMMIT=0');
+
+
 $rheaders = array_flip($headers);
 while (($row = fgetcsv($file, 1000, ';')) !== false) {
     $values = array();
@@ -74,17 +84,33 @@ while (($row = fgetcsv($file, 1000, ';')) !== false) {
             $values[$key]=  '"'.addslashes($data).'"';
     }
     $query = 'DELETE FROM '.$table_name.' WHERE num_tes='.$values[$rheaders['num_tes']];
-    $mysqli->query($query);
+    
+    
+    if (function_exists('mysqli_connect'))
+            mysqli_query($db, $query);
+    else
+            mysql_query($db, $query);
+    
     $query = 'INSERT INTO '.$table_name.' SET ';
     foreach ($values as $key=>$value) {
         if ($key > 0)
             $query .= ', ';
         $query .= $headers[$key].'='.$value;
     }
-    $mysqli->query($query);
+    
+    if (function_exists('mysqli_connect'))
+            mysqli_query($db, $query);
+    else
+            mysql_query($db, $query);
+    
     $n ++;
     if (intval($n/1000)== $n/1000) {
-        $mysqli->commit();
+        
+        if (function_exists('mysqli_connect'))
+                mysqli_commit($db);
+        else
+                mysql_query($db, 'COMMIT');
+       
         echo json_encode(array(
             'position'=>max(ftell($file),intval($_REQUEST['position'])),
             'message'=>'Importazione '.intval(ftell($file)/$last*100).'%'
@@ -93,7 +119,16 @@ while (($row = fgetcsv($file, 1000, ';')) !== false) {
     }
     
 }
-$mysqli->commit();
+
+if (function_exists('mysqli_connect')) {
+        mysqli_commit($db);
+        mysqli_close($db);
+}
+else {
+        mysql_query($db, 'COMMIT');
+        mysql_close($db);
+}
+
 echo json_encode(array(
     'position'=>'end',
     'message'=>'Importazione completata'

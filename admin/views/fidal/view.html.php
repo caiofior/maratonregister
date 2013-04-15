@@ -2,7 +2,7 @@
 /**
  * Fidal View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.4
+ * @version 0.5
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.application.component.view');
 /**
  * Fidal View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.4
+ * @version 0.5
  */
 class MaratonRegisterViewFidal extends JView
 {
@@ -40,8 +40,8 @@ class MaratonRegisterViewFidal extends JView
                 if (key_exists('num_tes', $_REQUEST))
                     JToolBarHelper::back ();
                 else {
-                    JToolBarHelper::custom('fidal_deleteall','icon-32-trash','','Cancella tutti',false);
-                    JToolBarHelper::custom('fidal.import','test','','Importa',false);
+                    JToolBarHelper::custom('fidal_deleteall','trash','','Cancella tutti',false);
+                    JToolBarHelper::custom('fidal.import','import','','Importa',false);
                 }
                 
                 // Display the template

@@ -2,7 +2,7 @@
 /**
  * General Controller of MaratonRegister component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.4
+ * @version 0.5
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.application.component.controllerform');
 /**
  * General Controller of MaratonRegister component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.4
+ * @version 0.5
  */
 class MaratonRegisterControllerMaratonRegister extends JControllerForm
 {
@@ -31,12 +31,20 @@ class MaratonRegisterControllerMaratonRegister extends JControllerForm
         $query->from('#__atlete')->where('removed=0 OR removed IS NULL');
         $db->setQuery($query);
         $atletes = $db->query();
-        header('Content-type: application/ms-excel');
+	header('Content-type: application/ms-excel');
         header('Content-Disposition: attachment; filename=atletes.csv');
-        while (is_array($atlete = mysqli_fetch_assoc($atletes))) {
-            if (mysqli_field_tell($atletes) == 0) {
+	switch ( get_resource_type($atletes)) {
+		case 'mysql result':
+			$function_fetch = 'mysql_fetch_assoc';
+		break;
+		case 'mysqli result':
+			$function_fetch = 'mysqli_fetch_assoc';
+		break;
+	}
+	$c =0;
+        while (is_array($atlete = $function_fetch($atletes))) {
+            if ($c == 0)
                 echo implode(';',array_keys($atlete))."\r\n";
-            }
             foreach ($atlete as $key=>$value) {
                 if (
                     $key == 'date_of_birth' 
@@ -57,6 +65,7 @@ class MaratonRegisterControllerMaratonRegister extends JControllerForm
                 $atlete[$key]='"'.addslashes ($value).'"';
             }
             echo implode(';',$atlete)."\r\n";
+	    $c++;
         }
         exit;
     }

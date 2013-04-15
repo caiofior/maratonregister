@@ -2,6 +2,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted Access');
 // load tooltip behavior
+JHtml::_('stylesheet','administrator/components/com_maratonregister/assets/css/com_maratonregister.css');
 JHtml::_('behavior.tooltip');
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_maratonregister&task=fidal'); ?>" method="post" name="adminForm">

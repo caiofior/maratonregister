@@ -10,7 +10,7 @@
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>0.4</version>
+	<version>0.5</version>
 	<!-- The description is optional and defaults to the name -->
 	<description>Registration to Pordenone Maratonina ...</description>
         <install> <!-- Runs on install -->
@@ -60,6 +60,7 @@
                         <filename>controller.php</filename>
                         <filename>upload.php</filename>
                         <filename>import.php</filename>
+                        <folder>assets</folder>
                         <folder>sql</folder>
                         <folder>tables</folder>
                         <folder>plupload</folder>

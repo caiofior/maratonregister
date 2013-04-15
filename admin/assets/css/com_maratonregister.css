@@ -1,0 +1,13 @@
+/* 
+    Document   : com_maratonregister
+    Created on : 15-apr-2013, 11.12.38
+    Author     : caiofior
+    Description:
+        Purpose of the stylesheet follows.
+*/
+.icon-32-excel       { 
+        background-image: url(../images/icon-32-excel.png); 
+}
+.icon-32-import       { 
+        background-image: url(../images/icon-32-import.png); 
+}

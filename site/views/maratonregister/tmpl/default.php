@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.4
+ * @version 0.5
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,13 +13,13 @@ $errors = $this->getModel()->getErrors();
 <?php endif; ?>
 <form action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
     <a id="fidal" href="?option=com_maratonregister" title="Tesserato Fidal">
-        <img style="opacity:0.4; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="200" height="100" alt="Tesserato Fidal"/>
+        <img style="opacity:0.5; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
     </a>
     <a id="other_ass" href="?option=com_maratonregister" title="Tesserato altra federazione">
-        <img style="opacity:0.4; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="200" height="100" alt="Tesserato altra federazione"/>
+        <img style="opacity:0.5; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
     </a>
     <a id="amateur" href="?option=com_maratonregister" title="Amatore">
-        <img  src="components/com_maratonregister/images/amatore.png" width="200" height="100" alt="Amatore"/>
+        <img  src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
     </a>
     <fieldset id="name_container">
     <label for="first_name">Nome</label>
@@ -101,7 +101,7 @@ $errors = $this->getModel()->getErrors();
     <script type="text/javascript">
     $("fidal").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.4",
+            opacity:"0.5",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -117,7 +117,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("other_ass").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.4",
+            opacity:"0.5",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -133,7 +133,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("amateur").addEvent("click", function(){
        $("registration").getElements("img").setStyles({
-            opacity:"0.4",
+            opacity:"0.5",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");

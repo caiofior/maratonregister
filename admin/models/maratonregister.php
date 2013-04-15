@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.4
+ * @version 0.5
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.4
+ * @version 0.5
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
