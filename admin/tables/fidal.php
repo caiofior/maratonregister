@@ -2,7 +2,7 @@
 /**
  * Fidal Table
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 // No direct access
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.database.table');
 /**
  * Fidal Table
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 class MaratonRegisterTableFidal extends JTable
 {

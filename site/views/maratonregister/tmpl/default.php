@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,14 +11,15 @@ $errors = $this->getModel()->getErrors();
 <?php if (key_exists('message', $_REQUEST)) : ?>
 <p><?php echo $_REQUEST['message']; ?></p>
 <?php endif; ?>
+<p>Gia registrato? <a href="?option=com_maratonregister&amp;task=verify">Verifica lo stato della tua iscrizione</a></p>
 <form action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
     <a id="fidal" href="?option=com_maratonregister" title="Tesserato Fidal">
-        <img style="opacity:0.5; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
+        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
     </a>
     <a id="other_ass" href="?option=com_maratonregister" title="Tesserato altra federazione">
-        <img style="opacity:0.5; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
+        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
     </a>
-    <a id="amateur" href="?option=com_maratonregister" title="Amatore">
+    <a id="amateur" href="?option=com_maratonregister" title="Non tesserati fidal">
         <img  src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
     </a>
     <fieldset id="name_container">
@@ -44,7 +45,7 @@ $errors = $this->getModel()->getErrors();
     </fieldset>
     <fieldset>
     <label for="date_of_birth">Data di nascita</label>
-    <?php echo JHTML::calendar($this->escape(""), 'date_of_birth', 'date_of_birth', '%Y-%m-%d'); ?>
+    <?php echo JHTML::calendar($this->escape(""), 'date_of_birth', 'date_of_birth', '%d/%m/%Y'); ?>
     <?php if (key_exists('date_of_birth', $errors)) echo '<p class="error">'.$errors['date_of_birth']['message'].'</p>';?>
     </fieldset>
     <fieldset id="sex_container">
@@ -77,9 +78,17 @@ $errors = $this->getModel()->getErrors();
         <?php if (key_exists('phone', $errors)) echo '<p class="error">'.$errors['phone']['message'].'</p>';?>
     </fieldset>
     <fieldset id="medical_certificate_container">
+    <div>
+        <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Modulo giornaliero">
+            Modulo giornaliero
+            <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Modulo giornaliero" style="float: left;"/>
+        </a>
+    </div>
     <label for="medical_certificate">Certificato Medico</label>
-    <input type="file" id="medical_certificate" name="medical_certificate" value ="" />
-        <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
+    <div class="fileinputs">
+        <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
+    </div>
+    <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
     </fieldset>
     <fieldset id="payment_type_container">
     <legend>Modalità di pagamento</legend>
@@ -90,6 +99,13 @@ $errors = $this->getModel()->getErrors();
     <label for="paypal">Paypal</label>
     <input type="radio" id="paypal" name="payment_type" value="paypal" />
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
+    <div>
+    <label for="payment_fname">Ricevuta di pagamento</label>
+    <div class="fileinputs">
+        <input class="file" type="file" id="payment_fname" name="payment_fname" value ="" />
+    </div>
+    <?php if (key_exists('payment_fname', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
+    </div>
     </fieldset>
     <fieldset id="email_container">
     <label for="email">Email</label>
@@ -99,9 +115,10 @@ $errors = $this->getModel()->getErrors();
     <input type="submit" id="submit" name="submit" value="Registrati"/>
     </form>
     <script type="text/javascript">
+    $(document.body).getElements("a.targetblank").setProperty("target","_blank");
     $("fidal").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.5",
+            opacity:"0.6",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -117,7 +134,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("other_ass").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.5",
+            opacity:"0.6",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -133,7 +150,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("amateur").addEvent("click", function(){
        $("registration").getElements("img").setStyles({
-            opacity:"0.5",
+            opacity:"0.6",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -167,5 +184,33 @@ $errors = $this->getModel()->getErrors();
          }).send();
         return status;
     });
+    function initFileUploads() {
+	var fakeFileUpload = document.createElement("a");
+        fakeFileUpload.setAttribute("href","#");
+	fakeFileUpload.innerHTML = 'Allega: ';
+        container = document.createElement("span");
+        container.innerHTML = "Scegli un documento";
+        fakeFileUpload.appendChild(container);
+	var x = document.getElementsByTagName("input");
+	for (var i=0;i<x.length;i++) {
+		if (x[i].type != "file") continue;
+		if (x[i].parentNode.className != "fileinputs") continue;
+		var clone = fakeFileUpload.cloneNode(true);
+                x[i].setAttribute("style","display:none;");
+		x[i].parentNode.appendChild(clone);
+                clone.onclick = function () {
+                        this.parentNode.getElementsByTagName("input")[0].click();
+                        return false;
+                }
+                x[i].onpropertychange =  function() {
+                    this.parentNode.getElementsByTagName("a")[0].getElementsByTagName("span")[0].innerHTML = this.value;
+                };
+                x[i].onchange = function() {
+                    this.parentNode.getElementsByTagName("a")[0].getElementsByTagName("span")[0].innerHTML = this.value;
+                };
+
+            }
+    }
+    initFileUploads();
     </script>    
 

@@ -78,7 +78,7 @@ JHtml::_('behavior.tooltip');
     </fieldset>
     <fieldset>
     <label for="date_of_birth">Data di nascita</label>
-    <?php echo JHTML::calendar($this->escape($this->item->date_of_birth), 'date_of_birth', 'date_of_birth', '%Y-%m-%d'); ?>
+    <?php echo JHTML::calendar($this->escape($this->item->date_of_birth), 'date_of_birth', 'date_of_birth', '%d/%m/%Y'); ?>
     <?php if (key_exists('date_of_birth', $errors)) echo '<p class="error">'.$errors['date_of_birth']['message'].'</p>';?>
     </fieldset>
     <fieldset id="sex_container">

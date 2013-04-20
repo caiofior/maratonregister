@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -28,6 +28,26 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
          * @var array
          */
         private $data=array();
+                 /**
+         * Returns a reference to the a Table object, always creating it.
+         *
+         * @param       type    The table type to instantiate
+         * @param       string  A prefix for the table class name. Optional.
+         * @param       array   Configuration array for model. Optional.
+         * @return      JTable  A database object
+         * @since       2.5
+         */
+        public function getTable($type = 'MaratonRegister', $prefix = 'MaratonRegisterTable', $config = array()) 
+        {
+                return JTable::getInstance($type, $prefix, $config);
+        }
+        /**
+         * get an items
+         */
+        public function getItem() {
+            $table = $this->getTable();
+            return $table;
+        }
         /**
          * Set new athlete data
          * @param array $data
@@ -71,7 +91,54 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                     
                 }
             }
+            
+            if ( key_exists('payment_fname',$_FILES) ) {
+                   if ( $_FILES['payment_fname']['error'] != 0 )
+                    $this->errors['payment_fname']=array(
+                    'message'=>'C\'è stato un\'errore nel caricare la ricevuta di pagamento, riprova in un secondo momento'
+                    );
+                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['payment_fname']['name']))
+                    $this->errors['payment_fname']=array(
+                     'message'=>'Puoi inviare la ricevuta come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
+                    );
+                else {
+                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['payment_fname']['name'])),-30);
+                    $filename = time().'_'.$filename;
+                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'payment_receipt';
+                    if(!is_dir($destination)) {
+                        if(!mkdir ($destination, 0777))
+                        $this->errors['payment_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare la ricevuta, riprova in un secondo momento'
+                        );
+                    }
+                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
+                    $destination .= DIRECTORY_SEPARATOR.$filename;
+                    if (!move_uploaded_file($_FILES['payment_fname']['tmp_name'], $destination))
+                        $this->errors['payment_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare la ricevuta, riprova in un secondo momento'
+                        );
+                    else
+                        $data['payment_fname']=$filename;
+                        $data['payment_datetime']='NOW()';
+                    
+                }
+            }
+            
             if (sizeof($this->errors) == 0) {
+                    $datetime = strptime($data['date_of_birth'], '%d/%m/%Y');
+                    $add_year = 1900;
+                    if ($datetime['tm_year'] < 20) 
+                        $add_year = 2000;
+                    $datetime = mktime (
+                            0,
+                            0,
+                            0,
+                            $datetime['tm_mon']+1,
+                            $datetime['tm_mday'],
+                            $datetime['tm_year']+$add_year);
+
+                    $data['date_of_birth'] = strftime('%Y-%m-%d',$destination);
+                    
                     $data['id']=  $this->generateKey($data);
                     $data['registration_datetime']='NOW()';
                     $db = JFactory::getDbo();
@@ -83,6 +150,9 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                     $db->setQuery($query);
                     $db->query();
                     $id = intval($db->loadResult());
+                    
+
+
                     if ($id > 0) {
                         $this->errors['first_name']=array(
                          'message'=>'Sei già registrato alla maratona, contatta lo staff per eventuali problemi'
@@ -248,6 +318,19 @@ EOT;
         public function checkData($data) {
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
+            
+            $datetime = strptime($data['date_of_birth'], '%d/%m/%Y');
+            $add_year = 1900;
+            if ($datetime['tm_year'] < 20) 
+                $add_year = 2000;
+            $datetime = mktime (
+                    0,
+                    0,
+                    0,
+                    $datetime['tm_mon']+1,
+                    $datetime['tm_mday'],
+                    $datetime['tm_year']+$add_year);
+            
             if ($data['num_tes'] != '') {
                 if (strlen($data['num_tes']) <> 8)
                   $errors['num_tes']=array(
@@ -328,6 +411,20 @@ EOT;
                   $errors['date_of_birth']=array(
                       'message'=>'La data di nascita è richiesta'
                   );
+            else if (
+                        $data['num_tes'] != '' &&
+                        $datetime > time() - 18 * 31556926 
+                    )
+                        $errors['date_of_birth']=array(
+                          'message'=>'Devi avere almeno 18 anni'
+                        );
+            else if (
+                        $data['num_tes'] == '' &&
+                        $datetime > time() - 23 * 31556926 
+                    )
+                        $errors['date_of_birth']=array(
+                          'message'=>'Devi avere almeno 23 anni'
+                        );
             if ($data['payment_type'] == '')
                   $errors['paypal']=array(
                       'message'=>'La modalità di pagamento è richiesta'
@@ -378,4 +475,56 @@ EOT;
         public function getErrors() {
             return $this->errors;
         }
+        /**
+         * Checks the data and return the associated atlete data
+         * 
+         * @param array $data
+         * @return MaratonRegisterTableMaratonRegister
+         */
+        public function verifyAndLoad ($data) {
+            
+            $datetime = strptime($data['date_of_birth'], '%d/%m/%Y');
+            
+            $add_year = 1900;
+            if ($datetime['tm_year'] < 20) 
+                $add_year = 2000;
+
+            $datetime = mktime (
+                    0,
+                    0,
+                    0,
+                    $datetime['tm_mon']+1,
+                    $datetime['tm_mday'],
+                    $datetime['tm_year']+$add_year);
+
+            $data['date_of_birth'] = strftime('%Y-%m-%d',$datetime);
+            
+            $db = JFactory::getDbo();
+            $query = $db->getQuery(true);
+            $query
+                    ->select('id')
+                    ->from('#__atlete')
+                    ->where('
+                        removed <> 1 AND (
+                            (
+                                LOWER(first_name) = '. $db->Quote(trim(strtolower($data['first_name']))) .' AND
+                                LOWER(last_name) = '. $db->Quote(trim(strtolower($data['last_name']))) .' AND
+                                LOWER(date_of_birth) = '. $db->Quote(trim(strtolower($data['date_of_birth']))) .' AND
+                                '. $db->Quote(trim(strtolower($data['num_tes']))).' = ""   
+                            )
+                            OR (
+                                LOWER(num_tes) = '. $db->Quote(trim(strtolower($data['num_tes']))).' AND
+                                    '. $db->Quote(trim(strtolower($data['num_tes']))).' <> ""
+                                )
+                        )
+                        ');
+                       
+            $db->setQuery($query);
+            $id = $db->loadResult();
+            $atlete = $this->getTable();
+            if ($id != '' )
+                $atlete->load($id);
+            return $atlete;
+        }
+        
 }

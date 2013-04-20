@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 
 // No direct access to this file
@@ -13,13 +13,18 @@ jimport('joomla.application.component.controller');
 /**
  * Marathon register Component Controller
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 class MaratonRegisterController extends JController
 {
     public function display($cachable = false, $urlparams = false) {
 
         
-        parent::display($cachable, $urlparams);
+        parent::display($cachable = false, $urlparams = false);
+    }
+    
+    public function verify ($cachable = false, $urlparams = false) {
+            
+            parent::display($cachable = false, $urlparams = false);
     }
 }

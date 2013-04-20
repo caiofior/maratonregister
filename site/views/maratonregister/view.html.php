@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.5
+ * @version 0.6
  */
 
 // No direct access to this file
@@ -18,7 +18,16 @@ class MaratonRegisterViewMaratonRegister extends JView
 	// Overwriting JView display method
 	function display($tpl = null) 
 	{
-                if(key_exists('submit',$_REQUEST)) {
+            
+                if (JRequest::getCmd('task') == 'verify') {
+                    $this->setLayout ('verify');
+                    $this->atlete = null;
+                    if(key_exists('submit',$_REQUEST)) {
+                        $model = $this->getModel();
+                        $this->atlete = $model->verifyAndLoad($_REQUEST);
+                    }
+                }
+                else if(key_exists('submit',$_REQUEST)) {
                     $model = $this->getModel();
                     if (key_exists('xhr', $_REQUEST)) {
                         $model->checkData($_REQUEST);
@@ -35,4 +44,5 @@ class MaratonRegisterViewMaratonRegister extends JView
 		// Display the view
 		parent::display($tpl);
 	}
+
 }

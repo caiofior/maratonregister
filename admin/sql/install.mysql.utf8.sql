@@ -17,6 +17,7 @@ CREATE TABLE  IF NOT EXISTS `#__atlete` (
   `registration_datetime` DATETIME NULL COMMENT 'Regsitration date time',
   `payment_type` ENUM('bank_transfer','money_order','paypal') NULL COMMENT 'Payment type' ,
   `payment_datetime` DATETIME NULL COMMENT 'Payment datetime, in null not sucesfull' ,
+  `payment_fname` varchar(50) DEFAULT NULL COMMENT 'Payment file name',
   `payment_confirm_datetime` DATETIME NULL COMMENT 'Payment confirm date time, in null not confirmed' ,
   `medical_certificate_fname` VARCHAR(50) NULL COMMENT 'Medical certificate file name' ,
   `medical_certificate_datetime` DATETIME NULL COMMENT 'Medical certificate date time' ,
