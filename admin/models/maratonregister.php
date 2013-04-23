@@ -275,6 +275,7 @@ EOT;
                             'other_num_tes' ,
                             'other_ass_name' ,
                             'payment_type' ,
+                            'payment_fname' ,
                             'payment_confirm_datetime' ,
                             'medical_certificate_fname',
                             'medical_certificate_datetime',

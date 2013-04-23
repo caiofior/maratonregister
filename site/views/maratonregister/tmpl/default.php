@@ -165,7 +165,7 @@ $errors = $this->getModel()->getErrors();
         return false;
     });
     $("submit").addEvent("click", function(){
-        status = true;
+         var status = true;
          $("registration").getElements("p").destroy();
          new Request.JSON({
             async:false,

@@ -132,15 +132,34 @@ JHtml::_('behavior.tooltip');
     <?php $disabled= ''; 
     if ($this->item->payment_confirm_datetime != '')
         $disabled= 'disabled="disabled"';  ?>
+    
     <label for="bank_transfer">Bonifico bancario</label>
     <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'bank_transfer' ? 'checked="checked"' : ''); ?> type="radio" id="bank_transfer" name="payment_type" value ="bank_transfer" />
     <label for="money_order">Bollettino postale</label>
     <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'money_order' ? 'checked="checked"' : ''); ?> type="radio" id="money_order" name="payment_type" value ="money_order" />
     <label for="paypal">Paypal</label>
     <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'paypal' ? 'checked="checked"' : ''); ?> type="radio" id="paypal" name="payment_type" value="paypal" />
+    
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
+    <?php
+        $payment_fname = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
+                'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'payment_receipt'.DIRECTORY_SEPARATOR.
+                $this->item->payment_fname;
+        if (is_file($payment_fname)) : ?>
+    
+        <label>
+        <a target="_blank" href="<?php echo 
+                '../components/com_maratonregister/payment_receipt/'.
+                $this->item->payment_fname; ?>">Ricevuta di pagamento</a></br>
+    </label>
+    <?php else : ?>
+    <label for="payment_fname">Ricevuta di pagamento</label>
+    <input type="file" id="payment_fname" name="payment_fname" value ="" />
+        <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
+    <?php endif; ?>
     <label for="payment_confirm_datetime">Conferma pagamento</label>
-    <input <?php echo ($this->item->payment_confirm_datetime != '' ? 'checked="checked"' : ''); ?> type="checkbox" id="payment_confirm_datetime" name="payment_confirm_datetime" value ="1" />
+    <input <?php echo ($this->item->payment_confirm_datetime != '' ? 'checked="checked"' : ''); ?> type="checkbox" id="payment_confirm_datetime" name="payment_confirm_datetime" value ="1" />    
+   
     </fieldset>
     <fieldset id="email_container">
     <label for="email">Email</label>

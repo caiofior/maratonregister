@@ -73,12 +73,14 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                     $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name'])),-30);
                     $filename = time().'_'.$filename;
                     $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'medical_certificate';
+                    
                     if(!is_dir($destination)) {
                         if(!mkdir ($destination, 0777))
                         $this->errors['medical_certificate']=array(
                          'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
                         );
                     }
+                    
                     file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
                     $destination .= DIRECTORY_SEPARATOR.$filename;
                     if (!move_uploaded_file($_FILES['medical_certificate']['tmp_name'], $destination))
@@ -88,7 +90,6 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                     else
                         $data['medical_certificate_fname']=$filename;
                         $data['medical_certificate_datetime']='NOW()';
-                    
                 }
             }
             
@@ -126,6 +127,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
             
             if (sizeof($this->errors) == 0) {
                     $datetime = strptime($data['date_of_birth'], '%d/%m/%Y');
+                    
                     $add_year = 1900;
                     if ($datetime['tm_year'] < 20) 
                         $add_year = 2000;
@@ -136,9 +138,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             $datetime['tm_mon']+1,
                             $datetime['tm_mday'],
                             $datetime['tm_year']+$add_year);
-
-                    $data['date_of_birth'] = strftime('%Y-%m-%d',$destination);
-                    
+                    $data['date_of_birth'] = strftime('%Y-%m-%d',$datetime);
                     $data['id']=  $this->generateKey($data);
                     $data['registration_datetime']='NOW()';
                     $db = JFactory::getDbo();
@@ -177,6 +177,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             'other_num_tes' ,
                             'other_ass_name' ,
                             'payment_type' ,
+                            'payment_fname',
                             'medical_certificate_fname',
                             'medical_certificate_datetime'
                         );
