@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6
+ * @version 0.6.1
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6
+ * @version 0.6.1
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -93,7 +93,8 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                 }
             }
             
-            if ( key_exists('payment_fname',$_FILES) ) {
+            if ( key_exists('payment_fname',$_FILES) &&
+                     $_FILES['payment_fname']['error'] != 4) {
                    if ( $_FILES['payment_fname']['error'] != 0 )
                     $this->errors['payment_fname']=array(
                     'message'=>'C\'è stato un\'errore nel caricare la ricevuta di pagamento, riprova in un secondo momento'

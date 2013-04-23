@@ -78,7 +78,8 @@ JHtml::_('behavior.tooltip');
     </fieldset>
     <fieldset>
     <label for="date_of_birth">Data di nascita</label>
-    <?php echo JHTML::calendar($this->escape($this->item->date_of_birth), 'date_of_birth', 'date_of_birth', '%d/%m/%Y'); ?>
+    <?php 
+    echo JHTML::calendar($this->escape($this->item->date_of_birth), 'date_of_birth', 'date_of_birth', '%Y-%m-%d'); ?>
     <?php if (key_exists('date_of_birth', $errors)) echo '<p class="error">'.$errors['date_of_birth']['message'].'</p>';?>
     </fieldset>
     <fieldset id="sex_container">
@@ -173,7 +174,7 @@ JHtml::_('behavior.tooltip');
     <a id="generate_pectoral" href="#">Genera un pettorale</a>
     <?php endif; ?>
     </fieldset>    
-    <input type="hidden" id="task" name="task" value="maratonregister.add" />
+    <input type="hidden" id="task" name="task" value="maratonregister" />
     <?php echo JHtml::_('form.token'); ?>
 </form>
 <script type="text/javascript">
@@ -190,7 +191,7 @@ JHtml::_('behavior.tooltip');
     $$("form").addEvent("submit", function(){
          if ($("task").get("value") !== "save")
              return;
-         status = true;
+         var status = true;
          el = this.getElements("p").destroy();
          mc = "";
          mc_el = $("medical_certificate");

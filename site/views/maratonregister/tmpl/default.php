@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6
+ * @version 0.6.1
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -14,10 +14,10 @@ $errors = $this->getModel()->getErrors();
 <p>Gia registrato? <a href="?option=com_maratonregister&amp;task=verify">Verifica lo stato della tua iscrizione</a></p>
 <form action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
     <a id="fidal" href="?option=com_maratonregister" title="Tesserato Fidal">
-        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
+        <img style="opacity:0.6.1; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
     </a>
     <a id="other_ass" href="?option=com_maratonregister" title="Tesserato altra federazione">
-        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
+        <img style="opacity:0.6.1; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
     </a>
     <a id="amateur" href="?option=com_maratonregister" title="Non tesserati fidal">
         <img  src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
@@ -118,7 +118,7 @@ $errors = $this->getModel()->getErrors();
     $(document.body).getElements("a.targetblank").setProperty("target","_blank");
     $("fidal").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.6",
+            opacity:"0.6.1",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -134,7 +134,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("other_ass").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.6",
+            opacity:"0.6.1",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -150,7 +150,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("amateur").addEvent("click", function(){
        $("registration").getElements("img").setStyles({
-            opacity:"0.6",
+            opacity:"0.6.1",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");

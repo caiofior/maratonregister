@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6
+ * @version 0.6.1
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6
+ * @version 0.6.1
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -129,8 +129,9 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                     
                 }
             } 
-            
-                        if ( key_exists('payment_fname',$_FILES) ) {
+            if ( key_exists('payment_fname',$_FILES) &&
+                     $_FILES['payment_fname']['error'] != 4
+                    ) {
                    if ( $_FILES['payment_fname']['error'] != 0 )
                     $this->errors['payment_fname']=array(
                     'message'=>'C\'è stato un\'errore nel caricare la ricevuta di pagamento, riprova in un secondo momento'
@@ -142,7 +143,8 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 else {
                     $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['payment_fname']['name'])),-30);
                     $filename = time().'_'.$filename;
-                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'payment_receipt';
+                    $destination = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
+                    'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'payment_receipt';
                     if(!is_dir($destination)) {
                         if(!mkdir ($destination, 0777))
                         $this->errors['payment_fname']=array(
@@ -244,20 +246,7 @@ EOT;
                 $data['pectoral']='NULL';
 
             if (sizeof($this->errors) == 0) {
-                $datetime = strptime($data['date_of_birth'], '%d/%m/%Y');
-                    $add_year = 1900;
-                    if ($datetime['tm_year'] < 20) 
-                        $add_year = 2000;
-                    $datetime = mktime (
-                            0,
-                            0,
-                            0,
-                            $datetime['tm_mon']+1,
-                            $datetime['tm_mday'],
-                            $datetime['tm_year']+$add_year);
-
-                $data['date_of_birth'] = strftime('%Y-%m-%d',$destination);
-                $columns = array(
+                                $columns = array(
                             'id',
                             'first_name' ,
                             'last_name',
@@ -325,7 +314,7 @@ EOT;
                             ->columns($db->quoteName($columns))
                             ->values(implode(',', $values));
                         $db->setQuery($query);
-                        var_dump($db->query());
+                        $db->query();
                     }
 
                 } else {
