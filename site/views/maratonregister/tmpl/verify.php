@@ -6,30 +6,45 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 $errors = $this->getModel()->getErrors();
+function format_date ($data) {
+    $datetime = strptime($data, '%Y-%m-%d %H:%M:%S');
+                    
+                    $add_year = 1900;
+                    if ($datetime['tm_year'] < 20) 
+                        $add_year = 2000;
+                    $datetime = mktime (
+                            $datetime['tm_hour'],
+                            $datetime['tm_min'],
+                            $datetime['tm_sec'],
+                            $datetime['tm_mon']+1,
+                            $datetime['tm_mday'],
+                            $datetime['tm_year']+$add_year);
+                    return strftime('%d/%m/%Y  %H:%M',$datetime);
+}
 ?>
     <h1>Verifica lo stato della registrazione</h1>
     <?php if (!is_null($this->atlete) && !is_null($this->atlete->id)) :    ?>
     <p>Benvenuto <?php echo $this->atlete->first_name; ?> <?php echo $this->atlete->last_name; ?></p>
-    <p>Ti sei registrato il <?php echo $this->atlete->registration_datetime; ?> </p>
+    <p>Ti sei registrato il <?php echo format_date($this->atlete->registration_datetime); ?> </p>
     <?php if ($this->atlete->payment_datetime == '') :?>
     <p>Non ci è perventuo il tuo pagamento</p>
     <?php else : ?>
-    <p>Abbiamo ricevuto il tuo pagamento il <?php echo $this->atlete->payment_datetime; ?></p>
+    <p>Abbiamo ricevuto il tuo pagamento il <?php echo format_date($this->atlete->payment_datetime); ?></p>
     <?php if ($this->atlete->payment_confirm_datetime == '') :?>
     <p>Il tuo pagamento è in attesa di conferma.</p>
     <?php else : ?>
-    <p>Il tuo pagamento è stato confermato il <?php echo $this->atlete->payment_confirm_datetime; ?>.</p>
+    <p>Il tuo pagamento è stato confermato il <?php echo format_date($this->atlete->payment_confirm_datetime); ?>.</p>
     <?php endif; ?>
     <?php endif; ?>
     <?php if ($this->atlete->num_tes == '') : ?>
     <?php if ($this->atlete->medical_certificate_fname == '' ) :?>
     <p>Non ci è arrivato un tuo certificato medico.</p>
     <?php else : ?>
-    <p>Ci hai inviato il tuo certificato medico il <?php echo $this->atlete->medical_certificate_datetime; ?>.</p>
+    <p>Ci hai inviato il tuo certificato medico il <?php echo format_date($this->atlete->medical_certificate_datetime); ?>.</p>
     <?php if ($this->atlete->medical_certificate_confirm_datetime == '' ) :?>
     <p>È in attesa di conferma</p>
     <?php else : ?>
-    <p>È stato confermato il <?php echo $this->atlete->medical_certificate_confirm_datetime; ?></p>
+    <p>È stato confermato il <?php echo format_date($this->atlete->medical_certificate_confirm_datetime); ?></p>
     <?php endif; ?>
     <?php endif; ?>
     <?php endif; ?>

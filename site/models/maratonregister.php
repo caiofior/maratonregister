@@ -140,7 +140,9 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             $datetime['tm_mday'],
                             $datetime['tm_year']+$add_year);
                     $data['date_of_birth'] = strftime('%Y-%m-%d',$datetime);
+                    
                     $data['id']=  $this->generateKey($data);
+
                     $data['registration_datetime']='NOW()';
                     $db = JFactory::getDbo();
                     $query = $db->getQuery(true);
@@ -332,7 +334,13 @@ EOT;
                     $datetime['tm_mon']+1,
                     $datetime['tm_mday'],
                     $datetime['tm_year']+$add_year);
+            $data['date_of_birth'] = strftime('%Y-%m-%d',$datetime);
             
+            if ($id > 0) {
+                $this->errors['first_name']=array(
+                 'message'=>'Sei già registrato alla maratona, contatta lo staff per eventuali problemi'
+                );
+            }
             if ($data['num_tes'] != '') {
                 if (strlen($data['num_tes']) <> 8)
                   $errors['num_tes']=array(
