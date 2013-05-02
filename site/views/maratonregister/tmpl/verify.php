@@ -55,7 +55,7 @@ function format_date ($data) {
     <p class="confirmed">La tua iscrizione è confermata dall'organizzazione.</p>
     <?php endif; ?>
     <?php elseif (!is_null($this->atlete)) : ?>
-    <p class="unconfirmed">Non risulti registrato alla maratona. <a href="?option=com_maratonregister">Registrati</a>
+    <p class="unconfirmed">Non risulti registrato alla Maratonina dei Borghi di Pordenone. <a href="?option=com_maratonregister">Registrati</a>
     </p>
     <?php endif; ?>
     <?php if (key_exists('message', $_REQUEST)) : ?>

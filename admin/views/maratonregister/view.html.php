@@ -69,9 +69,12 @@ class MaratonRegisterViewMaratonRegister extends JView
                 if (key_exists('id', $_REQUEST)) {
                     $item->load($_REQUEST['id']);
                 }
+                
                 if (
-                        key_exists('layout',$_REQUEST) &&
-                        $_REQUEST['layout'] == 'edit'
+                       ( 
+                            key_exists('layout',$_REQUEST) &&
+                            $_REQUEST['layout'] == 'edit'
+                        ) || $this->getLayout() != 'default'
                  ){
                     JToolBarHelper::title('Iscritti');
                     JToolBarHelper::save('save');

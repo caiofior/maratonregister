@@ -127,19 +127,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
             }
             
             if (sizeof($this->errors) == 0) {
-                    $datetime = strptime($data['date_of_birth'], '%d/%m/%Y');
-                    
-                    $add_year = 1900;
-                    if ($datetime['tm_year'] < 20) 
-                        $add_year = 2000;
-                    $datetime = mktime (
-                            0,
-                            0,
-                            0,
-                            $datetime['tm_mon']+1,
-                            $datetime['tm_mday'],
-                            $datetime['tm_year']+$add_year);
-                    $data['date_of_birth'] = strftime('%Y-%m-%d',$datetime);
+                    $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
                     
                     $data['id']=  $this->generateKey($data);
 
@@ -158,7 +146,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
 
                     if ($id > 0) {
                         $this->errors['first_name']=array(
-                         'message'=>'Sei già registrato alla maratona, contatta lo staff per eventuali problemi'
+                         'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
                         );
                     }
                     else {
@@ -322,23 +310,11 @@ EOT;
         public function checkData($data) {
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
-            
-            $datetime = strptime($data['date_of_birth'], '%d/%m/%Y');
-            $add_year = 1900;
-            if ($datetime['tm_year'] < 20) 
-                $add_year = 2000;
-            $datetime = mktime (
-                    0,
-                    0,
-                    0,
-                    $datetime['tm_mon']+1,
-                    $datetime['tm_mday'],
-                    $datetime['tm_year']+$add_year);
-            $data['date_of_birth'] = strftime('%Y-%m-%d',$datetime);
-            
+            $datetime = $this->getDateTime($data['date_of_birth']);
+            $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
             if ($id > 0) {
                 $this->errors['first_name']=array(
-                 'message'=>'Sei già registrato alla maratona, contatta lo staff per eventuali problemi'
+                 'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
                 );
             }
             if ($data['num_tes'] != '') {
@@ -535,6 +511,35 @@ EOT;
             if ($id != '' )
                 $atlete->load($id);
             return $atlete;
+        }
+        /**
+         * Gets the uniz timestamp
+         */
+        private function getDateTime($date) {
+            if ($date == '')
+                return 0;
+            return strptime($date, '%d/%m/%Y');
+        } 
+        /**
+         * Parses date and time
+         * @param string $date
+         * @return string
+         */
+        private function parseDate ($date) {
+            if ($date == '')
+                return '';
+            $datetime = $this->getDateTime($date);
+                $add_year = 1900;
+                if ($datetime['tm_year'] < 20) 
+                    $add_year = 2000;
+                $datetime = mktime (
+                        0,
+                        0,
+                        0,
+                        $datetime['tm_mon']+1,
+                        $datetime['tm_mday'],
+                        $datetime['tm_year']+$add_year);
+                return strftime('%Y-%m-%d',$datetime);
         }
         
 }

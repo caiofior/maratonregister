@@ -307,7 +307,7 @@ EOT;
                     $id = intval($db->loadResult());
                     if ($id > 0) {
                         $this->errors['first_name']=array(
-                         'message'=>'Sei già registrato alla maratona, contatta lo staff per eventuali problemi'
+                         'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
                         );
                     }
                     else {
