@@ -202,7 +202,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             $config->getValue( 'config.fromname' )
                         );
                         $mailer->setSender($sender);
-                        $mailer->addRecipient($sender);
+                        $mailer->addRecipient($config->getValue( 'config.mailfrom' ));
                         $body   = <<<EOT
 <p>Nuova iscrizione alla Maratonina dei Borghi di Pordenone</p>
 <table>
@@ -310,8 +310,10 @@ EOT;
         public function checkData($data) {
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
+
             $datetime = $this->getDateTime($data['date_of_birth']);
             $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
+
             if ($id > 0) {
                 $this->errors['first_name']=array(
                  'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
@@ -518,7 +520,18 @@ EOT;
         private function getDateTime($date) {
             if ($date == '')
                 return 0;
-            return strptime($date, '%d/%m/%Y');
+            $datetime = strptime($date, '%d/%m/%Y');
+		$add_year = 1900;
+                if ($datetime['tm_year'] < 20) 
+                    $add_year = 2000;
+                return mktime (
+                        0,
+                        0,
+                        0,
+                        $datetime['tm_mon']+1,
+                        $datetime['tm_mday'],
+                        $datetime['tm_year']+$add_year);
+
         } 
         /**
          * Parses date and time
@@ -529,16 +542,7 @@ EOT;
             if ($date == '')
                 return '';
             $datetime = $this->getDateTime($date);
-                $add_year = 1900;
-                if ($datetime['tm_year'] < 20) 
-                    $add_year = 2000;
-                $datetime = mktime (
-                        0,
-                        0,
-                        0,
-                        $datetime['tm_mon']+1,
-                        $datetime['tm_mday'],
-                        $datetime['tm_year']+$add_year);
+                
                 return strftime('%Y-%m-%d',$datetime);
         }
         

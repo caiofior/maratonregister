@@ -25,19 +25,29 @@ class MaratonRegisterControllerMaratonRegister extends JControllerForm
         $query = $db->getQuery(true);
 
         // Select some fields
-        $query->select('*');
+        $query->select(array(
+            'atlete.*',
+            'fidal_fella.denom'
+        ));
 
         // From the hello table
-        $query->from('#__atlete')->where('removed=0 OR removed IS NULL');
+        $query->from('#__atlete AS atlete')->join('LEFT', '#__fidal_fella AS fidal_fella ON (atlete.num_tes = fidal_fella.num_tes)')->where('atlete.removed=0 OR atlete.removed IS NULL');
         $db->setQuery($query);
+
         $atletes = $db->query();
+        if (is_resource($atletes))
+            $resource_type = get_resource_type($atletes);
+        else if (is_object($atletes))
+            $resource_type = get_class ($atletes);
 	header('Content-type: application/ms-excel');
         header('Content-Disposition: attachment; filename=atletes.csv');
-	switch ( get_resource_type($atletes)) {
+	switch ( $resource_type) {
 		case 'mysql result':
+                case 'mysql_result':
 			$function_fetch = 'mysql_fetch_assoc';
 		break;
 		case 'mysqli result':
+                case 'mysqli_result':
 			$function_fetch = 'mysqli_fetch_assoc';
 		break;
 	}
