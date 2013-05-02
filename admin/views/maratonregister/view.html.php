@@ -2,7 +2,7 @@
 /**
  * Maraton Register View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.application.component.view');
 /**
  * Maraton Register View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 class MaratonRegisterViewMaratonRegister extends JView
 {
@@ -38,6 +38,8 @@ class MaratonRegisterViewMaratonRegister extends JView
                         exit;
                     } else {
                         $model->setData($_REQUEST);
+                        $this->setLayout('default');
+
                     }
                 }
                 $item = $this->get('Item');
@@ -88,6 +90,9 @@ class MaratonRegisterViewMaratonRegister extends JView
                 $this->items = $this->get('Items');
                 $this->pagination = $this->get('Pagination');
                 $this->state	= $this->get('State');
+                
+                
+                
                 // Display the template
                 parent::display($tpl);
         }

@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -56,7 +56,7 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 $db = JFactory::getDBO();
                 $query = $db->getQuery(true);
                 // Select some fields
-                $query->select('id,first_name,last_name,date_of_birth,num_tes,city,registration_datetime');
+                $query->select('id,first_name,last_name,date_of_birth,num_tes,city,registration_datetime,payment_confirm_datetime,medical_certificate_confirm_datetime,pectoral');
                 // From the hello table
                 $query->from('#__atlete')->where(' (removed =0 OR removed IS NULL) ');
                 $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
@@ -179,9 +179,9 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 $mailer->setSender($sender);
                 $mailer->addRecipient($data['email']);
                 $body   = <<<EOT
-<p>Il certificato medico è stato confermato</p>
+<p>Il certificato medico per la Maratonina dei Borghi di Pordenone è stato confermato</p>
 EOT;
-                $mailer->setSubject('Conferma certificato medico maratonina dei borghi');
+                $mailer->setSubject('Conferma certificato medico Maratonina dei Borghi di Pordenone');
                 $mailer->isHTML(true);
                 $mailer->setBody($body);
                 $mailer->Send();
@@ -205,9 +205,9 @@ EOT;
                 $mailer->setSender($sender);
                 $mailer->addRecipient($data['email']);
                 $body   = <<<EOT
-<p>Il pagamento è stato confermato</p>
+<p>Il pagamento dell'iscrizione alla Maratonina dei Borghi di Pordenone è stato confermato</p>
 EOT;
-                $mailer->setSubject('Conferma pagamento maratonina dei borghi');
+                $mailer->setSubject('Conferma pagamento Maratonina dei Borghi di Pordenone');
                 $mailer->isHTML(true);
                 $mailer->setBody($body);
                 $mailer->Send();
@@ -232,9 +232,9 @@ EOT;
                         $mailer->setSender($sender);
                         $mailer->addRecipient($data['email']);
                         $body   = <<<EOT
-        <p>La tua iscrizione è stata confermata</p>
+        <p>La tua iscrizione alla FIDAL è stata convalidata alla Maratonina dei Borghi di Pordenone</p>
 EOT;
-                        $mailer->setSubject('Conferma iscrizione maratonina dei borghi');
+                        $mailer->setSubject('Conferma iscrizione FIDAL alla Maratonina dei Borghi di Pordenone');
                         $mailer->isHTML(true);
                         $mailer->setBody($body);
                         $mailer->Send();
@@ -242,6 +242,28 @@ EOT;
                     }
             else 
                 unset ($data['num_tes_datetime_confirmed']);
+            if (
+                    $atlete->pectoral != '' && 
+                    $data['pectoral'] != '' &&
+                    $data['pectoral'] != 0
+                ) {
+                        $mailer = JFactory::getMailer();
+                        $config = JFactory::getConfig();
+                        $sender = array( 
+                            $config->getValue( 'config.mailfrom' ),
+                            $config->getValue( 'config.fromname' )
+                        );
+                        $mailer->setSender($sender);
+                        $mailer->addRecipient($data['email']);
+                        $body   = <<<EOT
+        <p>La tua iscrizione alla Maratonina dei Borghi di Pordenone è stata confermata</p>
+EOT;
+                        $mailer->setSubject('Conferma iscrizione Maratonina dei Borghi di Pordenone');
+                        $mailer->isHTML(true);
+                        $mailer->setBody($body);
+                        $mailer->Send();
+            }
+                
             if ($data['pectoral'] == '' || $data['pectoral'] == 0)
                 $data['pectoral']='NULL';
 
@@ -389,7 +411,7 @@ EOT;
                   );
                 else if (strlen($data['citizenship'])>50)
                     $errors['citizenship']=array(
-                      'message'=>'La cittadinanaza può avere al massimo 50 caratteri'
+                      'message'=>'La cittadinanza può avere al massimo 50 caratteri'
                   );
                 if ($data['address'] == '')
                   $errors['address']=array(

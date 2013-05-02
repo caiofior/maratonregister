@@ -1,0 +1,55 @@
+p.error {
+    border-color: #9B1200;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #ff9966;
+    display: inline;
+    padding: 2px;
+}
+p.error:before {
+    content:url('../images/notice-alert.png');
+}
+input.wrong_field {
+    border-color: #9B1200;
+    border-width: 1px;
+    border-style: solid;
+}
+p.unconfirmed {
+    border-color: #9B1200;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #ff9966;
+    padding: 2px;
+    float:left;
+    clear: both;
+}
+p.unconfirmed:before {
+    content:url('../images/notice-alert.png');
+}
+p.confirmed {
+    border-color: #009933;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #99ff99;
+    padding: 2px;
+    float:left;
+    clear: both;
+}
+p.confirmed:before {
+    content:url('../images/checkin.png');
+}
+p.info {
+    border-color: #004080;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #99ffff;
+    padding: 2px;
+    float:left;
+    clear: both;
+}
+p.info:before {
+    content:url('../images/info.png');
+}
+form {
+    clear: both;
+}

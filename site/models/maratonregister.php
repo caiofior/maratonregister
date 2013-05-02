@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -216,7 +216,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                         $mailer->setSender($sender);
                         $mailer->addRecipient($sender);
                         $body   = <<<EOT
-<p>Nuova iscrizione alla maratonia dei Borghi</p>
+<p>Nuova iscrizione alla Maratonina dei Borghi di Pordenone</p>
 <table>
     <tr>
         <th>Nome e cognome</th>
@@ -267,7 +267,7 @@ EOT;
                         $mailer->setSender($sender);
                         $mailer->addRecipient($data['email']);
                         $body   = <<<EOT
-<p>Grazie per esserti iscritto alla maratonia dei Borghi, questi sono i dati da te forniti</p>
+<p>Grazie per esserti iscritto alla Maratonina dei Borghi, questi sono i dati da te forniti</p>
 <table>
     <tr>
         <th>Nome e cognome</th>
@@ -302,9 +302,9 @@ EOT;
         <td>{$data['num_tes']}</th>
     </tr>
 </table>
-<p>Per errori o inesattezze contatta l'organizzazione della maratone.</p>
+<p>Per errori o inesattezze contatta l'organizzazione della Maratonina dei Borghi di Pordenone.</p>
 EOT;
-                        $mailer->setSubject('Grazie per esserti iscritto alla maratonia dei Borghi');
+                        $mailer->setSubject('Grazie per esserti iscritto alla Maratonina dei Borghi di Pordenone');
                         $mailer->isHTML(true);
                         $mailer->setBody($body);
                         $mailer->Send();

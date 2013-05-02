@@ -1,10 +1,11 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+JHtml::_('stylesheet','components/com_maratonregister/assets/css/com_maratonregister.css');
 $errors = $this->getModel()->getErrors();
 ?>
 <h1>Registrati</h1>
@@ -14,10 +15,10 @@ $errors = $this->getModel()->getErrors();
 <p>Gia registrato? <a href="?option=com_maratonregister&amp;task=verify">Verifica lo stato della tua iscrizione</a></p>
 <form action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
     <a id="fidal" href="?option=com_maratonregister" title="Tesserato Fidal">
-        <img style="opacity:0.6.1; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
+        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
     </a>
     <a id="other_ass" href="?option=com_maratonregister" title="Tesserato altra federazione">
-        <img style="opacity:0.6.1; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
+        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
     </a>
     <a id="amateur" href="?option=com_maratonregister" title="Non tesserati fidal">
         <img  src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
@@ -79,12 +80,12 @@ $errors = $this->getModel()->getErrors();
     </fieldset>
     <fieldset id="medical_certificate_container">
     <div>
-        <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Modulo giornaliero">
-            Modulo giornaliero
-            <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Modulo giornaliero" style="float: left;"/>
+        <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
+            Autocertificazione buona salute per atleti stranieri
+            <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Autocertificazione buona salute per atleti stranieri" style="float: left;"/>
         </a>
     </div>
-    <label for="medical_certificate">Certificato Medico</label>
+    <label for="medical_certificate">Carica il tuo Certificato Medico</label>
     <div class="fileinputs">
         <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
     </div>
@@ -100,7 +101,7 @@ $errors = $this->getModel()->getErrors();
     <input type="radio" id="paypal" name="payment_type" value="paypal" />
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
     <div>
-    <label for="payment_fname">Ricevuta di pagamento</label>
+    <label for="payment_fname">Carica la ricevuta di pagamento</label>
     <div class="fileinputs">
         <input class="file" type="file" id="payment_fname" name="payment_fname" value ="" />
     </div>
@@ -118,7 +119,7 @@ $errors = $this->getModel()->getErrors();
     $(document.body).getElements("a.targetblank").setProperty("target","_blank");
     $("fidal").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.6.1",
+            opacity:"0.6",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -134,7 +135,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("other_ass").addEvent("click", function(){
         $("registration").getElements("img").setStyles({
-            opacity:"0.6.1",
+            opacity:"0.6",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -150,7 +151,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("amateur").addEvent("click", function(){
        $("registration").getElements("img").setStyles({
-            opacity:"0.6.1",
+            opacity:"0.6",
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
@@ -166,6 +167,7 @@ $errors = $this->getModel()->getErrors();
     });
     $("submit").addEvent("click", function(){
          var status = true;
+         $$("input.wrong_field").removeClass("wrong_field");
          $("registration").getElements("p").destroy();
          new Request.JSON({
             async:false,
@@ -177,6 +179,7 @@ $errors = $this->getModel()->getErrors();
                     el = new Element("p");
                     el.addClass("error");
                     el.appendText(object.message);
+                    $(id).addClass("wrong_field");
                     $(id).grab(el,"after");
                 });
                 
@@ -187,9 +190,8 @@ $errors = $this->getModel()->getErrors();
     function initFileUploads() {
 	var fakeFileUpload = document.createElement("a");
         fakeFileUpload.setAttribute("href","#");
-	fakeFileUpload.innerHTML = 'Allega: ';
         container = document.createElement("span");
-        container.innerHTML = "Scegli un documento";
+        container.innerHTML = "Scegli il documento";
         fakeFileUpload.appendChild(container);
 	var x = document.getElementsByTagName("input");
 	for (var i=0;i<x.length;i++) {

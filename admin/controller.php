@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 defined('_JEXEC') or die('Restricted access');
  
@@ -11,7 +11,7 @@ jimport('joomla.application.component.controller');
 /**
  * General Controller of MaratonRegister component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.6.1
+ * @version 0.7
  */
 class MaratonRegisterController extends JController
 {
@@ -35,7 +35,7 @@ class MaratonRegisterController extends JController
                 $input->set('view', $input->getCmd('view', 'MaratonRegister'));
                 
                 // call parent behavior
-                parent::display($cachable);
+                parent::display(false,false);
         }
         /**
          * Manages fidal task
@@ -46,7 +46,7 @@ class MaratonRegisterController extends JController
                 $input = JFactory::getApplication()->input;
                 $input->set('view', 'fidal');
                 // call parent behavior
-                parent::display($cachable);
+                parent::display(false,false);
         }
          /**
          * Manages fidal_deleteall task
@@ -59,7 +59,7 @@ class MaratonRegisterController extends JController
                 $input = JFactory::getApplication()->input;
                 $input->set('view', 'fidal');
                 // call parent behavior
-                parent::display($cachable);
+                parent::display(false,false);
         }
         /**
          * Manages fidal task
@@ -83,7 +83,7 @@ class MaratonRegisterController extends JController
                 $input = JFactory::getApplication()->input;
                 $input->set('view', 'import');
                 // call parent behavior
-                parent::display($cachable);
+                parent::display(false,false);
         }
         /**
          * Gets the new pectoral number

@@ -22,7 +22,7 @@ defined('_JEXEC') or die('Restricted Access');
                 Città
         </th>
         <th>
-                Data registrazione
+                Data e stato registrazione
         </th>
         <th>
                 Modifica
