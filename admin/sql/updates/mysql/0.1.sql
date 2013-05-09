@@ -22,6 +22,8 @@ CREATE TABLE  IF NOT EXISTS `#__atlete` (
   `medical_certificate_fname` VARCHAR(50) NULL COMMENT 'Medical certificate file name' ,
   `medical_certificate_datetime` DATETIME NULL COMMENT 'Medical certificate date time' ,
   `medical_certificate_confirm_datetime` DATETIME NULL COMMENT 'Medical certificate confirm date time, if null not confirmed' ,
+  `game_card_fname` VARCHAR(50) NULL COMMENT 'Game card file name' ,
+  `game_card_datetime` DATETIME NULL COMMENT 'Game card upload date time' ,
   `pectoral` INT NULL COMMENT 'Pectoral number' ,
   `removed` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'Removed items' ,
   PRIMARY KEY (`id`, `removed`) COMMENT 'Id must be unique',

@@ -120,13 +120,28 @@ JHtml::_('behavior.tooltip');
         <a target="_blank" href="<?php echo 
                 '../components/com_maratonregister/medical_certificate/'.
                 $this->item->medical_certificate_fname; ?>">Certificato medico</a></br>
+                <p>Caricato il <?php echo $this->item->medical_certificate_datetime;?></p> 
     <label for="medical_certificate_confirm_datetime">Conferma certificato medico</label>
-    <input <?php echo ($this->item->medical_certificate_confirm_datetime != '' ? 'checked="checked"' : ''); ?> type="checkbox" id="medical_certificate_confirm_datetime" name="medical_certificate_confirm_datetime" value ="1" />
+    <input <?php echo ($this->item->medical_certificate_confirm_datetime != '' ? 'checked="checked" disabled="disabled"' : ''); ?> type="checkbox" id="medical_certificate_confirm_datetime" name="medical_certificate_confirm_datetime" value ="1" />
     <?php else : ?>
     <label for="medical_certificate">Certificato Medico</label>
     <input type="file" id="medical_certificate" name="medical_certificate" value ="" />
         <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
     <?php endif; ?>
+    </fieldset>
+    <fieldset id="game_card_container">
+    <?php
+        $game_card_fname = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
+                'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'game_card'.DIRECTORY_SEPARATOR.
+                $this->item->game_card_fname;
+        if (is_file($game_card_fname)) : ?>
+        <a target="_blank" href="<?php echo 
+                '../components/com_maratonregister/game_card/'.
+                $this->item->game_card_fname; ?>">Cartellino di partecipazione</a></br>
+        <p>Caricato il <?php echo $this->item->game_card_datetime;?></p>        
+        <? else : ?>
+        <p>Cartellino di partecipazione non disponibile</p>
+        <?php endif; ?>
     </fieldset>
     <fieldset id="payment_type_container">
     <legend>Modalità di pagamento</legend>
@@ -152,6 +167,7 @@ JHtml::_('behavior.tooltip');
         <a target="_blank" href="<?php echo 
                 '../components/com_maratonregister/payment_receipt/'.
                 $this->item->payment_fname; ?>">Ricevuta di pagamento</a></br>
+        <p>Caricata il <?php echo $this->item->payment_datetime;?></p> 
     </label>
     <?php else : ?>
     <label for="payment_fname">Ricevuta di pagamento</label>
@@ -159,7 +175,7 @@ JHtml::_('behavior.tooltip');
         <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
     <?php endif; ?>
     <label for="payment_confirm_datetime">Conferma pagamento</label>
-    <input <?php echo ($this->item->payment_confirm_datetime != '' ? 'checked="checked"' : ''); ?> type="checkbox" id="payment_confirm_datetime" name="payment_confirm_datetime" value ="1" />    
+    <input <?php echo ($this->item->payment_confirm_datetime != '' ? 'checked="checked" disabled="disabled"' : ''); ?> type="checkbox" id="payment_confirm_datetime" name="payment_confirm_datetime" value ="1" />    
    
     </fieldset>
     <fieldset id="email_container">

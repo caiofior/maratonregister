@@ -2,7 +2,7 @@
 /**
  * Fidal Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.7
+ * @version 0.8
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Fidal Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.7
+ * @version 0.8
  */
 class MaratonRegisterModelFidal extends JModelList
 {

@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.7
+ * @version 0.8
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.7
+ * @version 0.8
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -164,6 +164,40 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 }
             }
             
+            if ( key_exists('game_card_fname',$_FILES) &&
+                     $_FILES['game_card_fname']['error'] != 4) {
+                   if ( $_FILES['game_card_fname']['error'] != 0 )
+                    $this->errors['game_card_fname']=array(
+                    'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
+                    );
+                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['payment_fname']['name']))
+                    $this->errors['game_card_fname']=array(
+                     'message'=>'Puoi inviare il cartellino come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
+                    );
+                else {
+                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['game_card_fname']['name'])),-30);
+                    $filename = time().'_'.$filename;
+                    $destination = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
+                    'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'game_card';
+                    if(!is_dir($destination)) {
+                        if(!mkdir ($destination, 0777))
+                        $this->errors['game_card_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
+                        );
+                    }
+                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
+                    $destination .= DIRECTORY_SEPARATOR.$filename;
+                    if (!move_uploaded_file($_FILES['game_card_fname']['tmp_name'], $destination))
+                        $this->errors['game_card_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
+                        );
+                    else
+                        $data['game_card_fname']=$filename;
+                        $data['game_card_datetime']='NOW()';
+                    
+                }
+            }
+            
             if (
                     $data['medical_certificate_confirm_datetime'] == 1 &&
                     $atlete->payment_confirm_datetime == ''
@@ -243,7 +277,7 @@ EOT;
             else 
                 unset ($data['num_tes_datetime_confirmed']);
             if (
-                    $atlete->pectoral != '' && 
+                    $atlete->pectoral == '' && 
                     $data['pectoral'] != '' &&
                     $data['pectoral'] != 0
                 ) {
@@ -291,6 +325,8 @@ EOT;
                             'medical_certificate_fname',
                             'medical_certificate_datetime',
                             'medical_certificate_confirm_datetime',
+                            'game_card_fname',
+                            'game_card_datetime',
                             'pectoral'
                         );
                     $db = JFactory::getDbo();
@@ -322,7 +358,9 @@ EOT;
                                     $column == 'medical_certificate_datetime' ||
                                     $column == 'medical_certificate_confirm_datetime' ||
                                     $column == 'num_tes_datetime_confirmed' ||
+                                    $column == 'payment_datetime' ||
                                     $column == 'payment_confirm_datetime' ||
+                                    $column == 'game_card_datetime' ||
                                     $data[$column] == 'NULL'
                                 )
                                 $values[$column]=$data[$column];

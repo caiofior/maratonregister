@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.7
+ * @version 0.8
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -27,7 +27,7 @@ function format_date ($data) {
     <?php if (!is_null($this->atlete) && !is_null($this->atlete->id)) :    ?>
     <p>Benvenuto <?php echo $this->atlete->first_name; ?> <?php echo $this->atlete->last_name; ?></p>
     <p class="confirmed">Ti sei registrato il <?php echo format_date($this->atlete->registration_datetime); ?> </p>
-    <?php if ($this->atlete->payment_datetime == '') :?>
+    <?php if ($this->atlete->payment_fname == '') :?>
     <p class="unconfirmed">Non ci è perventuo il tuo pagamento</p>
     <?php else : ?>
     <p class="confirmed">Abbiamo ricevuto il tuo pagamento il <?php echo format_date($this->atlete->payment_datetime); ?> ed è in attesa di conferma</p>

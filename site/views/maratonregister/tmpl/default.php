@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.7
+ * @version 0.8
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -90,6 +90,19 @@ $errors = $this->getModel()->getErrors();
         <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
     </div>
     <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
+    </fieldset>
+    <fieldset id=game_card_container">
+    <div>
+        <a href="components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
+            Cartellino di partecipazione gare su strada
+            <img width="100" hight="142" src ="components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
+        </a>
+    </div>
+    <label for="medical_certificate">Carica il tuo cartellino di partecipazione compilato</label>
+    <div class="fileinputs">
+        <input class="file" type="file" id="game_card_fname" name="game_card_fname" value ="" />
+    </div>
+    <?php if (key_exists('game_card_fname', $errors)) echo '<p class="error">'.$errors['game_card_fname']['message'].'</p>';?>
     </fieldset>
     <fieldset id="payment_type_container">
     <legend>Modalità di pagamento</legend>
