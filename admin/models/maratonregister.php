@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.8
+ * @version 0.9
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.8
+ * @version 0.9
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -222,7 +222,7 @@ EOT;
                     }
                     }
             else 
-                unset ($data['medical_certificate_confirm_datetime']);
+                $data['medical_certificate_confirm_datetime']='NULL';
             
             if (
                     $data['payment_confirm_datetime'] == 1 &&
@@ -248,7 +248,7 @@ EOT;
                 }
                }
             else 
-                unset ($data['payment_confirm_datetime']);
+                $data['payment_confirm_datetime']='NULL';
             
             if (
                     $atlete->num_tes != '' && 
@@ -578,4 +578,5 @@ EOT;
         public function getErrors() {
             return $this->errors;
         }
+
 }

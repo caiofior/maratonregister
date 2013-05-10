@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.8
+ * @version 0.9
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.8
+ * @version 0.9
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -62,103 +62,12 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                     'message'=>'Il certificato medico è richiesto'
                 );
             } else if ($data['num_tes'] == '') {
-                if ($_FILES['medical_certificate']['error'] != 0)
-                    $this->errors['medical_certificate']=array(
-                    'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
-                    );
-                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['medical_certificate']['name']))
-                    $this->errors['medical_certificate']=array(
-                     'message'=>'Puoi inviare il certificato come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
-                    );
-                else {
-                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name'])),-30);
-                    $filename = time().'_'.$filename;
-                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'medical_certificate';
-                    
-                    if(!is_dir($destination)) {
-                        if(!mkdir ($destination, 0777))
-                        $this->errors['medical_certificate']=array(
-                         'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
-                        );
-                    }
-                    
-                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
-                    $destination .= DIRECTORY_SEPARATOR.$filename;
-                    if (!move_uploaded_file($_FILES['medical_certificate']['tmp_name'], $destination))
-                        $this->errors['medical_certificate']=array(
-                         'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
-                        );
-                    else
-                        $data['medical_certificate_fname']=$filename;
-                        $data['medical_certificate_datetime']='NOW()';
-                }
+                $data = $this->addMedicalCertificate($data);
             }
             
-            if ( key_exists('payment_fname',$_FILES) &&
-                     $_FILES['payment_fname']['error'] != 4) {
-                   if ( $_FILES['payment_fname']['error'] != 0 )
-                    $this->errors['payment_fname']=array(
-                    'message'=>'C\'è stato un\'errore nel caricare la ricevuta di pagamento, riprova in un secondo momento'
-                    );
-                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['payment_fname']['name']))
-                    $this->errors['payment_fname']=array(
-                     'message'=>'Puoi inviare la ricevuta come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
-                    );
-                else {
-                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['payment_fname']['name'])),-30);
-                    $filename = time().'_'.$filename;
-                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'payment_receipt';
-                    if(!is_dir($destination)) {
-                        if(!mkdir ($destination, 0777))
-                        $this->errors['payment_fname']=array(
-                         'message'=>'C\'è stato un\'errore nel caricare la ricevuta, riprova in un secondo momento'
-                        );
-                    }
-                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
-                    $destination .= DIRECTORY_SEPARATOR.$filename;
-                    if (!move_uploaded_file($_FILES['payment_fname']['tmp_name'], $destination))
-                        $this->errors['payment_fname']=array(
-                         'message'=>'C\'è stato un\'errore nel caricare la ricevuta, riprova in un secondo momento'
-                        );
-                    else
-                        $data['payment_fname']=$filename;
-                        $data['payment_datetime']='NOW()';
-                    
-                }
-            }
+            $data = $this->addPayment($data);
 
-            if ( key_exists('game_card_fname',$_FILES) &&
-                     $_FILES['game_card_fname']['error'] != 4) {
-                   if ( $_FILES['game_card_fname']['error'] != 0 )
-                    $this->errors['game_card_fname']=array(
-                    'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
-                    );
-                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['payment_fname']['name']))
-                    $this->errors['game_card_fname']=array(
-                     'message'=>'Puoi inviare il cartellino come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
-                    );
-                else {
-                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['game_card_fname']['name'])),-30);
-                    $filename = time().'_'.$filename;
-                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'game_card';
-                    if(!is_dir($destination)) {
-                        if(!mkdir ($destination, 0777))
-                        $this->errors['game_card_fname']=array(
-                         'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
-                        );
-                    }
-                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
-                    $destination .= DIRECTORY_SEPARATOR.$filename;
-                    if (!move_uploaded_file($_FILES['game_card_fname']['tmp_name'], $destination))
-                        $this->errors['game_card_fname']=array(
-                         'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
-                        );
-                    else
-                        $data['game_card_fname']=$filename;
-                        $data['game_card_datetime']='NOW()';
-                    
-                }
-            }
+            $data = $this->addgameCard($data);
             
             if (sizeof($this->errors) == 0) {
                     $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
@@ -582,6 +491,124 @@ EOT;
             $datetime = $this->getDateTime($date);
                 
                 return strftime('%Y-%m-%d',$datetime);
+        }
+        /**
+         * add Payment Data
+         * @param array $data
+         * @return array
+         */
+        public function addPayment ($data) {
+            if ( key_exists('payment_fname',$_FILES) &&
+                     $_FILES['payment_fname']['error'] != 4) {
+                   if ( $_FILES['payment_fname']['error'] != 0 )
+                    $this->errors['payment_fname']=array(
+                    'message'=>'C\'è stato un\'errore nel caricare la ricevuta di pagamento, riprova in un secondo momento'
+                    );
+                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['payment_fname']['name']))
+                    $this->errors['payment_fname']=array(
+                     'message'=>'Puoi inviare la ricevuta come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
+                    );
+                else {
+                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['payment_fname']['name'])),-30);
+                    $filename = time().'_'.$filename;
+                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'payment_receipt';
+                    if(!is_dir($destination)) {
+                        if(!mkdir ($destination, 0777))
+                        $this->errors['payment_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare la ricevuta, riprova in un secondo momento'
+                        );
+                    }
+                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
+                    $destination .= DIRECTORY_SEPARATOR.$filename;
+                    if (!move_uploaded_file($_FILES['payment_fname']['tmp_name'], $destination))
+                        $this->errors['payment_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare la ricevuta, riprova in un secondo momento'
+                        );
+                    else
+                        $data['payment_fname']=$filename;
+                        $data['payment_datetime']='NOW()';
+                    
+                }
+            }
+            return $data;
+        }
+        /**
+         * Adds gamecard data
+         * @param array $data
+         * @return array
+         */
+        public function addGameCard($data) {
+            if ( key_exists('game_card_fname',$_FILES) &&
+                     $_FILES['game_card_fname']['error'] != 4) {
+                   if ( $_FILES['game_card_fname']['error'] != 0 )
+                    $this->errors['game_card_fname']=array(
+                    'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
+                    );
+                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['payment_fname']['name']))
+                    $this->errors['game_card_fname']=array(
+                     'message'=>'Puoi inviare il cartellino come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
+                    );
+                else {
+                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['game_card_fname']['name'])),-30);
+                    $filename = time().'_'.$filename;
+                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'game_card';
+                    if(!is_dir($destination)) {
+                        if(!mkdir ($destination, 0777))
+                        $this->errors['game_card_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
+                        );
+                    }
+                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
+                    $destination .= DIRECTORY_SEPARATOR.$filename;
+                    if (!move_uploaded_file($_FILES['game_card_fname']['tmp_name'], $destination))
+                        $this->errors['game_card_fname']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare il cartellino di partecipazione, riprova in un secondo momento'
+                        );
+                    else
+                        $data['game_card_fname']=$filename;
+                        $data['game_card_datetime']='NOW()';
+                    
+                }
+            }
+            return $data;
+        }
+        /**
+         * Adds a medical certificate
+         * @param array $data
+         * @return array
+         */
+        public function addMedicalCertificate ($data) {
+            if ($_FILES['medical_certificate']['error'] != 0)
+                    $this->errors['medical_certificate']=array(
+                    'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
+                    );
+                else if (preg_match ('/^\.(pdf|jpg|jpeg|gif|png|tiff)$/i',$_FILES['medical_certificate']['name']))
+                    $this->errors['medical_certificate']=array(
+                     'message'=>'Puoi inviare il certificato come documento PDF o immagine in formato JPG, TIFF, PNG e GIF'
+                    );
+                else {
+                    $filename = substr(preg_replace('/[^a-z_0-9\.]/','_',strtolower($_FILES['medical_certificate']['name'])),-30);
+                    $filename = time().'_'.$filename;
+                    $destination = dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'medical_certificate';
+                    
+                    if(!is_dir($destination)) {
+                        if(!mkdir ($destination, 0777))
+                        $this->errors['medical_certificate']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
+                        );
+                    }
+                    
+                    file_put_contents($destination.DIRECTORY_SEPARATOR.'index.html','<html><body bgcolor="#FFFFFF"></body></html>');
+                    $destination .= DIRECTORY_SEPARATOR.$filename;
+                    if (!move_uploaded_file($_FILES['medical_certificate']['tmp_name'], $destination))
+                        $this->errors['medical_certificate']=array(
+                         'message'=>'C\'è stato un\'errore nel caricare il certificato, riprova in un secondo momento'
+                        );
+                    else
+                        $data['medical_certificate_fname']=$filename;
+                        $data['medical_certificate_datetime']='NOW()';
+                }
+                return $data;
         }
         
 }

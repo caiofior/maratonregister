@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.8
+ * @version 0.9
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -24,11 +24,32 @@ function format_date ($data) {
 }
 ?>
     <h1>Verifica lo stato della registrazione</h1>
+    <form action="?option=com_maratonregister&task=verify" method="post" id="registration" name="registration" enctype="multipart/form-data">
     <?php if (!is_null($this->atlete) && !is_null($this->atlete->id)) :    ?>
+    <input type="hidden" id="atlete_id" name="atlete_id" value="<?php echo $this->atlete->id;?>" />
     <p>Benvenuto <?php echo $this->atlete->first_name; ?> <?php echo $this->atlete->last_name; ?></p>
     <p class="confirmed">Ti sei registrato il <?php echo format_date($this->atlete->registration_datetime); ?> </p>
     <?php if ($this->atlete->payment_fname == '') :?>
-    <p class="unconfirmed">Non ci è perventuo il tuo pagamento</p>
+    <p class="unconfirmed">Non è perventuo il tuo pagamento</p>
+    <fieldset id="payment_type_updater">
+    <legend>Modalità di pagamento</legend>
+    <?php $disabled= ''; 
+    if ($this->item->payment_confirm_datetime != '')
+        $disabled= 'disabled="disabled"';  ?>
+    <label for="bank_transfer">Bonifico bancario</label>
+    <input <?php echo $disabled;?> <?php echo ($this->atlete->payment_type == 'bank_transfer' ? 'checked="checked"' : ''); ?> type="radio" id="bank_transfer" name="payment_type" value ="bank_transfer" />
+    <label for="money_order">Bollettino postale</label>
+    <input <?php echo $disabled;?> <?php echo ($this->atlete->payment_type == 'money_order' ? 'checked="checked"' : ''); ?> type="radio" id="money_order" name="payment_type" value ="money_order" />
+    <label for="paypal">Paypal</label>
+    <input <?php echo $disabled;?> <?php echo ($this->atlete->payment_type == 'paypal' ? 'checked="checked"' : ''); ?> type="radio" id="paypal" name="payment_type" value="paypal" />
+    <div>
+    <label for="payment_fname">Carica la ricevuta di pagamento</label>
+    <div class="fileinputs">
+        <input class="file" type="file" id="payment_fname" name="payment_fname" value ="" />
+    </div>
+    <?php if (key_exists('payment_fname', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
+    </div>
+    </fieldset>
     <?php else : ?>
     <p class="confirmed">Abbiamo ricevuto il tuo pagamento il <?php echo format_date($this->atlete->payment_datetime); ?> ed è in attesa di conferma</p>
     <?php if ($this->atlete->payment_confirm_datetime == '') :?>
@@ -39,15 +60,46 @@ function format_date ($data) {
     <?php endif; ?>
     <?php if ($this->atlete->num_tes == '') : ?>
     <?php if ($this->atlete->medical_certificate_fname == '' ) :?>
-    <p class="unconfirmed">Non ci è arrivato un tuo certificato medico.</p>
+    <p class="unconfirmed">Non è arrivato un tuo certificato medico.</p>
+    <fieldset id="medical_certificate_updater">
+    <div>
+        <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
+            Autocertificazione buona salute per atleti stranieri
+            <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Autocertificazione buona salute per atleti stranieri" style="float: left;"/>
+        </a>
+    </div>
+    <label for="medical_certificate">Carica il tuo Certificato Medico</label>
+    <div class="fileinputs">
+        <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
+    </div>
+    <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
+    </fieldset>
     <?php else : ?>
-    <p class="confirmed">Ci hai inviato il tuo certificato medico il <?php echo format_date($this->atlete->medical_certificate_datetime); ?>.</p>
+    <p class="confirmed">Hai inviato il tuo certificato medico il <?php echo format_date($this->atlete->medical_certificate_datetime); ?>.</p>
     <?php if ($this->atlete->medical_certificate_confirm_datetime == '' ) :?>
     <p class="info">Il certificato medico è in attesa di conferma</p>
     <?php else : ?>
     <p class="confirmed">Il certificato medico è stato confermato il <?php echo format_date($this->atlete->medical_certificate_confirm_datetime); ?></p>
     <?php endif; ?>
     <?php endif; ?>
+    <?php endif; ?>
+    <?php if ($this->atlete->game_card_fname == ''):?>
+    <p class="unconfirmed">Non è arrivato il tuo cartellino di partecipazione</p>
+    <fieldset id="game_card_updater">
+    <div>
+        <a href="components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
+            Cartellino di partecipazione gare su strada
+            <img width="100" hight="142" src ="components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
+        </a>
+    </div>
+    <label for="game_card_fname">Carica il tuo cartellino di partecipazione compilato</label>
+    <div class="fileinputs">
+        <input class="file" type="file" id="game_card_fname" name="game_card_fname" value ="" />
+    </div>
+    <?php if (key_exists('game_card_fname', $errors)) echo '<p class="error">'.$errors['game_card_fname']['message'].'</p>';?>
+    </fieldset>
+    <?php else: ?>
+    <p class="confirmed">Il tuo cartellino di partecipazione è arrivato il <?php echo format_date($this->atlete->$this->atlete->game_card_datetime); ?>.</p>
     <?php endif; ?>
     <?php if ($this->atlete->pectoral == ''):?>
     <p class="info">La tua iscrizione non è stata confermata dall'organizzazione</p>
@@ -61,8 +113,7 @@ function format_date ($data) {
     <?php if (key_exists('message', $_REQUEST)) : ?>
     <p><?php echo $_REQUEST['message']; ?></p>
     <?php endif; ?>
-    <form action="?option=com_maratonregister&task=verify" method="post" id="registration" name="registration" enctype="multipart/form-data">
-    <fieldset >
+    <fieldset id="atlete_data">
     <div>
     <label for="first_name">Nome</label>
     <input id="first_name" name="first_name" value ="" />
@@ -84,7 +135,8 @@ function format_date ($data) {
     <?php if (key_exists('num_tes', $errors)) echo '<p class="error">'.$errors['num_tes']['message'].'</p>';?>
     </div>
     </fieldset>
-    <input type="submit" id="submit" name="submit" value="Controlla"/>
+    <input type="submit" id="submit" name="submit" value="Controlla / Aggiorna"/>
     </form>
- 
+    <a id="author" href="https://www.facebook.com/caiofior/" title="Realizzato da Claudio Fior">&#169; 2013 by <img src="http://www.gravatar.com/avatar/2e8d2d37da66c6874a65f69879f8e590.png" width="10" height="10" alt="Claudio Fior" /></a>
+    <script type="text/javascript" src="components/com_maratonregister/assets/js/verify.js"></script>
 

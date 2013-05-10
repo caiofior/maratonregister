@@ -24,6 +24,7 @@ JHtml::_('behavior.framework');
     <a id="uploadfiles" href="javascript:;">Carica i file</a>
 </div>
 </form>
+<a href="https://www.facebook.com/caiofior/" title="Realizzato da Claudio Fior">&#169; 2013 by <img src="http://www.gravatar.com/avatar/2e8d2d37da66c6874a65f69879f8e590.png" width="10" height="10" alt="Claudio Fior" /></a>
 <script type="text/javascript">
 // Custom example logic
 function $(id) {

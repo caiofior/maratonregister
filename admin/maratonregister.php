@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.8
+ * @version 0.9
  */
 
 // No direct access to this file

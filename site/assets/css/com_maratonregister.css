@@ -50,6 +50,13 @@ p.info {
 p.info:before {
     content:url('../images/info.png');
 }
-form {
+#atlete_data,
+#medical_certificate_updater,
+#payment_type_updater,
+#game_card_updater,
+#submit ,
+#author
+{
+    float:left;
     clear: both;
 }

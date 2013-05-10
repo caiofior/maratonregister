@@ -122,7 +122,17 @@ JHtml::_('behavior.tooltip');
                 $this->item->medical_certificate_fname; ?>">Certificato medico</a></br>
                 <p>Caricato il <?php echo $this->item->medical_certificate_datetime;?></p> 
     <label for="medical_certificate_confirm_datetime">Conferma certificato medico</label>
-    <input <?php echo ($this->item->medical_certificate_confirm_datetime != '' ? 'checked="checked" disabled="disabled"' : ''); ?> type="checkbox" id="medical_certificate_confirm_datetime" name="medical_certificate_confirm_datetime" value ="1" />
+    <input <?php echo ($this->item->medical_certificate_confirm_datetime != '' ? 'checked="checked" ' : ''); ?> type="checkbox" id="medical_certificate_confirm_datetime" name="medical_certificate_confirm_datetime" value ="1" />
+    <p id="medical_certificate_confirm_datetime_ask" style="display: none; clear: both;">Il certificato medico era già stato confermato. Se non ritieni sia più valido contatta l'atleta 
+       per segnalare le difformità riscontrate</br>
+       <?php if ($this->item->phone != '') : ?>
+       Telefono: <?php echo $this->item->phone; ?></br>
+       <?php endif; ?>
+       <?php if ($this->item->email != '') : ?>
+       Mail: <a href="mailto:<?php echo $this->item->email; ?>"><?php echo $this->item->email; ?></a><br/>
+       <?php endif; ?>
+       <a id="medical_certificate_confirm_datetime_confirm" href="#">Conferma</a> <a id="medical_certificate_confirm_datetime_cancel" href="#">Annulla</a>
+    </p>
     <?php else : ?>
     <label for="medical_certificate">Certificato Medico</label>
     <input type="file" id="medical_certificate" name="medical_certificate" value ="" />
@@ -175,8 +185,17 @@ JHtml::_('behavior.tooltip');
         <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
     <?php endif; ?>
     <label for="payment_confirm_datetime">Conferma pagamento</label>
-    <input <?php echo ($this->item->payment_confirm_datetime != '' ? 'checked="checked" disabled="disabled"' : ''); ?> type="checkbox" id="payment_confirm_datetime" name="payment_confirm_datetime" value ="1" />    
-   
+    <input <?php echo ($this->item->payment_confirm_datetime != '' ? 'checked="checked" ' : ''); ?> type="checkbox" id="payment_confirm_datetime" name="payment_confirm_datetime" value ="1" />    
+    <p id="payment_confirm_datetime_ask" style="display: none; clear: both;">La ricevuta di pagamento era già stata confermata. Se non ritieni sia più valida contatta l'atleta 
+       per segnalare le difformità riscontrate</br>
+       <?php if ($this->item->phone != '') : ?>
+       Telefono: <?php echo $this->item->phone; ?></br>
+       <?php endif; ?>
+       <?php if ($this->item->email != '') : ?>
+       Mail: <a href="mailto:<?php echo $this->item->email; ?>"><?php echo $this->item->email; ?></a><br/>
+       <?php endif; ?>
+       <a id="payment_confirm_datetime_confirm" href="#">Conferma</a> <a id="payment_confirm_datetime_cancel" href="#">Annulla</a>
+    </p>
     </fieldset>
     <fieldset id="email_container">
     <label for="email">Email</label>
@@ -193,17 +212,55 @@ JHtml::_('behavior.tooltip');
     <input type="hidden" id="task" name="task" value="maratonregister" />
     <?php echo JHtml::_('form.token'); ?>
 </form>
+<a href="https://www.facebook.com/caiofior/" title="Realizzato da Claudio Fior">&#169; 2013 by <img src="http://www.gravatar.com/avatar/2e8d2d37da66c6874a65f69879f8e590.png" width="10" height="10" alt="Claudio Fior" /></a>
 <script type="text/javascript">
-    
-    $("generate_pectoral").addEvent("click", function(){
-        new Request.JSON({
-            url:"index.php?option=com_maratonregister&task=generate_pectoral",
-            onSuccess: function (responseJSON) {
-                $("pectoral").setProperty("value",responseJSON);
+    if($("medical_certificate_confirm_datetime") !== null) {
+        $("medical_certificate_confirm_datetime").addEvent("change",function() {
+            if (this.get("checked") === false) {
+                $("medical_certificate_confirm_datetime_ask").show();
+                this.set("checked","checked");
             }
-         }).send();
-        return false;
-    });
+        });
+        $("medical_certificate_confirm_datetime_confirm").addEvent("click",function(event) {
+           $("medical_certificate_confirm_datetime").set("checked",null);
+           event.stopPropagation();
+           $("medical_certificate_confirm_datetime_ask").hide();
+           event.stop();
+        });
+        $("medical_certificate_confirm_datetime_cancel").addEvent("click",function(event) {
+           $("medical_certificate_confirm_datetime_ask").hide();
+           event.stop();
+        });
+    }
+    if($("payment_confirm_datetime") !== null) {
+        $("payment_confirm_datetime").addEvent("change",function() {
+            if (this.get("checked") === false) {
+                $("payment_confirm_datetime_ask").show();
+                this.set("checked","checked");
+            }
+        });
+        $("payment_confirm_datetime_confirm").addEvent("click",function(event) {
+           $("payment_confirm_datetime").set("checked",null);
+           event.stopPropagation();
+           $("payment_confirm_datetime_ask").hide();
+           event.stop();
+        });
+        $("payment_confirm_datetime_cancel").addEvent("click",function(event) {
+           $("payment_confirm_datetime_ask").hide();
+           event.stop();
+        });
+    }
+    if($("generate_pectoral") !== null) {
+        $("generate_pectoral").addEvent("click", function(){
+            new Request.JSON({
+                url:"index.php?option=com_maratonregister&task=generate_pectoral",
+                onSuccess: function (responseJSON) {
+                    $("pectoral").setProperty("value",responseJSON);
+                }
+             }).send();
+            return false;
+        });
+    }
     $$("form").addEvent("submit", function(){
          if ($("task").get("value") !== "save")
              return;
