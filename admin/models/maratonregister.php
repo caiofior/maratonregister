@@ -76,7 +76,24 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                             , 'AND');
                     }
                 }
+                $payment_filter = $this->getUserStateFromRequest($this->context.'.filter.search', 'payment_filter');
+                if ($payment_filter == 1)
+                    $query->where ('payment_confirm_datetime IS NOT NULL');
+                else if ($payment_filter == 0 && !is_null($payment_filter) && $payment_filter != '')
+                    $query->where ('payment_confirm_datetime IS NULL');
+                $medical_certificate_filter = $this->getUserStateFromRequest($this->context.'.filter.search', 'medical_certificate_filter');
+                if ($medical_certificate_filter == 1)
+                    $query->where ('medical_certificate_confirm_datetime IS NOT NULL');
+                else if ($medical_certificate_filter == 0 && !is_null($medical_certificate_filter) && $medical_certificate_filter != '')
+                    $query->where ('medical_certificate_confirm_datetime IS NULL');
+                $pectoral_filter = $this->getUserStateFromRequest($this->context.'.filter.search', 'pectoral_filter');
+                if ($pectoral_filter == 1)
+                    $query->where ('pectoral IS NOT NULL');
+                else if ($pectoral_filter == 0 && !is_null($pectoral_filter) && $pectoral_filter != '')
+                    $query->where ('pectoral IS NULL');
+
                 return $query;
+                
         }
         /**
          * Set new athlete data
@@ -221,7 +238,7 @@ EOT;
                 $mailer->Send();
                     }
                     }
-            else 
+            else if (is_null($data['medical_certificate_confirm_datetime']))
                 $data['medical_certificate_confirm_datetime']='NULL';
             
             if (
@@ -247,7 +264,7 @@ EOT;
                 $mailer->Send();
                 }
                }
-            else 
+            else if (is_null($data['payment_confirm_datetime']))
                 $data['payment_confirm_datetime']='NULL';
             
             if (

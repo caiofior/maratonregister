@@ -11,3 +11,9 @@
 .icon-32-import       { 
         background-image: url(../images/icon-32-import.png); 
 }
+.jgrid span.disabled  {
+    background-image: url(../images/disabled.png); 
+}
+.filter-search .left {
+    float: left;
+}
