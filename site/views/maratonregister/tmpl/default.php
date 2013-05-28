@@ -24,6 +24,7 @@ $errors = $this->getModel()->getErrors();
         <img  src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
     </a>
     <fieldset id="name_container">
+    <input type="hidden" id="type_of_check" name="type_of_check" value="amateur"/>
     <label for="first_name">Nome</label>
     <input id="first_name" name="first_name" value ="" />
     <?php if (key_exists('first_name', $errors)) echo '<p class="error">'.$errors['first_name']['message'].'</p>';?>

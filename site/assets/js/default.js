@@ -1,5 +1,8 @@
     $(document.body).getElements("a.targetblank").setProperty("target","_blank");
     $("fidal").addEvent("click", function(){
+        $$("input.wrong_field").removeClass("wrong_field");
+         $("registration").getElements("p").destroy();
+        $("type_of_check").set("value","fidal");
         $("registration").getElements("img").setStyles({
             opacity:"0.6",
             filter:"alpha(opacity=40)"
@@ -16,6 +19,9 @@
         return false;
     });
     $("other_ass").addEvent("click", function(){
+        $$("input.wrong_field").removeClass("wrong_field");
+         $("registration").getElements("p").destroy();
+        $("type_of_check").set("value","other_ass");
         $("registration").getElements("img").setStyles({
             opacity:"0.6",
             filter:"alpha(opacity=40)"
@@ -32,6 +38,9 @@
         return false;
     });
     $("amateur").addEvent("click", function(){
+        $$("input.wrong_field").removeClass("wrong_field");
+        $("registration").getElements("p").destroy();
+       $("type_of_check").set("value","amateur");
        $("registration").getElements("img").setStyles({
             opacity:"0.6",
             filter:"alpha(opacity=40)"

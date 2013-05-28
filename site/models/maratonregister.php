@@ -54,6 +54,13 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
          */
         public function setData($data) {
             $this->checkData($data);
+            
+            if ($data['type_of_check'] != 'fidal')
+                $data['num_tes'] = '';
+            if ($data['type_of_check'] != 'other_ass') {
+                $data['other_ass_name']='';
+                $data['other_num_tes']='';
+            }
 
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
@@ -260,7 +267,14 @@ EOT;
 
             $datetime = $this->getDateTime($data['date_of_birth']);
             $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
-
+            
+            if ($data['type_of_check'] != 'fidal')
+                $data['num_tes'] = '';
+            if ($data['type_of_check'] != 'other_ass') {
+                $data['other_ass_name']='';
+                $data['other_num_tes']='';
+            }
+                
             if ($id > 0) {
                 $this->errors['first_name']=array(
                  'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
@@ -347,14 +361,14 @@ EOT;
                       'message'=>'La data di nascita è richiesta'
                   );
             else if (
-                        $data['num_tes'] != '' &&
+                        $data['type_of_check'] == 'fidal' &&
                         $datetime > time() - 18 * 31556926 
                     )
                         $errors['date_of_birth']=array(
                           'message'=>'Devi avere almeno 18 anni'
                         );
             else if (
-                        $data['num_tes'] == '' &&
+                        $data['type_of_check'] != 'fidal' &&
                         $datetime > time() - 23 * 31556926 
                     )
                         $errors['date_of_birth']=array(
