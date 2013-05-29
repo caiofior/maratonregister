@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -53,6 +53,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
          * @param array $data
          */
         public function setData($data) {
+            $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name');
             $this->checkData($data);
             
             if ($data['type_of_check'] != 'fidal')
@@ -96,7 +97,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
 
                     if ($id > 0) {
                         $this->errors['first_name']=array(
-                         'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
+                         'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
                         );
                     }
                     else {
@@ -158,7 +159,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                         $mailer->setSender($sender);
                         $mailer->addRecipient($config->getValue( 'config.mailfrom' ));
                         $body   = <<<EOT
-<p>Nuova iscrizione alla Maratonina dei Borghi di Pordenone</p>
+<p>Nuova iscrizione alla {$marathon_name}</p>
 <table>
     <tr>
         <th>Nome e cognome</th>
@@ -209,7 +210,7 @@ EOT;
                         $mailer->setSender($sender);
                         $mailer->addRecipient($data['email']);
                         $body   = <<<EOT
-<p>Grazie per esserti iscritto alla Maratonina dei Borghi, questi sono i dati da te forniti</p>
+<p>Grazie per esserti iscritto alla {$marathon_name}, questi sono i dati da te forniti</p>
 <table>
     <tr>
         <th>Nome e cognome</th>
@@ -244,9 +245,9 @@ EOT;
         <td>{$data['num_tes']}</th>
     </tr>
 </table>
-<p>Per errori o inesattezze contatta l'organizzazione della Maratonina dei Borghi di Pordenone.</p>
+<p>Per errori o inesattezze contatta l'organizzazione della {$marathon_name}.</p>
 EOT;
-                        $mailer->setSubject('Grazie per esserti iscritto alla Maratonina dei Borghi di Pordenone');
+                        $mailer->setSubject('Grazie per esserti iscritto alla '.$marathon_name);
                         $mailer->isHTML(true);
                         $mailer->setBody($body);
                         $mailer->Send();
@@ -262,6 +263,18 @@ EOT;
          * @param array $data
          */
         public function checkData($data) {
+            $componentParams = JComponentHelper::getParams('com_maratonregister');
+            $marathon_datetime = time();
+            $config_marathon_datetime = date_parse($componentParams->get('maraton_date'));
+            if (is_array($config_marathon_datetime) ) {
+                $marathon_datetime = mktime (
+                        0,
+                        0,
+                        0,
+                        $config_marathon_datetime['month'],
+                        $config_marathon_datetime['day'],
+                        $config_marathon_datetime['year']);
+            }
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
 
@@ -277,7 +290,7 @@ EOT;
                 
             if ($id > 0) {
                 $this->errors['first_name']=array(
-                 'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
+                 'message'=>'Sei già registrato alla '.JComponentHelper::getParams('com_maratonregister')->get('maraton_name').', contatta lo staff per eventuali problemi'
                 );
             }
             if ($data['num_tes'] != '') {
@@ -362,14 +375,14 @@ EOT;
                   );
             else if (
                         $data['type_of_check'] == 'fidal' &&
-                        $datetime > time() - 18 * 31556926 
+                        $datetime > $marathon_datetime - 18 * 31556926 
                     )
                         $errors['date_of_birth']=array(
                           'message'=>'Devi avere almeno 18 anni'
                         );
             else if (
                         $data['type_of_check'] != 'fidal' &&
-                        $datetime > time() - 23 * 31556926 
+                        $datetime > $marathon_datetime - 23 * 31556926 
                     )
                         $errors['date_of_birth']=array(
                           'message'=>'Devi avere almeno 23 anni'

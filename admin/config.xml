@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+        <fieldset
+                name="maratonregister"
+                label="Registrazione alla Maratona"
+                description="Configurazione Registrazione alla Maratona"
+        >
+                <field
+                        name="maraton_name"
+                        type="text"
+                        label="Denominazione Maratona"
+                        description="Denominazione Maratona"
+                        default="Maratonina dei borghi di Pordenone"
+                >
+                </field>
+                <field
+                        name="maraton_date"
+                        type="text"
+                        label="Data della gara"
+                        description="Data della gara"
+                        default="2013-10-13"
+                >
+                </field>
+        </fieldset>
+</config>

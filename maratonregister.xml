@@ -10,9 +10,9 @@
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
-	<version>0.9</version>
+	<version>0.10</version>
 	<!-- The description is optional and defaults to the name -->
-	<description>Registration to Pordenone Maratonina ...</description>
+	<description>Marathon Registration Extension</description>
         <install> <!-- Runs on install -->
                 <sql>
                         <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>

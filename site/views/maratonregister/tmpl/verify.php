@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -107,7 +107,7 @@ function format_date ($data) {
     <p class="confirmed">La tua iscrizione è confermata dall'organizzazione.</p>
     <?php endif; ?>
     <?php elseif (!is_null($this->atlete)) : ?>
-    <p class="unconfirmed">Non risulti registrato alla Maratonina dei Borghi di Pordenone. <a href="?option=com_maratonregister">Registrati</a>
+    <p class="unconfirmed">Non risulti registrato alla <?php echo JComponentHelper::getParams('com_maratonregister')->get('maraton_name');?>. <a href="?option=com_maratonregister">Registrati</a>
     </p>
     <?php endif; ?>
     <?php if (key_exists('message', $_REQUEST)) : ?>

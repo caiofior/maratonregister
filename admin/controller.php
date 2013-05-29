@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 defined('_JEXEC') or die('Restricted access');
  
@@ -11,7 +11,7 @@ jimport('joomla.application.component.controller');
 /**
  * General Controller of MaratonRegister component
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 class MaratonRegisterController extends JController
 {

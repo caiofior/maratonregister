@@ -2,7 +2,7 @@
 /**
  * Maraton Register View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.application.component.view');
 /**
  * Maraton Register View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 class MaratonRegisterViewMaratonRegister extends JView
 {
@@ -85,6 +85,7 @@ class MaratonRegisterViewMaratonRegister extends JView
                     JToolBarHelper::addNew('maratonregister.add');
                     JToolBarHelper::trash('maratonregister.trash');
                     JToolBarHelper::custom('maratonregister.export','excel','','Esporta',false);
+                    JToolBarHelper::preferences('com_maratonregister');
                 }
                 $this->item = $item;
  

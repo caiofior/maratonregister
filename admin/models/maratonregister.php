@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.9
+ * @version 0.10
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -100,6 +100,7 @@ class MaratonRegisterModelMaratonRegister extends JModelList
          * @param array $data
          */
         public function setData($data) {
+            $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name');
             $this->checkData($data);
             $atlete = $this->getTable();
             
@@ -230,9 +231,9 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 $mailer->setSender($sender);
                 $mailer->addRecipient($data['email']);
                 $body   = <<<EOT
-<p>Il certificato medico per la Maratonina dei Borghi di Pordenone è stato confermato</p>
+<p>Il certificato medico per la {$marathon_name} è stato confermato</p>
 EOT;
-                $mailer->setSubject('Conferma certificato medico Maratonina dei Borghi di Pordenone');
+                $mailer->setSubject('Conferma certificato medico '.$marathon_name);
                 $mailer->isHTML(true);
                 $mailer->setBody($body);
                 $mailer->Send();
@@ -256,9 +257,9 @@ EOT;
                 $mailer->setSender($sender);
                 $mailer->addRecipient($data['email']);
                 $body   = <<<EOT
-<p>Il pagamento dell'iscrizione alla Maratonina dei Borghi di Pordenone è stato confermato</p>
+<p>Il pagamento dell'iscrizione alla {$marathon_name} è stato confermato</p>
 EOT;
-                $mailer->setSubject('Conferma pagamento Maratonina dei Borghi di Pordenone');
+                $mailer->setSubject('Conferma pagamento '.$marathon_name);
                 $mailer->isHTML(true);
                 $mailer->setBody($body);
                 $mailer->Send();
@@ -283,9 +284,9 @@ EOT;
                         $mailer->setSender($sender);
                         $mailer->addRecipient($data['email']);
                         $body   = <<<EOT
-        <p>La tua iscrizione alla FIDAL è stata convalidata alla Maratonina dei Borghi di Pordenone</p>
+        <p>La tua iscrizione alla FIDAL è stata convalidata alla {$marathon_name}</p>
 EOT;
-                        $mailer->setSubject('Conferma iscrizione FIDAL alla Maratonina dei Borghi di Pordenone');
+                        $mailer->setSubject('Conferma iscrizione FIDAL alla '.$marathon_name);
                         $mailer->isHTML(true);
                         $mailer->setBody($body);
                         $mailer->Send();
@@ -307,9 +308,9 @@ EOT;
                         $mailer->setSender($sender);
                         $mailer->addRecipient($data['email']);
                         $body   = <<<EOT
-        <p>La tua iscrizione alla Maratonina dei Borghi di Pordenone è stata confermata</p>
+        <p>La tua iscrizione alla {$marathon_name} è stata confermata</p>
 EOT;
-                        $mailer->setSubject('Conferma iscrizione Maratonina dei Borghi di Pordenone');
+                        $mailer->setSubject('Conferma iscrizione '.$marathon_name);
                         $mailer->isHTML(true);
                         $mailer->setBody($body);
                         $mailer->Send();
@@ -360,7 +361,7 @@ EOT;
                     $id = intval($db->loadResult());
                     if ($id > 0) {
                         $this->errors['first_name']=array(
-                         'message'=>'Sei già registrato alla Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
+                         'message'=>'Sei già registrato alla '.$marathon_name.'Maratonina dei Borghi di Pordenone, contatta lo staff per eventuali problemi'
                         );
                     }
                     else {
