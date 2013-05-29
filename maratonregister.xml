@@ -58,6 +58,7 @@
 		<files folder="admin">
 			<!-- Admin Main File Copy Section -->
 			<filename>index.html</filename>
+                        <filename>config.xml</filename>
 			<filename>maratonregister.php</filename>
                         <filename>controller.php</filename>
                         <filename>upload.php</filename>
