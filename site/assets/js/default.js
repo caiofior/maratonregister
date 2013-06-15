@@ -8,6 +8,9 @@
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
+        $("registration").setStyle("display", "block");
+        $("choose_athlete").setStyle("display", "none");
+        $("game_card_container").setStyle("display", "none");
         $("name_container").setStyle("display", "none");
         $("sex_container").setStyle("display", "none");
         $("citizenship_container").setStyle("display", "none");
@@ -27,6 +30,9 @@
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
+        $("registration").setStyle("display", "block");
+        $("choose_athlete").setStyle("display", "none");
+        $("game_card_container").setStyle("display", "block");
         $("name_container").setStyle("display", "block");
         $("sex_container").setStyle("display", "block");
         $("citizenship_container").setStyle("display", "block");
@@ -46,6 +52,9 @@
             filter:"alpha(opacity=40)"
         });
         $(this).getElements("img").removeProperty("style");
+        $("registration").setStyle("display", "block");
+        $("choose_athlete").setStyle("display", "none");
+        $("game_card_container").setStyle("display", "block");
         $("name_container").setStyle("display", "block");
         $("sex_container").setStyle("display", "block");
         $("citizenship_container").setStyle("display", "block");

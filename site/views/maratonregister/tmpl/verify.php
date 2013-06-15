@@ -83,6 +83,7 @@ function format_date ($data) {
     <?php endif; ?>
     <?php endif; ?>
     <?php endif; ?>
+    <?php if ($this->atlete->num_tes == '') : ?>
     <?php if ($this->atlete->game_card_fname == ''):?>
     <p class="unconfirmed">Non è arrivato il tuo cartellino di partecipazione</p>
     <fieldset id="game_card_updater">
@@ -100,6 +101,7 @@ function format_date ($data) {
     </fieldset>
     <?php else: ?>
     <p class="confirmed">Il tuo cartellino di partecipazione è arrivato il <?php echo format_date($this->atlete->$this->atlete->game_card_datetime); ?>.</p>
+    <?php endif; ?>
     <?php endif; ?>
     <?php if ($this->atlete->pectoral == ''):?>
     <p class="info">La tua iscrizione non è stata confermata dall'organizzazione</p>

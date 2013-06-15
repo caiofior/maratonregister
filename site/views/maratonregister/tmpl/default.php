@@ -12,17 +12,19 @@ $errors = $this->getModel()->getErrors();
 <?php if (key_exists('message', $_REQUEST)) : ?>
 <p><?php echo $_REQUEST['message']; ?></p>
 <?php endif; ?>
-<p>Gia registrato? <a href="?option=com_maratonregister&amp;task=verify">Verifica lo stato della tua iscrizione</a></p>
-<form action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
-    <a id="fidal" href="?option=com_maratonregister" title="Tesserato Fidal">
-        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
-    </a>
-    <a id="other_ass" href="?option=com_maratonregister" title="Tesserato altra federazione">
-        <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
-    </a>
-    <a id="amateur" href="?option=com_maratonregister" title="Non tesserati fidal">
-        <img  src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
-    </a>
+<p>Già registrato? <a href="?option=com_maratonregister&amp;task=verify">Verifica lo stato della tua iscrizione</a></p>
+<p id="choose_athlete">Seleziona il tipo di iscrizione</p>
+<a id="fidal" href="?option=com_maratonregister" title="Tesserati FIDAL">
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
+</a>
+<a id="other_ass" href="?option=com_maratonregister" title="Tesserati enti di promozione riconosciuti FIDAL">
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
+</a>
+<a id="amateur" href="?option=com_maratonregister" title="Non tesserati FIDAL e altra federazione non FIDAL">
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
+</a>
+<form style="display:none;" action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
+
     <fieldset id="name_container">
     <input type="hidden" id="type_of_check" name="type_of_check" value="amateur"/>
     <label for="first_name">Nome</label>
@@ -80,19 +82,27 @@ $errors = $this->getModel()->getErrors();
         <?php if (key_exists('phone', $errors)) echo '<p class="error">'.$errors['phone']['message'].'</p>';?>
     </fieldset>
     <fieldset id="medical_certificate_container">
+    
     <div>
         <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
-            Autocertificazione buona salute per atleti stranieri
             <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Autocertificazione buona salute per atleti stranieri" style="float: left;"/>
         </a>
+
+        
+        <label for="medical_certificate">Carica il tuo Certificato Medico</label>
+        <div class="fileinputs">
+            <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
+        </div>
+        <br/>
+        <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
+            Autocertificazione buona salute per atleti stranieri
+        </a>
+
     </div>
-    <label for="medical_certificate">Carica il tuo Certificato Medico</label>
-    <div class="fileinputs">
-        <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
-    </div>
+    
     <?php if (key_exists('medical_certificate', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
     </fieldset>
-    <fieldset id=game_card_container">
+    <fieldset id="game_card_container">
     <div>
         <a href="components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
             Cartellino di partecipazione gare su strada
@@ -129,5 +139,6 @@ $errors = $this->getModel()->getErrors();
     </fieldset>
     <input type="submit" id="submit" name="submit" value="Registrati"/>
     </form>
+    <br/>
     <a href="https://www.facebook.com/caiofior/" title="Realizzato da Claudio Fior">&#169; 2013 by <img src="http://www.gravatar.com/avatar/2e8d2d37da66c6874a65f69879f8e590.png" width="10" height="10" alt="Claudio Fior" /></a>
     <script type="text/javascript" src="components/com_maratonregister/assets/js/default.js"></script>
