@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.10
+ * @version 1.0
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.10
+ * @version 1.0
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -100,7 +100,7 @@ class MaratonRegisterModelMaratonRegister extends JModelList
          * @param array $data
          */
         public function setData($data) {
-            $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name');
+            $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name','Maratonina dei borghi di Pordenone');
             $this->checkData($data);
             $atlete = $this->getTable();
             

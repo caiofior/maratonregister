@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.10
+ * @version 1.0
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.10
+ * @version 1.0
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -53,7 +53,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
          * @param array $data
          */
         public function setData($data) {
-            $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name');
+            $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name','Maratonina dei borghi di Pordenone');
             $this->checkData($data);
             
             if ($data['type_of_check'] != 'fidal')
@@ -265,7 +265,7 @@ EOT;
         public function checkData($data) {
             $componentParams = JComponentHelper::getParams('com_maratonregister');
             $marathon_datetime = time();
-            $config_marathon_datetime = date_parse($componentParams->get('maraton_date'));
+            $config_marathon_datetime = date_parse($componentParams->get('maraton_date','2013-10-13'));
             if (is_array($config_marathon_datetime) ) {
                 $marathon_datetime = mktime (
                         0,
@@ -290,7 +290,7 @@ EOT;
                 
             if ($id > 0) {
                 $this->errors['first_name']=array(
-                 'message'=>'Sei già registrato alla '.JComponentHelper::getParams('com_maratonregister')->get('maraton_name').', contatta lo staff per eventuali problemi'
+                 'message'=>'Sei già registrato alla '.JComponentHelper::getParams('com_maratonregister')->get('maraton_name','Maratonina dei borghi di Pordenone').', contatta lo staff per eventuali problemi'
                 );
             }
             if ($data['num_tes'] != '') {
@@ -378,14 +378,14 @@ EOT;
                         $datetime > $marathon_datetime - 18 * 31556926 
                     )
                         $errors['date_of_birth']=array(
-                          'message'=>'Devi avere almeno 18 anni'
+                          'message'=>'Devi avere almeno 18 anni al '.strftime('%d/%m/%Y',$marathon_datetime)
                         );
             else if (
                         $data['type_of_check'] != 'fidal' &&
                         $datetime > $marathon_datetime - 23 * 31556926 
                     )
                         $errors['date_of_birth']=array(
-                          'message'=>'Devi avere almeno 23 anni'
+                          'message'=>'Devi avere almeno 23 anni al '.strftime('%d/%m/%Y',$marathon_datetime)
                         );
             if ($data['payment_type'] == '')
                   $errors['paypal']=array(
