@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="component" version="0.1" method="upgrade">
+<extension type="component" version="1.0" method="upgrade">
 
 	<name>Maraton Register</name>
 	<!-- The following elements are optional and free of formatting conttraints -->
-	<creationDate>2013-03-21</creationDate>
+	<creationDate>2013-06-16</creationDate>
 	<author>Claudio Fior</author>
 	<authorEmail>caiofior@gmail.com</authorEmail>
-	<authorUrl>http://digilander.libero.it/caiofior/</authorUrl>
+	<authorUrl>https://www.facebook.com/caiofior/</authorUrl>
 	<copyright>Copyright Info</copyright>
 	<license>License Info</license>
 	<!--  The version string is recorded in the components table -->
