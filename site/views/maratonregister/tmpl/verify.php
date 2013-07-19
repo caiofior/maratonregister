@@ -51,7 +51,7 @@ function format_date ($data) {
     </div>
     </fieldset>
     <?php else : ?>
-    <p class="confirmed">Abbiamo ricevuto il tuo pagamento il <?php echo format_date($this->atlete->payment_datetime); ?> ed è in attesa di conferma</p>
+    <p class="confirmed">Abbiamo ricevuto il tuo pagamento il <?php echo format_date($this->atlete->payment_datetime); ?>.</p>
     <?php if ($this->atlete->payment_confirm_datetime == '') :?>
     <p class="info">Il tuo pagamento è in attesa di conferma.</p>
     <?php else : ?>
@@ -77,15 +77,15 @@ function format_date ($data) {
     <?php else : ?>
     <p class="confirmed">Hai inviato il tuo certificato medico il <?php echo format_date($this->atlete->medical_certificate_datetime); ?>.</p>
     <?php if ($this->atlete->medical_certificate_confirm_datetime == '' ) :?>
-    <p class="info">Il certificato medico è in attesa di conferma</p>
+    <p class="info">Il certificato medico è in attesa di conferma.</p>
     <?php else : ?>
-    <p class="confirmed">Il certificato medico è stato confermato il <?php echo format_date($this->atlete->medical_certificate_confirm_datetime); ?></p>
+    <p class="confirmed">Il certificato medico è stato confermato il <?php echo format_date($this->atlete->medical_certificate_confirm_datetime); ?>.</p>
     <?php endif; ?>
     <?php endif; ?>
     <?php endif; ?>
     <?php if ($this->atlete->num_tes == '') : ?>
     <?php if ($this->atlete->game_card_fname == ''):?>
-    <p class="unconfirmed">Non è arrivato il tuo cartellino di partecipazione</p>
+    <p class="unconfirmed">Non è arrivato il tuo cartellino di partecipazione.</p>
     <fieldset id="game_card_updater">
     <div>
         <a href="components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
@@ -104,7 +104,7 @@ function format_date ($data) {
     <?php endif; ?>
     <?php endif; ?>
     <?php if ($this->atlete->pectoral == ''):?>
-    <p class="info">La tua iscrizione non è stata confermata dall'organizzazione</p>
+    <p class="info">La tua iscrizione non è stata confermata dall'organizzazione.</p>
     <?php else: ?>
     <p class="confirmed">La tua iscrizione è confermata dall'organizzazione.</p>
     <?php endif; ?>

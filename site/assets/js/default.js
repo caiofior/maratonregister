@@ -1,7 +1,7 @@
     $(document.body).getElements("a.targetblank").setProperty("target","_blank");
     $("fidal").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
-         $("registration").getElements("p").destroy();
+        $("registration").getElements("p").destroy();
         $("type_of_check").set("value","fidal");
         $("registration").getElements("img").setStyles({
             opacity:"0.6",
@@ -19,11 +19,62 @@
         $("other_num_tes_container").setStyle("display", "none");
         $("medical_certificate_container").setStyle("display", "none");
         $("num_tes_container").setStyle("display", "block");
+        $("group_fidal_container").setStyle("display", "none");
+        return false;
+    });
+    /**
+     * Hides or shows  remove button
+     */
+    function hide_show_remove() {
+     if ($$(".group_member").length > 1)
+        $$(".remove_memeber_container").setStyle("display", "block");
+     else
+        $$(".remove_memeber_container").setStyle("display", "none");
+    }
+    $$(".add_memeber").addEvent("click", function(){
+     el = $$(".group_member").pop().clone(true,true);
+     $("group_fidal_container").adopt(el); 
+     hide_show_remove();
+     event_add_element();
+     return false;
+     });
+     /**
+      * Recreates the event click on remove button
+      */
+    function event_add_element() { 
+        $$(".remove_memeber").removeEvents("click").addEvent("click", function(){
+         this.getParent().getParent().destroy();
+         hide_show_remove();
+         return false;
+        });
+     }
+     event_add_element();
+     $("group_fidal").addEvent("click", function(){
+        $$("input.wrong_field").removeClass("wrong_field");
+        $("registration").getElements("p").destroy();
+        $("type_of_check").set("value","group_fidal");
+        $("registration").getElements("img").setStyles({
+            opacity:"0.6",
+            filter:"alpha(opacity=40)"
+        });
+        $(this).getElements("img").removeProperty("style");
+        $("registration").setStyle("display", "block");
+        $("choose_athlete").setStyle("display", "none");
+        $("game_card_container").setStyle("display", "none");
+        $("name_container").setStyle("display", "none");
+        $("sex_container").setStyle("display", "none");
+        $("citizenship_container").setStyle("display", "none");
+        $("address_container").setStyle("display", "none");
+        $("phone_container").setStyle("display", "none");
+        $("other_num_tes_container").setStyle("display", "none");
+        $("medical_certificate_container").setStyle("display", "none");
+        $("num_tes_container").setStyle("display", "block");
+        $("group_fidal_container").setStyle("display", "block");
         return false;
     });
     $("other_ass").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
-         $("registration").getElements("p").destroy();
+        $("registration").getElements("p").destroy();
         $("type_of_check").set("value","other_ass");
         $("registration").getElements("img").setStyles({
             opacity:"0.6",
@@ -41,13 +92,14 @@
         $("medical_certificate_container").setStyle("display", "block");
         $("other_num_tes_container").setStyle("display", "block");
         $("num_tes_container").setStyle("display", "none");
+        $("group_fidal_container").setStyle("display", "none");
         return false;
     });
     $("amateur").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
-       $("type_of_check").set("value","amateur");
-       $("registration").getElements("img").setStyles({
+        $("type_of_check").set("value","amateur");
+        $("registration").getElements("img").setStyles({
             opacity:"0.6",
             filter:"alpha(opacity=40)"
         });
@@ -63,6 +115,7 @@
         $("medical_certificate_container").setStyle("display", "block");
         $("other_num_tes_container").setStyle("display", "none");
         $("num_tes_container").setStyle("display", "none");
+        $("group_fidal_container").setStyle("display", "none");
         return false;
     });
     $("submit").addEvent("click", function(){

@@ -17,6 +17,9 @@ $errors = $this->getModel()->getErrors();
 <a id="fidal" href="?option=com_maratonregister" title="Tesserati FIDAL">
     <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
 </a>
+<a id="group_fidal" href="?option=com_maratonregister" title="Gruppo tesserati FIDAL">
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/group_fidal.png" width="187" height="68" alt="Gruppo tesserati FIDAL"/>
+</a>
 <a id="other_ass" href="?option=com_maratonregister" title="Tesserati enti di promozione riconosciuti FIDAL">
     <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
 </a>
@@ -136,6 +139,19 @@ $errors = $this->getModel()->getErrors();
     <label for="email">Email</label>
     <input id="email" name="email" value ="" />
     <?php if (key_exists('email', $errors)) echo '<p class="error">'.$errors['email']['message'].'</p>';?>
+    </fieldset>
+    <fieldset id="group_fidal_container">
+    <legend>Componenti del gruppo</legend>
+    <div ><a class="add_memeber" href="#">Aggiungi</a></div>
+    <div class="group_member">
+    <div class="remove_memeber_container" style="display: none;"><a class="remove_memeber" href="#">Rimuovi</a></div>
+    <label >Nome</label>
+    <input name="member_first_name[]" value ="" />
+    <label >Cognome</label>
+    <input name="member_last_name[]" value ="" /><br/>
+    <label >N° Tessera Fidal</label>
+    <input name="member_num_tes[]" value ="" />
+    </div>
     </fieldset>
     <input type="submit" id="submit" name="submit" value="Registrati"/>
     </form>
