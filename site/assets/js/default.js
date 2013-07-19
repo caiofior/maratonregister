@@ -33,6 +33,7 @@
     }
     $$(".add_memeber").addEvent("click", function(){
      el = $$(".group_member").pop().clone(true,true);
+     el.getElements("input").set("value","");
      $("group_fidal_container").adopt(el); 
      hide_show_remove();
      event_add_element();
