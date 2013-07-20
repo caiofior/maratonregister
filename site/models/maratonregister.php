@@ -56,15 +56,20 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
             $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name','Maratonina dei borghi di Pordenone');
             $this->checkData($data);
             
-            if ($data['type_of_check'] != 'fidal')
+            if ($data['type_of_check'] != 'fidal' &&
+                $data['type_of_check'] != 'group_fidal')
                 $data['num_tes'] = '';
             if ($data['type_of_check'] != 'other_ass') {
                 $data['other_ass_name']='';
                 $data['other_num_tes']='';
             }
+            if ($data['type_of_check'] != 'group_fidal')
+                unset($data['member_first_name'],$data['member_last_name'],$data['member_num_tes']);
 
-            foreach ($data as $key=>$value)
-                $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
+            foreach ($data as $key=>$value) {
+                if (!is_array($value))
+                    $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
+            }
             if ( $data['num_tes'] == '' && !key_exists('medical_certificate',$_FILES)) {
                 $this->errors['medical_certificate']=array(
                     'message'=>'Il certificato medico è richiesto'
@@ -143,6 +148,62 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                                 $values[$column]=$db->quote($data[$column]);
                         }
                         
+                        if ( key_exists('member_first_name', $data) ) {
+                            $columns[]='group_reference_id';
+                            $values[]=$values['id'];
+                            foreach($data['member_first_name'] as $key=>$value) {
+                                $member_values = $values;
+                                $member_data = $data;
+                                $member_data['first_name']=$value;
+                                $member_data['last_name']=$data['member_last_name'][$key];
+                                $member_data['num_tes']=$data['member_num_tes'][$key];
+                                
+                                
+                                $member_values['id']=$db->Quote($this->generateKey($member_data));
+                                $query = $db->getQuery(true);
+                                $query
+                                    ->select('COUNT(id)')
+                                    ->from('#__atlete')
+                                    ->where('removed <> 1 AND id = '. $member_values['id']);
+                                $db->setQuery($query);
+                                $db->query();
+                                $id = intval($db->loadResult());
+
+                                if ($id > 0) {
+                                    $this->errors['member_first_name']=array(
+                                     'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
+                                    );
+                                }
+                                $member_values['first_name']=$db->quote($value);
+                                $member_values['last_name']=$db->quote($data['member_last_name'][$key]);
+                                $member_values['num_tes']=$db->quote($data['member_num_tes'][$key]);
+                                $query
+                                    ->insert($db->quoteName('#__atlete'))
+                                    ->columns($db->quoteName($columns))
+                                    ->values(implode(',', $member_values));
+
+                                $db->setQuery($query);
+                                $db->query();
+                                $db = JFactory::getDbo();
+                            }
+                                $query = $db->getQuery(true);
+                                $query
+                                    ->select('COUNT(id)')
+                                    ->from('#__atlete')
+                                    ->where('removed <> 1 AND id = '. $db->Quote($data['id']));
+                                $db->setQuery($query);
+                                $db->query();
+                                $id = intval($db->loadResult());
+
+
+
+                                if ($id > 0) {
+                                    $this->errors['first_name']=array(
+                                     'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
+                                    );
+                                }
+                                $query = $db->getQuery(true);
+                        }
                         $query
                             ->insert($db->quoteName('#__atlete'))
                             ->columns($db->quoteName($columns))
@@ -263,6 +324,7 @@ EOT;
          * @param array $data
          */
         public function checkData($data) {
+            
             $componentParams = JComponentHelper::getParams('com_maratonregister');
             $marathon_datetime = time();
             $config_marathon_datetime = date_parse($componentParams->get('maraton_date','2013-10-13'));
@@ -275,18 +337,24 @@ EOT;
                         $config_marathon_datetime['day'],
                         $config_marathon_datetime['year']);
             }
-            foreach ($data as $key=>$value)
-                $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
-
+            
+            foreach ($data as $key=>$value) {
+                if (!is_array($value))
+                    $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
+            }
+            
             $datetime = $this->getDateTime($data['date_of_birth']);
             $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
-            
-            if ($data['type_of_check'] != 'fidal')
+          
+            if ($data['type_of_check'] != 'fidal' && 
+                $data['type_of_check'] != 'group_fidal')
                 $data['num_tes'] = '';
             if ($data['type_of_check'] != 'other_ass') {
                 $data['other_ass_name']='';
                 $data['other_num_tes']='';
             }
+            if ($data['type_of_check'] != 'group_fidal')
+                unset($data['member_first_name'],$data['member_last_name'],$data['member_num_tes']);
                 
             if ($id > 0) {
                 $this->errors['first_name']=array(
@@ -397,7 +465,60 @@ EOT;
                       'message'=>'La mail non è valida'
                   );  
             }
-            
+            if (
+                    key_exists('member_first_name', $data) &&
+                    key_exists('member_last_name', $data) &&
+                    key_exists('member_num_tes', $data)
+                    ) {
+                if (
+                        !is_array($data['member_first_name']) ||
+                        !is_array($data['member_last_name']) ||
+                        !is_array($data['member_num_tes'])
+                    )
+                    {
+                        $errors['group_fidal_container']=array(
+                            'message'=>'Dati del gruppo non validi'
+                          ); 
+                        }
+                        $data['member_first_name'] = array_filter($data['member_first_name']);
+                        $data['member_last_name'] = array_filter($data['member_last_name']);
+                        $data['member_num_tes'] = array_filter($data['member_num_tes']);
+                    if (
+                        sizeof($data['member_first_name']) != sizeof($data['member_last_name']) ||
+                        sizeof($data['member_first_name']) != sizeof($data['member_num_tes'])
+                        ) {
+                            $errors['group_fidal_container']=array(
+                              'message'=>'Dati del gruppo non validi'
+                          ); 
+                        }
+                        if(!key_exists('group_fidal_container', $errors)) {
+                            foreach($data['member_first_name'] as $key=>$value) {
+                                
+                                
+                            
+                                $member_data = $data;
+                                $member_data['first_name']=$value;
+                                $member_data['last_name']=$data['member_last_name'][$key];
+                                $member_data['num_tes']=$data['member_num_tes'][$key];
+                                
+                                $db = JFactory::getDbo();
+                                $query = $db->getQuery(true);
+                                $query
+                                    ->select('COUNT(id)')
+                                    ->from('#__atlete')
+                                    ->where('removed <> 1 AND id = '. $db->Quote($this->generateKey($member_data)));
+                                $db->setQuery($query);
+                                $db->query();
+                                $id = intval($db->loadResult());
+                                if ($id > 0) {
+                                    $errors['group_fidal_container']=array(
+                                     'message'=>'L\'atleta '.$member_data['first_name'].' '.$member_data['last_name'].' risulta già registrato.'
+                                    );
+                                }
+                                
+                        }
+                }
+            }
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
             $query

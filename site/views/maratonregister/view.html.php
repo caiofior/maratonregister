@@ -18,8 +18,7 @@ class MaratonRegisterViewMaratonRegister extends JView
 	// Overwriting JView display method
 	function display($tpl = null) 
 	{
-            
-                if (JRequest::getCmd('task') == 'verify') {
+               if (JRequest::getCmd('task') == 'verify') {
                     
                     $this->setLayout ('verify');
                     $this->atlete = null;

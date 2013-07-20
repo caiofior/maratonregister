@@ -38,9 +38,8 @@ CREATE TABLE  IF NOT EXISTS `#__atlete` (
   KEY `pectoral` (`pectoral`),
   KEY `payment_confirm_datetime` (`payment_confirm_datetime`),
   KEY `medical_certificate_confirm_datetime` (`medical_certificate_confirm_datetime`),
-  KEY `group_reference_id` (`group_reference_id`),
-  CONSTRAINT `fk_group_reference_id` FOREIGN KEY (`group_reference_id`) REFERENCES `#__atlete` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Atlete table';
+  KEY `group_reference_id` (`group_reference_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Atlete table';
 
 
 CREATE TABLE  IF NOT EXISTS`#__fidal_fella` (

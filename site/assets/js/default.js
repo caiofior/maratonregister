@@ -3,9 +3,8 @@
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","fidal");
-        $("registration").getElements("img").setStyles({
-            opacity:"0.6",
-            filter:"alpha(opacity=40)"
+        $("athlete_selectors").getElements("img").setStyles({
+            "display":"none"
         });
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
@@ -42,21 +41,47 @@
      /**
       * Recreates the event click on remove button
       */
-    function event_add_element() { 
+    function event_add_element() {
         $$(".remove_memeber").removeEvents("click").addEvent("click", function(){
          this.getParent().getParent().destroy();
          hide_show_remove();
          return false;
         });
+        $("group_fidal_container").getElements("input").removeEvents("blur").addEvent("blur", function(){
+         check_empty_input();
+         return false;
+        });
+        check_empty_input ();
+     }
+     /**
+      * Check if there is an empty group memeber
+      * @returns {Boolean}
+      */
+     function check_empty_input () {
+         var status = true;
+         if ($("type_of_check").get("value") != "group_fidal") 
+             return status;
+         $("registration").getElements("p").destroy();
+         input_coll = $("group_fidal_container").getElements("input");
+         for (var i=0;i<input_coll.length;i++) {
+             if(input_coll[i].get("value") == "") {
+                    el = new Element("p");
+                    el.addClass("error");
+                    el.appendText("Nome e numero di tessera sono richiesti");
+                    $(input_coll[i]).addClass("wrong_field");
+                    $(input_coll[i]).grab(el,"after");
+                 status = false;
+             }
+         }
+         return status;
      }
      event_add_element();
      $("group_fidal").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","group_fidal");
-        $("registration").getElements("img").setStyles({
-            opacity:"0.6",
-            filter:"alpha(opacity=40)"
+        $("athlete_selectors").getElements("img").setStyles({
+            "display":"none"
         });
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
@@ -77,9 +102,8 @@
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","other_ass");
-        $("registration").getElements("img").setStyles({
-            opacity:"0.6",
-            filter:"alpha(opacity=40)"
+        $("athlete_selectors").getElements("img").setStyles({
+            "display":"none"
         });
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
@@ -100,9 +124,8 @@
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","amateur");
-        $("registration").getElements("img").setStyles({
-            opacity:"0.6",
-            filter:"alpha(opacity=40)"
+        $("athlete_selectors").getElements("img").setStyles({
+            "display":"none"
         });
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
@@ -120,7 +143,7 @@
         return false;
     });
     $("submit").addEvent("click", function(){
-         var status = true;
+         var status = check_empty_input ();
          $$("input.wrong_field").removeClass("wrong_field");
          $("registration").getElements("p").destroy();
          new Request.JSON({

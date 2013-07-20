@@ -14,6 +14,7 @@ $errors = $this->getModel()->getErrors();
 <?php endif; ?>
 <p>Già registrato? <a href="?option=com_maratonregister&amp;task=verify">Verifica lo stato della tua iscrizione</a></p>
 <p id="choose_athlete">Seleziona il tipo di iscrizione</p>
+<div id="athlete_selectors">
 <a id="fidal" href="?option=com_maratonregister" title="Tesserati FIDAL">
     <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
 </a>
@@ -26,6 +27,7 @@ $errors = $this->getModel()->getErrors();
 <a id="amateur" href="?option=com_maratonregister" title="Non tesserati FIDAL e altra federazione non FIDAL">
     <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
 </a>
+</div>
 <form style="display:none;" action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
 
     <fieldset id="name_container">
