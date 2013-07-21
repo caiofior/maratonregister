@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0
+ * @version 1.0.1
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0
+ * @version 1.0.1
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -106,7 +106,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                         );
                     }
                     else {
-                        $query = $db->getQuery(true);
+                        
                         $columns = array(
                             'id',
                             'first_name' ,
@@ -151,6 +151,18 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                         if ( key_exists('member_first_name', $data) ) {
                             $columns[]='group_reference_id';
                             $values[]=$values['id'];
+                        }
+                        
+                        $query = $db->getQuery(true);
+                        $query
+                            ->insert($db->quoteName('#__atlete'))
+                            ->columns($db->quoteName($columns))
+                            ->values(implode(',', $values));
+
+                        $db->setQuery($query);
+                        $db->query();
+                        
+                        if ( key_exists('member_first_name', $data) ) {
                             foreach($data['member_first_name'] as $key=>$value) {
                                 $member_values = $values;
                                 $member_data = $data;
@@ -202,15 +214,9 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                                      'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
                                     );
                                 }
-                                $query = $db->getQuery(true);
+                                
                         }
-                        $query
-                            ->insert($db->quoteName('#__atlete'))
-                            ->columns($db->quoteName($columns))
-                            ->values(implode(',', $values));
-
-                        $db->setQuery($query);
-                        $db->query();
+                        
                         $mailer = JFactory::getMailer();
                         $config = JFactory::getConfig();
                         $sender = array( 
@@ -362,7 +368,7 @@ EOT;
                 );
             }
             if ($data['num_tes'] != '') {
-                if (strlen($data['num_tes']) <> 8)
+                if (!preg_match('/^[0-9]{8}$/',$data['num_tes']))
                   $errors['num_tes']=array(
                       'message'=>'Il numero tessera è errato'
                   );  
@@ -491,11 +497,18 @@ EOT;
                               'message'=>'Dati del gruppo non validi'
                           ); 
                         }
+                     if (sizeof($data['member_first_name']) <1) {
+                            $errors['group_fidal_container']=array(
+                              'message'=>'Dev\'esserci almeno un membro nel gruppo'
+                          ); 
+                        }
                         if(!key_exists('group_fidal_container', $errors)) {
                             foreach($data['member_first_name'] as $key=>$value) {
-                                
-                                
-                            
+                                if (!preg_match('/^[0-9]{8}$/', $data['member_num_tes'][$key])) {
+                                    $errors['group_fidal_container']=array(
+                                     'message'=>'Il numero di tessera '.$data['member_num_tes'][$key].'non è valido.'
+                                    );
+                                }
                                 $member_data = $data;
                                 $member_data['first_name']=$value;
                                 $member_data['last_name']=$data['member_last_name'][$key];

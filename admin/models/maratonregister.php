@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0
+ * @version 1.0.1
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0
+ * @version 1.0.1
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -56,7 +56,7 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 $db = JFactory::getDBO();
                 $query = $db->getQuery(true);
                 // Select some fields
-                $query->select('id,first_name,last_name,date_of_birth,num_tes,city,registration_datetime,payment_confirm_datetime,medical_certificate_confirm_datetime,pectoral');
+                $query->select('id,first_name,last_name,date_of_birth,num_tes,city,registration_datetime,payment_confirm_datetime,medical_certificate_confirm_datetime,pectoral,group_reference_id');
                 // From the hello table
                 $query->from('#__atlete')->where(' (removed =0 OR removed IS NULL) ');
                 $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');

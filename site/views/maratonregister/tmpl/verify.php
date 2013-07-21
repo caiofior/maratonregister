@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0
+ * @version 1.0.1
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -28,6 +28,56 @@ function format_date ($data) {
     <?php if (!is_null($this->atlete) && !is_null($this->atlete->id)) :    ?>
     <input type="hidden" id="atlete_id" name="atlete_id" value="<?php echo $this->atlete->id;?>" />
     <p>Benvenuto <?php echo $this->atlete->first_name; ?> <?php echo $this->atlete->last_name; ?></p>
+    <?php if($this->atlete->id == $this->atlete->group_reference_id) :?>
+    <p>Sei il referente del gruppo:</p>
+    <ul>
+        <?php 
+                $db = JFactory::getDBO();
+                $query = $db->getQuery(true);
+                // Select some fields
+                $query->select('id,first_name,last_name,num_tes,pectoral');
+                // From the hello table
+                $query->from('#__atlete')->where(' (group_reference_id = '.$this->atlete->id.' AND group_reference_id <> id) ');
+                $db->setQuery($query);
+                $db->query();
+                $members = $db->loadObjectList();
+        
+        foreach($members as $member) : ?>
+        <li>
+            <?php echo $member->first_name; ?>
+            <?php echo $member->last_name; ?>
+            Tessera n°<?php echo $member->num_tes; ?>
+            <?php if ($member->pectoral == '') :?>
+            Pettorale non assegnato
+            <?php else : ?>
+            Pettorale <?php echo $member->pectoral; ?>
+            <?php endif ?>
+        </li>    
+        <?php endforeach; ?>
+    </ul>
+    <?php elseif ($this->atlete->group_reference_id != ''): ?>
+    <p>Fai parte di un gruppo, per eventuali problemi contatta il tuo referente:
+        <?php 
+                $db = JFactory::getDBO();
+                $query = $db->getQuery(true);
+                // Select some fields
+                $query->select('id,first_name,last_name,phone,email');
+                // From the hello table
+                $query->from('#__atlete')->where(' (id = '.$this->atlete->group_reference_id.') ');
+                $db->setQuery($query);
+                $db->query();
+                $member = $db->loadObject();
+        ?>
+        <?php echo $member->first_name; ?>
+        <?php echo $member->last_name; ?>
+        <?php if ($member->email != '') :?>
+        <br/>email: <?php echo $member->email; ?>
+        <?php endif; ?>
+        <?php if ($member->phone != '') :?>
+        <br/>telefono: <?php echo $member->phone; ?>
+        <?php endif; ?>
+    </p>
+    <?php endif;?>
     <p class="confirmed">Ti sei registrato il <?php echo format_date($this->atlete->registration_datetime); ?> </p>
     <?php if ($this->atlete->payment_fname == '') :?>
     <p class="unconfirmed">Non è perventuo il tuo pagamento</p>

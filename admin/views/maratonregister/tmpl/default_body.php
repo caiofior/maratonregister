@@ -64,6 +64,11 @@ defined('_JEXEC') or die('Restricted Access');
                                 Pettorale : <?php echo $item->pectoral;?>
                             </a>
                         <?php endif; ?>
+                        <?php if ($item->id == $item->group_reference_id) :?>
+                        Referente di gruppo
+                        <?php elseif ($item->group_reference_id != '') :?>
+                        Membro di gruppo
+                        <?php endif; ?>
                 </td>
                 <td>
                     <a  class="toolbar" href="<?php echo JRoute::_('?option=com_maratonregister&view=maratonregister&layout=edit&id='.$item->id); ?>">

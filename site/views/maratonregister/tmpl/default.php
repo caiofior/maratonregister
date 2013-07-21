@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0
+ * @version 1.0.1
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -144,7 +144,7 @@ $errors = $this->getModel()->getErrors();
     </fieldset>
     <fieldset id="group_fidal_container">
     <legend>Componenti del gruppo</legend>
-    <div ><a class="add_memeber" href="#">Aggiungi</a></div>
+    <div ><a class="add_member" href="#">Aggiungi</a></div>
     <div class="group_member">
     <div class="remove_memeber_container" style="display: none;"><a class="remove_memeber" href="#">Rimuovi</a></div>
     <label >Nome</label>

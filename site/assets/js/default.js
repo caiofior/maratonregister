@@ -30,13 +30,24 @@
      else
         $$(".remove_memeber_container").setStyle("display", "none");
     }
-    $$(".add_memeber").addEvent("click", function(){
+    $$(".add_member").addEvent("click", function(){
      el = $$(".group_member").pop().clone(true,true);
      el.getElements("input").set("value","");
      $("group_fidal_container").adopt(el); 
      hide_show_remove();
      event_add_element();
      return false;
+     });
+     $("num_tes").addEvent("blur", function(){
+         if(/^[0-9]{8}$/.test($("num_tes").get("value")) == false) {
+                    el = new Element("p");
+                    el.addClass("error");
+                    el.appendText("Numero di tessera errato");
+                    $("num_tes").addClass("wrong_field");
+                    $("num_tes").grab(el,"after");
+         }
+         /*else
+             $("num_tes").next().destroy();*/
      });
      /**
       * Recreates the event click on remove button
@@ -58,9 +69,10 @@
       * @returns {Boolean}
       */
      function check_empty_input () {
-         var status = true;
+         status = true;
          if ($("type_of_check").get("value") != "group_fidal") 
              return status;
+         num_tes_coll=[$("num_tes").get("value")];
          $("registration").getElements("p").destroy();
          input_coll = $("group_fidal_container").getElements("input");
          for (var i=0;i<input_coll.length;i++) {
@@ -70,8 +82,28 @@
                     el.appendText("Nome e numero di tessera sono richiesti");
                     $(input_coll[i]).addClass("wrong_field");
                     $(input_coll[i]).grab(el,"after");
-                 status = false;
+                    status = false;
              }
+             if(input_coll[i].get("name") == "member_num_tes[]") {
+                 if(/^[0-9]{8}$/.test(input_coll[i].get("value")) == false) {
+                    el = new Element("p");
+                    el.addClass("error");
+                    el.appendText("Numero di tessera errato");
+                    $(input_coll[i]).addClass("wrong_field");
+                    $(input_coll[i]).grab(el,"after");
+                    status = false;
+                 }
+                 if (num_tes_coll.contains(input_coll[i].get("value"))){
+                    el = new Element("p");
+                    el.addClass("error");
+                    el.appendText("Numero di tessera già presente nel gruppo");
+                    $(input_coll[i]).addClass("wrong_field");
+                    $(input_coll[i]).grab(el,"after");
+                    status = false;
+                 }
+                 num_tes_coll.push(input_coll[i].get("value"));
+             }
+             
          }
          return status;
      }
