@@ -37,7 +37,7 @@ defined('_JEXEC') or die('Restricted Access');
                                 </span>
                             </a>
                         <?php endif; ?>
-                        <?php if ($item->medical_certificate_confirm_datetime == '' ) :?>
+                        <?php if ($item->medical_certificate_confirm_datetime == '' && $item->num_tes == '' ) :?>
                             <a class="jgrid hasTip"  title="Certificato medico non confermato">
                                 <span class="state unpublish">
                                     <span class="text">Certificato medico non confermato</span>

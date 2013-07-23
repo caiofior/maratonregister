@@ -172,7 +172,7 @@ JHtml::_('behavior.tooltip');
         $medical_certificate_fname = JPATH_BASE.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.
                 'components'.DIRECTORY_SEPARATOR.'com_maratonregister'.DIRECTORY_SEPARATOR.'medical_certificate'.DIRECTORY_SEPARATOR.
                 $this->item->medical_certificate_fname;
-        if (is_file($medical_certificate_fname)) : ?>
+        if ($this->item->num_tes == '' && is_file($medical_certificate_fname)) : ?>
         <a target="_blank" href="<?php echo 
                 '../components/com_maratonregister/medical_certificate/'.
                 $this->item->medical_certificate_fname; ?>">Certificato medico</a></br>
@@ -189,6 +189,8 @@ JHtml::_('behavior.tooltip');
        <?php endif; ?>
        <a id="medical_certificate_confirm_datetime_confirm" href="#">Conferma</a> <a id="medical_certificate_confirm_datetime_cancel" href="#">Annulla</a>
     </p>
+    <?php elseif ($this->item->num_tes != '') : ?>
+    <p>Atleta FIDAL, non necessita di certificato medico.</p>
     <?php else : ?>
     <label for="medical_certificate">Certificato Medico</label>
     <input type="file" id="medical_certificate" name="medical_certificate" value ="" />
@@ -203,10 +205,10 @@ JHtml::_('behavior.tooltip');
         if (is_file($game_card_fname)) : ?>
         <a target="_blank" href="<?php echo 
                 '../components/com_maratonregister/game_card/'.
-                $this->item->game_card_fname; ?>">Cartellino di partecipazione</a></br>
+                $this->item->game_card_fname; ?>">Cartellino di partecipazione/Tessera societaria</a></br>
         <p>Caricato il <?php echo $this->item->game_card_datetime;?></p>        
         <? else : ?>
-        <p>Cartellino di partecipazione non disponibile</p>
+        <p>Cartellino di partecipazione/Tessera societaria non disponibile</p>
         <?php endif; ?>
     </fieldset>
     <fieldset id="payment_type_container">

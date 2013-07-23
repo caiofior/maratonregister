@@ -8,6 +8,9 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::_('stylesheet','components/com_maratonregister/assets/css/com_maratonregister.css');
 $errors = $this->getModel()->getErrors();
 ?>
+<script type="text/javascript" >
+var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister')->get('maraton_amount','30'); ?>;
+</script>
 <h1>Registrati</h1>
 <?php if (key_exists('message', $_REQUEST)) : ?>
 <p><?php echo $_REQUEST['message']; ?></p>
@@ -16,16 +19,16 @@ $errors = $this->getModel()->getErrors();
 <p id="choose_athlete">Seleziona il tipo di iscrizione</p>
 <div id="athlete_selectors">
 <a id="fidal" href="?option=com_maratonregister" title="Tesserati FIDAL">
-    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="187" height="68" alt="Tesserato Fidal"/>
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/fidal.png" width="175" height="68" alt="Tesserato Fidal"/>
 </a>
 <a id="group_fidal" href="?option=com_maratonregister" title="Gruppo tesserati FIDAL">
-    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/group_fidal.png" width="187" height="68" alt="Gruppo tesserati FIDAL"/>
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/group_fidal.png" width="175" height="68" alt="Gruppo tesserati FIDAL"/>
 </a>
-<a id="other_ass" href="?option=com_maratonregister" title="Tesserati enti di promozione riconosciuti FIDAL">
-    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="187" height="68" alt="Tesserato altra federazione"/>
+<a id="other_ass" href="?option=com_maratonregister" title="Società riconosciute FIDAL">
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="175" height="68" alt="Società riconosciute FIDAL"/>
 </a>
 <a id="amateur" href="?option=com_maratonregister" title="Non tesserati FIDAL e altra federazione non FIDAL">
-    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/amatore.png" width="187" height="68" alt="Amatore"/>
+    <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/amatore.png" width="175" height="68" alt="Non tesserati FIDAL e altra federazione non FIDAL"/>
 </a>
 </div>
 <form style="display:none;" action="?option=com_maratonregister" method="post" id="registration" name="registration" enctype="multipart/form-data">
@@ -89,7 +92,7 @@ $errors = $this->getModel()->getErrors();
     <fieldset id="medical_certificate_container">
     
     <div>
-        <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
+        <a id="health_form_image" href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
             <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Autocertificazione buona salute per atleti stranieri" style="float: left;"/>
         </a>
 
@@ -109,12 +112,12 @@ $errors = $this->getModel()->getErrors();
     </fieldset>
     <fieldset id="game_card_container">
     <div>
-        <a href="components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
+        <a id="game_card_image" href="components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
             Cartellino di partecipazione gare su strada
             <img width="100" hight="142" src ="components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
         </a>
     </div>
-    <label for="game_card_fname">Carica il tuo cartellino di partecipazione compilato</label>
+    <label for="game_card_fname"><span id="game_card_label">Carica il tuo cartellino di partecipazione compilato</span><span id="other_ass_card_label" style="display: none;">Copia della tessera societaria</span></label>
     <div class="fileinputs">
         <input class="file" type="file" id="game_card_fname" name="game_card_fname" value ="" />
     </div>
@@ -144,6 +147,8 @@ $errors = $this->getModel()->getErrors();
     </fieldset>
     <fieldset id="group_fidal_container">
     <legend>Componenti del gruppo</legend>
+    <div>La quota di iscrizione è di <?php echo JComponentHelper::getParams('com_maratonregister')->get('maraton_amount','30'); ?> € a persona. </div>
+    <div id="billing_group"></div>
     <div ><a class="add_member" href="#">Aggiungi</a></div>
     <div class="group_member">
     <div class="remove_memeber_container" style="display: none;"><a class="remove_memeber" href="#">Rimuovi</a></div>

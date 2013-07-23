@@ -3,9 +3,7 @@
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","fidal");
-        $("athlete_selectors").getElements("img").setStyles({
-            "display":"none"
-        });
+        $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
         $("choose_athlete").setStyle("display", "none");
@@ -14,11 +12,15 @@
         $("sex_container").setStyle("display", "none");
         $("citizenship_container").setStyle("display", "none");
         $("address_container").setStyle("display", "none");
-        $("phone_container").setStyle("display", "none");
+        $("phone_container").setStyle("display", "block");
         $("other_num_tes_container").setStyle("display", "none");
         $("medical_certificate_container").setStyle("display", "none");
         $("num_tes_container").setStyle("display", "block");
         $("group_fidal_container").setStyle("display", "none");
+        $("health_form_image").setStyle("display", "block");
+        $("game_card_image").setStyle("display", "block");
+        $("game_card_label").setStyle("display", "block");
+        $("other_ass_card_label").setStyle("display", "none");
         return false;
     });
     /**
@@ -35,6 +37,7 @@
      el.getElements("input").set("value","");
      $("group_fidal_container").adopt(el); 
      hide_show_remove();
+     group_billing_amount();
      event_add_element();
      return false;
      });
@@ -46,8 +49,13 @@
                     $("num_tes").addClass("wrong_field");
                     $("num_tes").grab(el,"after");
          }
-         /*else
-             $("num_tes").next().destroy();*/
+         else {
+             $("num_tes").removeClass("wrong_field");
+             next = $("num_tes").getNext();
+             if(next !== null && next.tagName == "P") {
+                next.destroy();
+             }
+         }
      });
      /**
       * Recreates the event click on remove button
@@ -56,6 +64,7 @@
         $$(".remove_memeber").removeEvents("click").addEvent("click", function(){
          this.getParent().getParent().destroy();
          hide_show_remove();
+         group_billing_amount();
          return false;
         });
         $("group_fidal_container").getElements("input").removeEvents("blur").addEvent("blur", function(){
@@ -63,6 +72,12 @@
          return false;
         });
         check_empty_input ();
+     }
+     /**
+      * Calcolates the billing amount for the group
+      */
+     function group_billing_amount() {
+        $("billing_group").set("text","L'importo dovuto è di "+($$(".group_member").length+1)*maraton_amount+" €"); 
      }
      /**
       * Check if there is an empty group memeber
@@ -112,9 +127,7 @@
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","group_fidal");
-        $("athlete_selectors").getElements("img").setStyles({
-            "display":"none"
-        });
+        $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
         $("choose_athlete").setStyle("display", "none");
@@ -123,20 +136,22 @@
         $("sex_container").setStyle("display", "none");
         $("citizenship_container").setStyle("display", "none");
         $("address_container").setStyle("display", "none");
-        $("phone_container").setStyle("display", "none");
+        $("phone_container").setStyle("display", "block");
         $("other_num_tes_container").setStyle("display", "none");
         $("medical_certificate_container").setStyle("display", "none");
         $("num_tes_container").setStyle("display", "block");
         $("group_fidal_container").setStyle("display", "block");
+        $("health_form_image").setStyle("display", "block");
+        $("game_card_image").setStyle("display", "block");
+        $("game_card_label").setStyle("display", "block");
+        $("other_ass_card_label").setStyle("display", "none");
         return false;
     });
     $("other_ass").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","other_ass");
-        $("athlete_selectors").getElements("img").setStyles({
-            "display":"none"
-        });
+        $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
         $("choose_athlete").setStyle("display", "none");
@@ -150,15 +165,17 @@
         $("other_num_tes_container").setStyle("display", "block");
         $("num_tes_container").setStyle("display", "none");
         $("group_fidal_container").setStyle("display", "none");
+        $("health_form_image").setStyle("display", "none");
+        $("game_card_image").setStyle("display", "none");
+        $("game_card_label").setStyle("display", "none");
+        $("other_ass_card_label").setStyle("display", "block");
         return false;
     });
     $("amateur").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p").destroy();
         $("type_of_check").set("value","amateur");
-        $("athlete_selectors").getElements("img").setStyles({
-            "display":"none"
-        });
+        $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
         $("registration").setStyle("display", "block");
         $("choose_athlete").setStyle("display", "none");
@@ -172,6 +189,10 @@
         $("other_num_tes_container").setStyle("display", "none");
         $("num_tes_container").setStyle("display", "none");
         $("group_fidal_container").setStyle("display", "none");
+        $("health_form_image").setStyle("display", "block");
+        $("game_card_image").setStyle("display", "block");
+        $("game_card_label").setStyle("display", "block");
+        $("other_ass_card_label").setStyle("display", "none");
         return false;
     });
     $("submit").addEvent("click", function(){

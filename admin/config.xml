@@ -21,5 +21,13 @@
                         default="2013-10-13"
                 >
                 </field>
+                <field
+                        name="maraton_amount"
+                        type="text"
+                        label="Quota di iscrizione"
+                        description="Quota di iscrizione"
+                        default="30"
+                >
+                </field>
         </fieldset>
 </config>

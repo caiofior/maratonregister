@@ -55,6 +55,10 @@ class MaratonRegisterControllerMaratonRegister extends JControllerForm
         while (is_array($atlete = $function_fetch($atletes))) {
             if ($c == 0)
                 echo implode(';',array_keys($atlete))."\r\n";
+            if ($atlete['num_tes'] != '') {
+              $atlete['medical_certificate_datetime']=$atlete['registration_datetime'];  
+              $atlete['medical_certificate_confirm_datetime']=$atlete['registration_datetime'];
+            }
             foreach ($atlete as $key=>$value) {
                 if (
                     $key == 'date_of_birth' 
