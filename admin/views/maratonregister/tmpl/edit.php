@@ -66,24 +66,32 @@ JHtml::_('behavior.tooltip');
         <?php endif; ?>
     <?php endif; ?>
     <?php if (key_exists('num_tes', $errors)) echo '<p class="error">'.$errors['num_tes']['message'].'</p>';?>
-    <?php if($this->item->id == $this->item->group_reference_id) :?>
-    <p>L'atleta è il referente del gruppo:</p>
+    <?php if ($this->item->group_reference_id != ''): 
+        
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $query
+        ->select('denom')
+        ->from('#__fidal_fella')
+        ->where('num_tes = '.$db->quote($this->item->num_tes));
+    $db->setQuery($query);
+    $db->query();
+    $group_name = $db->loadResult();
+    ?>
+    <p>L'atleta fa parte del gruppo <?php echo $this->item->group_reference_id; ?> <?php echo $group_name; ?>:
     <ul>
         <?php 
-                $db = JFactory::getDBO();
                 $query = $db->getQuery(true);
                 // Select some fields
-                $query->select('id,first_name,last_name,num_tes,pectoral');
+                $query->select('id,num_tes,pectoral');
                 // From the hello table
-                $query->from('#__atlete')->where(' (group_reference_id = '.$this->item->id.' AND group_reference_id <> id) ');
+                $query->from('#__atlete')->where(' (group_reference_id = '.$this->item->group_reference_id.' AND id <> '.$db->quote($this->item->id).') ');
                 $db->setQuery($query);
                 $db->query();
                 $members = $db->loadObjectList();
         
         foreach($members as $member) : ?>
         <li>
-            <?php echo $member->first_name; ?>
-            <?php echo $member->last_name; ?>
             Tessera n°<?php echo $member->num_tes; ?>
             <?php if ($member->pectoral == '') :?>
             Pettorale non assegnato
@@ -96,31 +104,6 @@ JHtml::_('behavior.tooltip');
         </li>    
         <?php endforeach; ?>
     </ul>
-    <?php elseif ($this->item->group_reference_id != ''): ?>
-    <p>L'atleta fa parte di un gruppo, per eventuali problemi contatta il referente:
-        <?php 
-                $db = JFactory::getDBO();
-                $query = $db->getQuery(true);
-                // Select some fields
-                $query->select('id,first_name,last_name,phone,email');
-                // From the hello table
-                $query->from('#__atlete')->where(' (id = '.$this->item->group_reference_id.') ');
-                $db->setQuery($query);
-                $db->query();
-                $member = $db->loadObject();
-        ?>
-        <?php echo $member->first_name; ?>
-        <?php echo $member->last_name; ?>
-        <?php if ($member->email != '') :?>
-        <br/>email: <?php echo $member->email; ?>
-        <?php endif; ?>
-        <?php if ($member->phone != '') :?>
-        <br/>telefono: <?php echo $member->phone; ?>
-        <?php endif; ?>
-        <a  class="toolbar" href="<?php echo JRoute::_('?option=com_maratonregister&view=maratonregister&layout=edit&id='.$this->item->group_reference_id); ?>">
-                        <span style="display: block; width: 32px; height: 32px;" class="icon-32-edit"></span>
-        </a>
-    </p>
     <?php endif;?>    
     </fieldset>
     <fieldset id="other_num_tes_container" >

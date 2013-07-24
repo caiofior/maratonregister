@@ -56,50 +56,53 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
             $marathon_name = JComponentHelper::getParams('com_maratonregister')->get('maraton_name','Maratonina dei borghi di Pordenone');
             $this->checkData($data);
             
-            if ($data['type_of_check'] != 'fidal' &&
-                $data['type_of_check'] != 'group_fidal')
+            if ($data['type_of_check'] != 'fidal' )
                 $data['num_tes'] = '';
             if ($data['type_of_check'] != 'other_ass') {
                 $data['other_ass_name']='';
                 $data['other_num_tes']='';
             }
             if ($data['type_of_check'] != 'group_fidal')
-                unset($data['member_first_name'],$data['member_last_name'],$data['member_num_tes']);
+                unset($data['member_num_tes']);
 
             foreach ($data as $key=>$value) {
                 if (!is_array($value))
                     $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
             }
-            if ( $data['num_tes'] == '' && !key_exists('medical_certificate',$_FILES)) {
-                $this->errors['medical_certificate']=array(
-                    'message'=>'Il certificato medico è richiesto'
-                );
-            } else if ($data['num_tes'] == '') {
-                $data = $this->addMedicalCertificate($data);
+            if (!key_exists('member_num_tes', $data)) {
+                if ( 
+                      $data['num_tes'] == '' &&
+                     !key_exists('medical_certificate',$_FILES)
+                    ) {
+                    $this->errors['medical_certificate']=array(
+                        'message'=>'Il certificato medico è richiesto'
+                    );
+                } else if ($data['num_tes'] == '') {
+                    $data = $this->addMedicalCertificate($data);
+                }
             }
             
             $data = $this->addPayment($data);
 
             $data = $this->addgameCard($data);
-            
             if (sizeof($this->errors) == 0) {
                     $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
                     
                     $data['id']=  $this->generateKey($data);
 
                     $data['registration_datetime']='NOW()';
-                    $db = JFactory::getDbo();
-                    $query = $db->getQuery(true);
-                    $query
-                        ->select('COUNT(id)')
-                        ->from('#__atlete')
-                        ->where('removed <> 1 AND id = '. $db->Quote($data['id']));
-                    $db->setQuery($query);
-                    $db->query();
-                    $id = intval($db->loadResult());
-                    
-
-
+                    $id =0;
+                    if ( !key_exists('member_num_tes', $data) ) {
+                        $db = JFactory::getDbo();
+                        $query = $db->getQuery(true);
+                        $query
+                            ->select('COUNT(id)')
+                            ->from('#__atlete')
+                            ->where('removed <> 1 AND id = '. $db->Quote($data['id']));
+                        $db->setQuery($query);
+                        $db->query();
+                        $id = intval($db->loadResult());
+                    }
                     if ($id > 0) {
                         $this->errors['first_name']=array(
                          'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
@@ -134,7 +137,9 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                         $rcolumns = array_flip($columns);
                         $rcolumns = array_intersect_key($rcolumns, $data);
                         $columns = array_flip($rcolumns);
+                        $db = JFactory::getDbo();
                         foreach ($columns as $column) {
+                            
                             if (!key_exists($column, $data)) 
                                 continue;
                             if (
@@ -147,36 +152,42 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             else
                                 $values[$column]=$db->quote($data[$column]);
                         }
-                        
-                        if ( key_exists('member_first_name', $data) ) {
+                        $group_reference_text = '';
+                        if ( key_exists('member_num_tes', $data) ) {
                             $columns[]='group_reference_id';
-                            $values[]=$values['id'];
-                        }
-                        
-                        $query = $db->getQuery(true);
-                        $query
-                            ->insert($db->quoteName('#__atlete'))
-                            ->columns($db->quoteName($columns))
-                            ->values(implode(',', $values));
-
-                        $db->setQuery($query);
-                        $db->query();
-                        
-                        if ( key_exists('member_first_name', $data) ) {
-                            foreach($data['member_first_name'] as $key=>$value) {
+                            $query = $db->getQuery(true);
+                            $query
+                                ->select('MAX(group_reference_id)')
+                                ->from('#__atlete');
+                            $db->setQuery($query);
+                            $db->query();
+                            $group_reference_id = intval($db->loadResult())+1;
+                            $values[]=$group_reference_id;
+                            $group_name = '';
+                            foreach($data['member_num_tes'] as $key=>$value) {
                                 $member_values = $values;
                                 $member_data = $data;
-                                $member_data['first_name']=$value;
-                                $member_data['last_name']=$data['member_last_name'][$key];
-                                $member_data['num_tes']=$data['member_num_tes'][$key];
+                                $member_data['num_tes']=$value;
+                                $member_values['num_tes']=$db->quote($value);
+                                $member_values['date_of_birth']=$db->quote($data['member_num_tes'][$key]);
+                                $member_values['id']=$this->generateKey($member_data);
+                                if ($group_name == '') {
+                                    
+                                    $query = $db->getQuery(true);
+                                    $query
+                                        ->select('denom')
+                                        ->from('#__fidal_fella')
+                                        ->where('num_tes = '.$db->quote($value));
+                                    $db->setQuery($query);
+                                    $db->query();
+                                    $group_name = $db->loadResult();
+                                }
                                 
-                                
-                                $member_values['id']=$db->Quote($this->generateKey($member_data));
                                 $query = $db->getQuery(true);
                                 $query
                                     ->select('COUNT(id)')
                                     ->from('#__atlete')
-                                    ->where('removed <> 1 AND id = '. $member_values['id']);
+                                    ->where('removed <> 1 AND id = '. $db->quote($member_values['id']));
                                 $db->setQuery($query);
                                 $db->query();
                                 $id = intval($db->loadResult());
@@ -186,9 +197,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                                      'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
                                     );
                                 }
-                                $member_values['first_name']=$db->quote($value);
-                                $member_values['last_name']=$db->quote($data['member_last_name'][$key]);
-                                $member_values['num_tes']=$db->quote($data['member_num_tes'][$key]);
+                                $query = $db->getQuery(true);
                                 $query
                                     ->insert($db->quoteName('#__atlete'))
                                     ->columns($db->quoteName($columns))
@@ -196,25 +205,22 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
 
                                 $db->setQuery($query);
                                 $db->query();
-                                $db = JFactory::getDbo();
                             }
-                                $query = $db->getQuery(true);
-                                $query
-                                    ->select('COUNT(id)')
-                                    ->from('#__atlete')
-                                    ->where('removed <> 1 AND id = '. $db->Quote($data['id']));
-                                $db->setQuery($query);
-                                $db->query();
-                                $id = intval($db->loadResult());
-
-
-
-                                if ($id > 0) {
-                                    $this->errors['first_name']=array(
-                                     'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
-                                    );
-                                }
+                            $group_size = sizeof($data['member_num_tes']);
+                            $group_reference_text = <<<EOT
+                            <p>Hai registrato un gruppo di {$group_size} persone; l'identificativo del gruppo {$group_name} è {$group_reference_id} .</p>
+EOT;
                                 
+                        }
+                        else {
+                            $query = $db->getQuery(true);
+                            $query
+                                ->insert($db->quoteName('#__atlete'))
+                                ->columns($db->quoteName($columns))
+                                ->values(implode(',', $values));
+
+                            $db->setQuery($query);
+                            $db->query();
                         }
                         
                         $mailer = JFactory::getMailer();
@@ -261,6 +267,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
         <td>{$data['num_tes']}</th>
     </tr>
 </table>
+{$group_reference_text}
 <p>Accedi al sito per confermare l'iscrizione, il pagamento e il certificato medico.</p>
 EOT;
                         $mailer->setSubject('Nuova iscrizione '.$data['first_name'].' '.$data['last_name']);
@@ -312,6 +319,7 @@ EOT;
         <td>{$data['num_tes']}</th>
     </tr>
 </table>
+{$group_reference_text}
 <p>Per errori o inesattezze contatta l'organizzazione della {$marathon_name}.</p>
 EOT;
                         $mailer->setSubject('Grazie per esserti iscritto alla '.$marathon_name);
@@ -352,15 +360,14 @@ EOT;
             $datetime = $this->getDateTime($data['date_of_birth']);
             $data['date_of_birth'] = $this->parseDate($data['date_of_birth']);
           
-            if ($data['type_of_check'] != 'fidal' && 
-                $data['type_of_check'] != 'group_fidal')
+            if ($data['type_of_check'] != 'fidal' )
                 $data['num_tes'] = '';
             if ($data['type_of_check'] != 'other_ass') {
                 $data['other_ass_name']='';
                 $data['other_num_tes']='';
             }
             if ($data['type_of_check'] != 'group_fidal')
-                unset($data['member_first_name'],$data['member_last_name'],$data['member_num_tes']);
+                unset($data['member_num_tes']);
                 
             if ($id > 0) {
                 $this->errors['first_name']=array(
@@ -377,6 +384,84 @@ EOT;
                   $errors['other_ass_name']=array(
                       'message'=>'Il nome dell\'associazione è richiesto'
                   );
+            } else if ( key_exists('member_num_tes', $data) ) {
+                if ( !is_array($data['member_num_tes']) )
+                    {
+                        $errors['group_fidal_container']=array(
+                            'message'=>'Dati del gruppo non validi'
+                          ); 
+                    }
+                    
+                    if (sizeof($data['member_num_tes']) <1) {
+                           $errors['group_fidal_container']=array(
+                             'message'=>'Dev\'esserci almeno un membro nel gruppo'
+                         ); 
+                       }
+                       
+                       if ($data['first_name'] == '')
+                  $errors['first_name']=array(
+                      'message'=>'Il nome è richiesto'
+                  );
+                else if (strlen($data['first_name'])>50)
+                    $errors['first_name']=array(
+                      'message'=>'Il nome può avere al massimo 50 caratteri'
+                  );
+                if ($data['last_name'] == '')
+                  $errors['last_name']=array(
+                      'message'=>'Il cognome è richiesto'
+                  );
+                else if (strlen($data['last_name'])>50)
+                    $errors['last_name']=array(
+                      'message'=>'Il cognome può avere al massimo 50 caratteri'
+                  );
+            
+                if ($data['phone'] == '')
+                  $errors['phone']=array(
+                      'message'=>'Il telefono è richiesto'
+                  );
+                else if (!preg_match('/^[ \+0-9]+$/', $data['phone']))
+                    $errors['phone']=array(
+                      'message'=>'Il telefono può contenere numeri, spazi e +'
+                  );
+                
+            if ($data['payment_type'] == '')
+                  $errors['paypal']=array(
+                      'message'=>'La modalità di pagamento è richiesta'
+                  );
+            if ($data['email'] != '') {
+                if (!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/', $data['email']))
+                  $errors['email']=array(
+                      'message'=>'La mail non è valida'
+                  );  
+            }
+                       
+                        if(!key_exists('group_fidal_container', $errors)) {
+                            foreach($data['member_num_tes'] as $key=>$value) {
+                                if (!preg_match('/^[0-9]{8}$/', $value)) {
+                                    $errors['group_fidal_container']=array(
+                                     'message'=>'Il numero di tessera '.$value.'non è valido.'
+                                    );
+                                }
+                                $member_data = $data;
+                                $member_data['num_tes']=$value;
+                                
+                                $db = JFactory::getDbo();
+                                $query = $db->getQuery(true);
+                                $query
+                                    ->select('COUNT(id)')
+                                    ->from('#__atlete')
+                                    ->where('removed <> 1 AND id = '. $db->Quote($this->generateKey($member_data)));
+                                $db->setQuery($query);
+                                $db->query();
+                                $id = intval($db->loadResult());
+                                if ($id > 0) {
+                                    $errors['group_fidal_container']=array(
+                                     'message'=>'L\'atleta con tessera numero '.$value.' risulta già registrato.'
+                                    );
+                                }
+                                
+                        }
+                }
             } else {
                 if ($data['first_name'] == '')
                   $errors['first_name']=array(
@@ -443,24 +528,26 @@ EOT;
                       'message'=>'Il certificato medico è richiesto'
                   );
             }
-            if ($data['date_of_birth'] == '')
-                  $errors['date_of_birth']=array(
-                      'message'=>'La data di nascita è richiesta'
-                  );
-            else if (
-                        $data['type_of_check'] == 'fidal' &&
-                        $datetime > $marathon_datetime - 18 * 31556926 
-                    )
-                        $errors['date_of_birth']=array(
-                          'message'=>'Devi avere almeno 18 anni al '.strftime('%d/%m/%Y',$marathon_datetime)
-                        );
-            else if (
-                        $data['type_of_check'] != 'fidal' &&
-                        $datetime > $marathon_datetime - 23 * 31556926 
-                    )
-                        $errors['date_of_birth']=array(
-                          'message'=>'Devi avere almeno 23 anni al '.strftime('%d/%m/%Y',$marathon_datetime)
-                        );
+            if ( !key_exists('member_num_tes', $data) ) {
+                if ( $data['date_of_birth'] == '' )
+                      $errors['date_of_birth']=array(
+                          'message'=>'La data di nascita è richiesta'
+                      );
+                else if (
+                            $data['type_of_check'] == 'fidal' &&
+                            $datetime > $marathon_datetime - 18 * 31556926 
+                        )
+                            $errors['date_of_birth']=array(
+                              'message'=>'Devi avere almeno 18 anni al '.strftime('%d/%m/%Y',$marathon_datetime)
+                            );
+                else if (
+                            $data['type_of_check'] != 'fidal' &&
+                            $datetime > $marathon_datetime - 23 * 31556926 
+                        )
+                            $errors['date_of_birth']=array(
+                              'message'=>'Devi avere almeno 23 anni al '.strftime('%d/%m/%Y',$marathon_datetime)
+                            );
+            }
             if ($data['payment_type'] == '')
                   $errors['paypal']=array(
                       'message'=>'La modalità di pagamento è richiesta'
@@ -471,67 +558,7 @@ EOT;
                       'message'=>'La mail non è valida'
                   );  
             }
-            if (
-                    key_exists('member_first_name', $data) &&
-                    key_exists('member_last_name', $data) &&
-                    key_exists('member_num_tes', $data)
-                    ) {
-                if (
-                        !is_array($data['member_first_name']) ||
-                        !is_array($data['member_last_name']) ||
-                        !is_array($data['member_num_tes'])
-                    )
-                    {
-                        $errors['group_fidal_container']=array(
-                            'message'=>'Dati del gruppo non validi'
-                          ); 
-                        }
-                        $data['member_first_name'] = array_filter($data['member_first_name']);
-                        $data['member_last_name'] = array_filter($data['member_last_name']);
-                        $data['member_num_tes'] = array_filter($data['member_num_tes']);
-                    if (
-                        sizeof($data['member_first_name']) != sizeof($data['member_last_name']) ||
-                        sizeof($data['member_first_name']) != sizeof($data['member_num_tes'])
-                        ) {
-                            $errors['group_fidal_container']=array(
-                              'message'=>'Dati del gruppo non validi'
-                          ); 
-                        }
-                     if (sizeof($data['member_first_name']) <1) {
-                            $errors['group_fidal_container']=array(
-                              'message'=>'Dev\'esserci almeno un membro nel gruppo'
-                          ); 
-                        }
-                        if(!key_exists('group_fidal_container', $errors)) {
-                            foreach($data['member_first_name'] as $key=>$value) {
-                                if (!preg_match('/^[0-9]{8}$/', $data['member_num_tes'][$key])) {
-                                    $errors['group_fidal_container']=array(
-                                     'message'=>'Il numero di tessera '.$data['member_num_tes'][$key].'non è valido.'
-                                    );
-                                }
-                                $member_data = $data;
-                                $member_data['first_name']=$value;
-                                $member_data['last_name']=$data['member_last_name'][$key];
-                                $member_data['num_tes']=$data['member_num_tes'][$key];
-                                
-                                $db = JFactory::getDbo();
-                                $query = $db->getQuery(true);
-                                $query
-                                    ->select('COUNT(id)')
-                                    ->from('#__atlete')
-                                    ->where('removed <> 1 AND id = '. $db->Quote($this->generateKey($member_data)));
-                                $db->setQuery($query);
-                                $db->query();
-                                $id = intval($db->loadResult());
-                                if ($id > 0) {
-                                    $errors['group_fidal_container']=array(
-                                     'message'=>'L\'atleta '.$member_data['first_name'].' '.$member_data['last_name'].' risulta già registrato.'
-                                    );
-                                }
-                                
-                        }
-                }
-            }
+            
             $db = JFactory::getDbo();
             $query = $db->getQuery(true);
             $query
@@ -558,7 +585,7 @@ EOT;
          * @return type
          */
         private function generateKey($data) {
-             if ($data['num_tes'] == '')
+            if ($data['num_tes'] == '')
                     $id=  str_replace('-','_',$data['first_name']).'_'.str_replace ('-','_', $data['last_name']).'_'.$data['date_of_birth'];
             else
                 $id=$data['num_tes'];

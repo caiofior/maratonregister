@@ -56,9 +56,9 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                 $db = JFactory::getDBO();
                 $query = $db->getQuery(true);
                 // Select some fields
-                $query->select('id,first_name,last_name,date_of_birth,num_tes,city,registration_datetime,payment_confirm_datetime,medical_certificate_confirm_datetime,pectoral,group_reference_id');
+                $query->select('id,first_name,last_name,date_of_birth,atlete.num_tes,city,registration_datetime,payment_confirm_datetime,medical_certificate_confirm_datetime,pectoral,group_reference_id,fidal_fella.denom');
                 // From the hello table
-                $query->from('#__atlete')->where(' (removed =0 OR removed IS NULL) ');
+                $query->from('#__atlete AS atlete')->join('LEFT', '#__fidal_fella AS fidal_fella ON (atlete.num_tes = fidal_fella.num_tes)')->where(' (removed =0 OR removed IS NULL) ');
                 $search = $this->getUserStateFromRequest($this->context.'.filter.search', 'filter_search');
                 if($search != '') {
                     $search = explode(' ', $search);

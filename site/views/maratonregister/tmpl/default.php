@@ -152,12 +152,10 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <div ><a class="add_member" href="#">Aggiungi</a></div>
     <div class="group_member">
     <div class="remove_memeber_container" style="display: none;"><a class="remove_memeber" href="#">Rimuovi</a></div>
-    <label >Nome</label>
-    <input name="member_first_name[]" value ="" />
-    <label >Cognome</label>
-    <input name="member_last_name[]" value ="" /><br/>
     <label >N° Tessera Fidal</label>
     <input name="member_num_tes[]" value ="" />
+    <label >Data di nascita (giorno/mese/anno)</label>
+    <input name="member_date_of_birth[]" value ="" />
     </div>
     </fieldset>
     <input type="submit" id="submit" name="submit" value="Registrati"/>

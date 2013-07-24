@@ -41,22 +41,6 @@
      event_add_element();
      return false;
      });
-     $("num_tes").addEvent("blur", function(){
-         if(/^[0-9]{8}$/.test($("num_tes").get("value")) == false) {
-                    el = new Element("p");
-                    el.addClass("error");
-                    el.appendText("Numero di tessera errato");
-                    $("num_tes").addClass("wrong_field");
-                    $("num_tes").grab(el,"after");
-         }
-         else {
-             $("num_tes").removeClass("wrong_field");
-             next = $("num_tes").getNext();
-             if(next !== null && next.tagName == "P") {
-                next.destroy();
-             }
-         }
-     });
      /**
       * Recreates the event click on remove button
       */
@@ -67,17 +51,12 @@
          group_billing_amount();
          return false;
         });
-        $("group_fidal_container").getElements("input").removeEvents("blur").addEvent("blur", function(){
-         check_empty_input();
-         return false;
-        });
-        check_empty_input ();
      }
      /**
       * Calcolates the billing amount for the group
       */
      function group_billing_amount() {
-        $("billing_group").set("text","L'importo dovuto è di "+($$(".group_member").length+1)*maraton_amount+" €"); 
+        $("billing_group").set("text","L'importo dovuto è di "+($$(".group_member").length)*maraton_amount+" €"); 
      }
      /**
       * Check if there is an empty group memeber
@@ -87,19 +66,22 @@
          status = true;
          if ($("type_of_check").get("value") != "group_fidal") 
              return status;
-         num_tes_coll=[$("num_tes").get("value")];
+         num_tes_coll=[];
          $("registration").getElements("p").destroy();
          input_coll = $("group_fidal_container").getElements("input");
          for (var i=0;i<input_coll.length;i++) {
              if(input_coll[i].get("value") == "") {
                     el = new Element("p");
                     el.addClass("error");
-                    el.appendText("Nome e numero di tessera sono richiesti");
+                    if (input_coll[i].get("name") == "member_num_tes[]")
+                        el.appendText("Il numero di tessera è richiesto");
+                    else 
+                        el.appendText("La data di nascita è richiesta");
                     $(input_coll[i]).addClass("wrong_field");
                     $(input_coll[i]).grab(el,"after");
                     status = false;
              }
-             if(input_coll[i].get("name") == "member_num_tes[]") {
+             else if(input_coll[i].get("name") == "member_num_tes[]") {
                  if(/^[0-9]{8}$/.test(input_coll[i].get("value")) == false) {
                     el = new Element("p");
                     el.addClass("error");
@@ -108,10 +90,10 @@
                     $(input_coll[i]).grab(el,"after");
                     status = false;
                  }
-                 if (num_tes_coll.contains(input_coll[i].get("value"))){
+             else if (num_tes_coll.contains(input_coll[i].get("value"))){
                     el = new Element("p");
                     el.addClass("error");
-                    el.appendText("Numero di tessera già presente nel gruppo");
+                    el.appendText("Numero di tessera già presente");
                     $(input_coll[i]).addClass("wrong_field");
                     $(input_coll[i]).grab(el,"after");
                     status = false;
@@ -132,14 +114,14 @@
         $("registration").setStyle("display", "block");
         $("choose_athlete").setStyle("display", "none");
         $("game_card_container").setStyle("display", "none");
-        $("name_container").setStyle("display", "none");
-        $("sex_container").setStyle("display", "none");
+        $("name_container").setStyle("display", "block");
+        $("sex_container").setStyle("display", "block");
         $("citizenship_container").setStyle("display", "none");
-        $("address_container").setStyle("display", "none");
+        $("address_container").setStyle("display", "block");
         $("phone_container").setStyle("display", "block");
         $("other_num_tes_container").setStyle("display", "none");
         $("medical_certificate_container").setStyle("display", "none");
-        $("num_tes_container").setStyle("display", "block");
+        $("num_tes_container").setStyle("display", "none");
         $("group_fidal_container").setStyle("display", "block");
         $("health_form_image").setStyle("display", "block");
         $("game_card_image").setStyle("display", "block");
@@ -197,25 +179,29 @@
     });
     $("submit").addEvent("click", function(){
          var status = check_empty_input ();
-         $$("input.wrong_field").removeClass("wrong_field");
-         $("registration").getElements("p").destroy();
-         new Request.JSON({
-            async:false,
-            url:$("registration").get("action")+"&submit=1&xhr=1&medical_certificate="+$("medical_certificate").get("value"),
-            data: $("registration").toQueryString(),
-            onSuccess: function (responseJSON) {
-                Object.each(responseJSON,function(object,id) {
-                    status = false;
-                    el = new Element("p");
-                    el.addClass("error");
-                    el.appendText(object.message);
-                    $(id).addClass("wrong_field");
-                    $(id).grab(el,"after");
-                });
-                
-            }
-         }).send();
-        return status;
+         if (status == "true") {
+            $$("input.wrong_field").removeClass("wrong_field");
+            $("registration").getElements("p").destroy();
+            new Request.JSON({
+               async:false,
+               url:$("registration").get("action")+"&submit=1&xhr=1&medical_certificate="+$("medical_certificate").get("value"),
+               data: $("registration").toQueryString(),
+               onSuccess: function (responseJSON) {
+                   Object.each(responseJSON,function(object,id) {
+                       status = false;
+                       el = new Element("p");
+                       el.addClass("error");
+                       el.appendText(object.message);
+                       $(id).addClass("wrong_field");
+                       $(id).grab(el,"after");
+                   });
+
+               }
+            }).send();
+            return status;
+        }
+        else
+            return false;
     });
     function initFileUploads() {
 	var fakeFileUpload = document.createElement("a");

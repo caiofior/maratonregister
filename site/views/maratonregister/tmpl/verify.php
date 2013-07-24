@@ -28,24 +28,31 @@ function format_date ($data) {
     <?php if (!is_null($this->atlete) && !is_null($this->atlete->id)) :    ?>
     <input type="hidden" id="atlete_id" name="atlete_id" value="<?php echo $this->atlete->id;?>" />
     <p>Benvenuto <?php echo $this->atlete->first_name; ?> <?php echo $this->atlete->last_name; ?></p>
-    <?php if($this->atlete->id == $this->atlete->group_reference_id) :?>
-    <p>Sei il referente del gruppo:</p>
+    <?php if( $this->atlete->group_reference_id != '') :
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    $query
+        ->select('denom')
+        ->from('#__fidal_fella')
+        ->where('num_tes = '.$db->quote($this->atlete->num_tes));
+    $db->setQuery($query);
+    $db->query();
+    $group_name = $db->loadResult();
+?>
+    <p>Fai parte del gruppo <?php echo $this->atlete->group_reference_id; ?> <?php echo $group_name; ?>:</p>
     <ul>
         <?php 
-                $db = JFactory::getDBO();
                 $query = $db->getQuery(true);
                 // Select some fields
-                $query->select('id,first_name,last_name,num_tes,pectoral');
+                $query->select('id,num_tes,pectoral');
                 // From the hello table
-                $query->from('#__atlete')->where(' (group_reference_id = '.$this->atlete->id.' AND group_reference_id <> id) ');
+                $query->from('#__atlete')->where(' (group_reference_id = '.$this->atlete->group_reference_id.'  AND id <> '.$db->quote($this->atlete->group_reference_id).') ');
                 $db->setQuery($query);
                 $db->query();
                 $members = $db->loadObjectList();
         
         foreach($members as $member) : ?>
         <li>
-            <?php echo $member->first_name; ?>
-            <?php echo $member->last_name; ?>
             Tessera n°<?php echo $member->num_tes; ?>
             <?php if ($member->pectoral == '') :?>
             Pettorale non assegnato

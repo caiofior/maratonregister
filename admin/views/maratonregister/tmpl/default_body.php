@@ -64,10 +64,8 @@ defined('_JEXEC') or die('Restricted Access');
                                 Pettorale : <?php echo $item->pectoral;?>
                             </a>
                         <?php endif; ?>
-                        <?php if ($item->id == $item->group_reference_id) :?>
-                        Referente di gruppo
-                        <?php elseif ($item->group_reference_id != '') :?>
-                        Membro di gruppo
+                        <?php if ($item->group_reference_id != '') :?>
+                        Membro del gruppo <?php echo $item->group_reference_id; ?> <?php echo $item->denom; ?>
                         <?php endif; ?>
                 </td>
                 <td>
