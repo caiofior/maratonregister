@@ -154,8 +154,8 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <div class="remove_memeber_container" style="display: none;"><a class="remove_memeber" href="#">Rimuovi</a></div>
     <label >N° Tessera Fidal</label>
     <input name="member_num_tes[]" value ="" />
-    <label >Data di nascita (giorno/mese/anno)</label>
-    <input name="member_date_of_birth[]" value ="" />
+    <label >Data di nascita</label>
+    <input class="member_date_of_birth" title="" name="member_date_of_birth[]" id="member_date_of_birth" value="" type="text"><img src="/maratoninadeiborghi.it/media/system/images/calendar.png" alt="**Calendario**" class="calendar" id="member_date_of_birth_img">
     </div>
     </fieldset>
     <input type="submit" id="submit" name="submit" value="Registrati"/>

@@ -169,7 +169,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                                 $member_data = $data;
                                 $member_data['num_tes']=$value;
                                 $member_values['num_tes']=$db->quote($value);
-                                $member_values['date_of_birth']=$db->quote($data['member_num_tes'][$key]);
+                                $member_values['date_of_birth']=$db->quote($this->parseDate($data['member_date_of_birth'][$key]));
                                 $member_values['id']=$this->generateKey($member_data);
                                 if ($group_name == '') {
                                     

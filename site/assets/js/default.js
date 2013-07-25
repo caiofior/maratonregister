@@ -1,7 +1,7 @@
     $(document.body).getElements("a.targetblank").setProperty("target","_blank");
     $("fidal").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
-        $("registration").getElements("p").destroy();
+        $("registration").getElements("p.error").destroy();
         $("type_of_check").set("value","fidal");
         $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
@@ -32,10 +32,38 @@
      else
         $$(".remove_memeber_container").setStyle("display", "none");
     }
-    $$(".add_member").addEvent("click", function(){
+    Calendar.setup({
+				// Id of the input field
+				inputField: "member_date_of_birth",
+				// Format of the input field
+				ifFormat: "%d/%m/%Y",
+				// Trigger for the calendar (button ID)
+				button: "member_date_of_birth_img",
+				// Alignment (defaults to "Bl")
+				align: "Tl",
+				singleClick: true,
+				firstDay: 1
+    });
+     $$(".add_member").addEvent("click", function(){
+     id = new Date().getTime();
      el = $$(".group_member").pop().clone(true,true);
+     el.getElements("p.error").destroy();
      el.getElements("input").set("value","");
-     $("group_fidal_container").adopt(el); 
+     el.getElements("input.member_date_of_birth").set("id","i"+id);
+     el.getElements("img").set("id","b"+id);
+     $("group_fidal_container").adopt(el);
+     Calendar.setup({
+				// Id of the input field
+				inputField: "i"+id,
+				// Format of the input field
+				ifFormat: "%d/%m/%Y",
+				// Trigger for the calendar (button ID)
+				button: "b"+id,
+				// Alignment (defaults to "Bl")
+				align: "Tl",
+				singleClick: true,
+				firstDay: 1
+     });
      hide_show_remove();
      group_billing_amount();
      event_add_element();
@@ -66,8 +94,9 @@
          status = true;
          if ($("type_of_check").get("value") != "group_fidal") 
              return status;
+         console.log("HI");
          num_tes_coll=[];
-         $("registration").getElements("p").destroy();
+         $("group_fidal_container").getElements("p.error").destroy();
          input_coll = $("group_fidal_container").getElements("input");
          for (var i=0;i<input_coll.length;i++) {
              if(input_coll[i].get("value") == "") {
@@ -107,7 +136,7 @@
      event_add_element();
      $("group_fidal").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
-        $("registration").getElements("p").destroy();
+        $("registration").getElements("p.error").destroy();
         $("type_of_check").set("value","group_fidal");
         $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
@@ -131,7 +160,7 @@
     });
     $("other_ass").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
-        $("registration").getElements("p").destroy();
+        $("registration").getElements("p.error").destroy();
         $("type_of_check").set("value","other_ass");
         $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
@@ -155,7 +184,7 @@
     });
     $("amateur").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
-        $("registration").getElements("p").destroy();
+        $("registration").getElements("p.error").destroy();
         $("type_of_check").set("value","amateur");
         $("athlete_selectors").getElements("img").setStyle("display", "none");
         $(this).getElements("img").removeProperty("style");
@@ -178,10 +207,9 @@
         return false;
     });
     $("submit").addEvent("click", function(){
-         var status = check_empty_input ();
-         if (status == "true") {
+         var status = true; 
             $$("input.wrong_field").removeClass("wrong_field");
-            $("registration").getElements("p").destroy();
+            $("registration").getElements("p.error").destroy();
             new Request.JSON({
                async:false,
                url:$("registration").get("action")+"&submit=1&xhr=1&medical_certificate="+$("medical_certificate").get("value"),
@@ -198,10 +226,8 @@
 
                }
             }).send();
-            return status;
-        }
-        else
-            return false;
+        status = check_empty_input () && status;
+        return status;
     });
     function initFileUploads() {
 	var fakeFileUpload = document.createElement("a");
