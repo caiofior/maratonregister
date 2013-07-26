@@ -55,7 +55,7 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <input id="other_num_tes" name="other_num_tes" value ="" />
     <?php if (key_exists('other_num_tes', $errors)) echo '<p class="error">'.$errors['other_num_tes']['message'].'</p>';?>
     </fieldset>
-    <fieldset>
+    <fieldset id="date_of_birth_container">
     <label for="date_of_birth">Data di nascita</label>
     <?php echo JHTML::calendar($this->escape(""), 'date_of_birth', 'date_of_birth', '%d/%m/%Y'); ?>
     <?php if (key_exists('date_of_birth', $errors)) echo '<p class="error">'.$errors['date_of_birth']['message'].'</p>';?>
@@ -149,13 +149,13 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <legend>Componenti del gruppo</legend>
     <div>La quota di iscrizione è di <?php echo JComponentHelper::getParams('com_maratonregister')->get('maraton_amount','30'); ?> € a persona. </div>
     <div id="billing_group"></div>
-    <div ><a class="add_member" href="#">Aggiungi</a></div>
+    <div ><a class="add_member" href="#"><img title="Aggiungi" alt="Aggiungi" src="components/com_maratonregister/assets/images/plus.png"/></a></div>
     <div class="group_member">
-    <div class="remove_memeber_container" style="display: none;"><a class="remove_memeber" href="#">Rimuovi</a></div>
+    <div class="remove_memeber_container" style="display: none;"><a class="remove_memeber" href="#"><img title="Rimuovi" alt="Rimuovi" src="components/com_maratonregister/assets/images/minus.png"/></a></div>
     <label >N° Tessera Fidal</label>
     <input name="member_num_tes[]" value ="" />
     <label >Data di nascita</label>
-    <input class="member_date_of_birth" title="" name="member_date_of_birth[]" id="member_date_of_birth" value="" type="text"><img src="/maratoninadeiborghi.it/media/system/images/calendar.png" alt="**Calendario**" class="calendar" id="member_date_of_birth_img">
+    <input class="member_date_of_birth" title="" name="member_date_of_birth[]" id="member_date_of_birth" value="" type="text"><img src="media/system/images/calendar.png" alt="**Calendario**" class="calendar" id="member_date_of_birth_img">
     </div>
     </fieldset>
     <input type="submit" id="submit" name="submit" value="Registrati"/>

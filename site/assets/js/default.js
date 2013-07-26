@@ -21,6 +21,7 @@
         $("game_card_image").setStyle("display", "block");
         $("game_card_label").setStyle("display", "block");
         $("other_ass_card_label").setStyle("display", "none");
+        $("date_of_birth_container").setStyle("display", "block");
         return false;
     });
     /**
@@ -156,6 +157,7 @@
         $("game_card_image").setStyle("display", "block");
         $("game_card_label").setStyle("display", "block");
         $("other_ass_card_label").setStyle("display", "none");
+        $("date_of_birth_container").setStyle("display", "none");
         return false;
     });
     $("other_ass").addEvent("click", function(){
@@ -180,6 +182,7 @@
         $("game_card_image").setStyle("display", "none");
         $("game_card_label").setStyle("display", "none");
         $("other_ass_card_label").setStyle("display", "block");
+        $("date_of_birth_container").setStyle("display", "block");
         return false;
     });
     $("amateur").addEvent("click", function(){
@@ -204,6 +207,7 @@
         $("game_card_image").setStyle("display", "block");
         $("game_card_label").setStyle("display", "block");
         $("other_ass_card_label").setStyle("display", "none");
+        $("date_of_birth_container").setStyle("display", "block");
         return false;
     });
     $("submit").addEvent("click", function(){
@@ -216,12 +220,14 @@
                data: $("registration").toQueryString(),
                onSuccess: function (responseJSON) {
                    Object.each(responseJSON,function(object,id) {
-                       status = false;
-                       el = new Element("p");
-                       el.addClass("error");
-                       el.appendText(object.message);
-                       $(id).addClass("wrong_field");
-                       $(id).grab(el,"after");
+                       if (id != "group_fidal_container") {
+                        status = false;
+                        el = new Element("p");
+                        el.addClass("error");
+                        el.appendText(object.message);
+                        $(id).addClass("wrong_field");
+                        $(id).grab(el,"after");
+                       }
                    });
 
                }

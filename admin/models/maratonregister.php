@@ -69,9 +69,10 @@ class MaratonRegisterModelMaratonRegister extends JModelList
                             LOWER(email) LIKE "%'.strtolower($word).'%" OR
                             LOWER(phone) LIKE "%'.strtolower($word).'%" OR
                             LOWER(city) LIKE "%'.strtolower($word).'%" OR
-                            LOWER(num_tes) LIKE "%'.strtolower($word).'%" OR    
+                            LOWER(atlete.num_tes) LIKE "%'.strtolower($word).'%" OR    
                             pectoral LIKE "%'.strtolower($word).'%" OR
-                            date_of_birth LIKE "%'.strtolower($word).'%"
+                            date_of_birth LIKE "%'.strtolower($word).'%" OR
+                            LOWER(fidal_fella.denom) LIKE "%'.strtolower($word).'%"
                             ) '
                             , 'AND');
                     }

@@ -193,7 +193,7 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                                 $id = intval($db->loadResult());
 
                                 if ($id > 0) {
-                                    $this->errors['member_first_name']=array(
+                                    $this->errors['member_num_tes']=array(
                                      'message'=>'Sei già registrato alla '.$marathon_name.', contatta lo staff per eventuali problemi'
                                     );
                                 }
