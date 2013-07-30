@@ -95,7 +95,6 @@
          status = true;
          if ($("type_of_check").get("value") != "group_fidal") 
              return status;
-         console.log("HI");
          num_tes_coll=[];
          $("group_fidal_container").getElements("p.error").destroy();
          input_coll = $("group_fidal_container").getElements("input");
