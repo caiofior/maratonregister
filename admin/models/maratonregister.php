@@ -383,6 +383,8 @@ EOT;
                                     $data[$column] == 'NULL'
                                 )
                                 $values[$column]=$data[$column];
+                            else if ($column == 'num_tes')
+                                $values[$column]=$db->quote(strtoupper ($data[$column]));
                             else
                                 $values[$column]=$db->quote($data[$column]);
                             }
@@ -432,7 +434,7 @@ EOT;
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
             if ($data['num_tes'] != '') {
-                if (strlen($data['num_tes']) <> 8)
+                if (!preg_match('/^[a-zA_Z0-9]{8}$/',$data['num_tes']))
                   $errors['num_tes']=array(
                       'message'=>'Il numero tessera è errato'
                   );  

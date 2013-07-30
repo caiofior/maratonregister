@@ -111,7 +111,7 @@
                     status = false;
              }
              else if(input_coll[i].get("name") == "member_num_tes[]") {
-                 if(/^[0-9]{8}$/.test(input_coll[i].get("value")) == false) {
+                 if(/^[a-zA_Z0-9]{8}$/.test(input_coll[i].get("value")) == false) {
                     el = new Element("p");
                     el.addClass("error");
                     el.appendText("Numero di tessera errato");
@@ -231,7 +231,7 @@
 
                }
             }).send();
-        status = check_empty_input () && status;
+        status = (check_empty_input () == "true") && status;
         return status;
     });
     function initFileUploads() {

@@ -149,6 +149,8 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                                     $column == 'game_card_datetime'
                                 )
                                 $values[$column]=$data[$column];
+                            else if ($column == 'num_tes')
+                                $values[$column]=$db->quote(strtoupper($data[$column]));
                             else
                                 $values[$column]=$db->quote($data[$column]);
                         }
@@ -167,10 +169,10 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             foreach($data['member_num_tes'] as $key=>$value) {
                                 $member_values = $values;
                                 $member_data = $data;
-                                $member_data['num_tes']=$value;
-                                $member_values['num_tes']=$db->quote($value);
+                                $member_data['num_tes']=  strtoupper($value);
+                                $member_values['num_tes']=$db->quote(strtoupper($value));
                                 $member_values['date_of_birth']=$db->quote($this->parseDate($data['member_date_of_birth'][$key]));
-                                $member_values['id']=$this->generateKey($member_data);
+                                $member_values['id']=$db->quote($this->generateKey($member_data));
                                 if ($group_name == '') {
                                     
                                     $query = $db->getQuery(true);
@@ -375,7 +377,7 @@ EOT;
                 );
             }
             if ($data['num_tes'] != '') {
-                if (!preg_match('/^[0-9]{8}$/',$data['num_tes']))
+                if (!preg_match('/^[a-zA_Z0-9]{8}$/',$data['num_tes']))
                   $errors['num_tes']=array(
                       'message'=>'Il numero tessera è errato'
                   );  
@@ -437,7 +439,7 @@ EOT;
                        
                         if(!key_exists('group_fidal_container', $errors)) {
                             foreach($data['member_num_tes'] as $key=>$value) {
-                                if (!preg_match('/^[0-9]{8}$/', $value)) {
+                                if (!preg_match('/^[a-zA_Z0-9]{8}$/', $value)) {
                                     $errors['group_fidal_container']=array(
                                      'message'=>'Il numero di tessera '.$value.'non è valido.'
                                     );
