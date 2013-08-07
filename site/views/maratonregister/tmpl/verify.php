@@ -85,7 +85,7 @@ function format_date ($data) {
     <?php if (key_exists('payment_fname', $errors)) echo '<p class="error">'.$errors['medical_certificate']['message'].'</p>';?>
     </div>
     </fieldset>
-    <?php else : ?>
+    <?php elseif ($this->atlete->payment_datetime != '') : ?>
     <p class="confirmed">Abbiamo ricevuto il tuo pagamento il <?php echo format_date($this->atlete->payment_datetime); ?>.</p>
     <?php endif; ?>
     <?php if ($this->atlete->payment_confirm_datetime != '') :?>
