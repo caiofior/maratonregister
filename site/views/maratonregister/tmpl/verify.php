@@ -64,7 +64,7 @@ function format_date ($data) {
     </ul>
     <?php endif;?>
     <p class="confirmed">Ti sei registrato il <?php echo format_date($this->atlete->registration_datetime); ?> </p>
-    <?php if ( $this->atlete->payment_fname == '' ) :?>
+    <?php if ( $this->atlete->payment_fname == '' && $this->atlete->payment_confirm_datetime == '') :?>
     <p class="unconfirmed">Non è perventuo il tuo pagamento</p>
     <fieldset id="payment_type_updater">
     <legend>Modalità di pagamento</legend>
