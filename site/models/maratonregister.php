@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0.1
+ * @version 1.1
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0.1
+ * @version 1.1
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {

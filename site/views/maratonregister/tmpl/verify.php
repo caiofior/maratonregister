@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0.1
+ * @version 1.1
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -62,31 +62,9 @@ function format_date ($data) {
         </li>    
         <?php endforeach; ?>
     </ul>
-    <?php elseif ($this->atlete->group_reference_id != ''): ?>
-    <p>Fai parte di un gruppo, per eventuali problemi contatta il tuo referente:
-        <?php 
-                $db = JFactory::getDBO();
-                $query = $db->getQuery(true);
-                // Select some fields
-                $query->select('id,first_name,last_name,phone,email');
-                // From the hello table
-                $query->from('#__atlete')->where(' (id = '.$this->atlete->group_reference_id.') ');
-                $db->setQuery($query);
-                $db->query();
-                $member = $db->loadObject();
-        ?>
-        <?php echo $member->first_name; ?>
-        <?php echo $member->last_name; ?>
-        <?php if ($member->email != '') :?>
-        <br/>email: <?php echo $member->email; ?>
-        <?php endif; ?>
-        <?php if ($member->phone != '') :?>
-        <br/>telefono: <?php echo $member->phone; ?>
-        <?php endif; ?>
-    </p>
     <?php endif;?>
     <p class="confirmed">Ti sei registrato il <?php echo format_date($this->atlete->registration_datetime); ?> </p>
-    <?php if ($this->atlete->payment_fname == '') :?>
+    <?php if ( $this->atlete->payment_fname == '' ) :?>
     <p class="unconfirmed">Non è perventuo il tuo pagamento</p>
     <fieldset id="payment_type_updater">
     <legend>Modalità di pagamento</legend>
@@ -109,11 +87,11 @@ function format_date ($data) {
     </fieldset>
     <?php else : ?>
     <p class="confirmed">Abbiamo ricevuto il tuo pagamento il <?php echo format_date($this->atlete->payment_datetime); ?>.</p>
-    <?php if ($this->atlete->payment_confirm_datetime == '') :?>
-    <p class="info">Il tuo pagamento è in attesa di conferma.</p>
-    <?php else : ?>
-    <p class="confirmed">Il tuo pagamento è stato confermato il <?php echo format_date($this->atlete->payment_confirm_datetime); ?>.</p>
     <?php endif; ?>
+    <?php if ($this->atlete->payment_confirm_datetime != '') :?>
+    <p class="confirmed">Il tuo pagamento è stato confermato il <?php echo format_date($this->atlete->payment_confirm_datetime); ?>.</p>
+    <?php elseif ($this->atlete->payment_fname != '' ): ?>
+    <p class="info">Il tuo pagamento è in attesa di conferma.</p>
     <?php endif; ?>
     <?php if ($this->atlete->num_tes == '') : ?>
     <?php if ($this->atlete->medical_certificate_fname == '' ) :?>

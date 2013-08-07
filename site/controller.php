@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0.1
+ * @version 1.1
  */
 
 // No direct access to this file
@@ -13,7 +13,7 @@ jimport('joomla.application.component.controller');
 /**
  * Marathon register Component Controller
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.0.1
+ * @version 1.1
  */
 class MaratonRegisterController extends JController
 {
