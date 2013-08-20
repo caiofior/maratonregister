@@ -24,10 +24,10 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
 <a id="group_fidal" href="?option=com_maratonregister" title="Gruppo tesserati FIDAL">
     <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/group_fidal.png" width="175" height="68" alt="Gruppo tesserati FIDAL"/>
 </a>
-<a id="other_ass" href="?option=com_maratonregister" title="Società riconosciute FIDAL">
+<a id="other_ass" href="?option=com_maratonregister" title="Tesserati enti di promozione riconosciuti FIDAL sopra i 35 anni">
     <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/altra_societa.png" width="175" height="68" alt="Società riconosciute FIDAL"/>
 </a>
-<a id="amateur" href="?option=com_maratonregister" title="Non tesserati FIDAL e altra federazione non FIDAL">
+<a id="amateur" href="?option=com_maratonregister" title="Enti di promozione riconosciuti FIDAL al di sotto dei 35 anni">
     <img style="opacity:0.6; filter:alpha(opacity=40); " src="components/com_maratonregister/images/amatore.png" width="175" height="68" alt="Non tesserati FIDAL e altra federazione non FIDAL"/>
 </a>
 </div>
@@ -126,11 +126,15 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <fieldset id="payment_type_container">
     <legend>Modalità di pagamento</legend>
     <label for="bank_transfer">Bonifico bancario</label>
-    <input type="radio" id="bank_transfer" name="payment_type" value ="bank_transfer" />
+    <input class="payment_type iban" type="radio" id="bank_transfer" name="payment_type" value ="bank_transfer" />
     <label for="money_order">Bollettino postale</label>
-    <input type="radio" id="money_order" name="payment_type" value ="money_order" />
+    <input class="payment_type" type="radio" id="money_order" name="payment_type" value ="money_order" />
     <label for="paypal">Paypal</label>
-    <input type="radio" id="paypal" name="payment_type" value="paypal" />
+    <input class="payment_type" type="radio" id="paypal" name="payment_type" value="paypal" />
+    <label for="other">Altro</label>
+    <input class="payment_type" type="radio" id="other" name="payment_type" value="other" />
+    <?php $iban = JComponentHelper::getParams('com_maratonregister')->get('maraton_iban'); ?>
+    <div id="iban_code" style="display:none"><?php if ($iban != '') : ?>Il pagamento tramite bonifico va fatto sul conto con coordinate IBAN : <?php echo $iban;?><?php endif; ?></div>
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
     <div>
     <label for="payment_fname">Allega la ricevuta di pagamento</label>

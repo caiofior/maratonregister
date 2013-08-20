@@ -29,5 +29,12 @@
                         default="30"
                 >
                 </field>
+                <field
+                        name="maraton_iban"
+                        type="text"
+                        label="Codice IBAN"
+                        description="Codice IBAN"
+                >
+                </field>
         </fieldset>
 </config>

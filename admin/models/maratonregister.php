@@ -242,6 +242,8 @@ EOT;
                     }
             else if (is_null($data['medical_certificate_confirm_datetime']))
                 $data['medical_certificate_confirm_datetime']='NULL';
+            else 
+                $data['payment_confirm_datetime']=$atlete->medical_certificate_confirm_datetime;
             
             if (
                     $data['payment_confirm_datetime'] == 1 &&
@@ -268,6 +270,8 @@ EOT;
                }
             else if (is_null($data['payment_confirm_datetime']))
                 $data['payment_confirm_datetime']='NULL';
+            else 
+                $data['payment_confirm_datetime']=$atlete->payment_confirm_datetime;
             
             if (
                     $atlete->num_tes != '' && 
@@ -293,8 +297,9 @@ EOT;
                         $mailer->Send();
                         }
                     }
-            else 
-                unset ($data['num_tes_datetime_confirmed']);
+            else
+                 $data['num_tes_datetime_confirmed']=$atlete->num_tes_datetime_confirmed;
+
             if (
                     $atlete->pectoral == '' && 
                     $data['pectoral'] != '' &&
@@ -398,18 +403,14 @@ EOT;
                     foreach ($data as $column=>$value) {
                         if (!in_array($column, $columns) ) continue;
                         if (
-                                    $column == 'registration_datetime' ||
-                                    $column == 'medical_certificate_datetime' ||
-                                    $column == 'medical_certificate_confirm_datetime' ||
-                                    $column == 'num_tes_datetime_confirmed' ||
-                                    $column == 'payment_confirm_datetime' ||
+                                    $data[$column] == 'NOW()' ||
                                     $data[$column] == 'NULL'
                                 )
                             $query->set($db->quoteName($column).' = '.$value);
                         else
                             $query->set($db->quoteName($column).' = '.$db->quote($value));
                     }
-                    $query->where('id='.$db->quote($atlete->id));
+                    $query->where('removed <> 1 AND id='.$db->quote($atlete->id));
                     $db->setQuery($query);
                     $db->query();
                 }

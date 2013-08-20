@@ -209,6 +209,13 @@
         $("date_of_birth_container").setStyle("display", "block");
         return false;
     });
+    $$(".payment_type").addEvent("click", function(){
+        if ($(this).hasClass("iban"))
+            $("iban_code").setStyle("display", "block");
+        else
+            $("iban_code").setStyle("display", "none");
+    });
+
     $("submit").addEvent("click", function(){
          var status = true; 
             $$("input.wrong_field").removeClass("wrong_field");
