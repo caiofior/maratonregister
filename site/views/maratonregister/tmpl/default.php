@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -97,7 +97,7 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
         </a>
 
         
-        <label for="medical_certificate">Carica il tuo Certificato Medico</label>
+        <label for="medical_certificate">Allega il tuo Certificato Medico</label>
         <div class="fileinputs">
             <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
         </div>
@@ -117,7 +117,7 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
             <img width="100" hight="142" src ="components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
         </a>
     </div>
-    <label for="game_card_fname"><span id="game_card_label">Carica il tuo cartellino di partecipazione compilato</span><span id="other_ass_card_label" style="display: none;">Copia della tessera societaria</span></label>
+    <label for="game_card_fname"><span id="game_card_label">Allega il tuo cartellino di partecipazione compilato</span><span id="other_ass_card_label" style="display: none;">Copia della tessera societaria</span></label>
     <div class="fileinputs">
         <input class="file" type="file" id="game_card_fname" name="game_card_fname" value ="" />
     </div>
@@ -133,7 +133,7 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <input type="radio" id="paypal" name="payment_type" value="paypal" />
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
     <div>
-    <label for="payment_fname">Carica la ricevuta di pagamento</label>
+    <label for="payment_fname">Allega la ricevuta di pagamento</label>
     <div class="fileinputs">
         <input class="file" type="file" id="payment_fname" name="payment_fname" value ="" />
     </div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -78,7 +78,7 @@ function format_date ($data) {
     <label for="paypal">Paypal</label>
     <input <?php echo $disabled;?> <?php echo ($this->atlete->payment_type == 'paypal' ? 'checked="checked"' : ''); ?> type="radio" id="paypal" name="payment_type" value="paypal" />
     <div>
-    <label for="payment_fname">Carica la ricevuta di pagamento</label>
+    <label for="payment_fname">Allega la ricevuta di pagamento</label>
     <div class="fileinputs">
         <input class="file" type="file" id="payment_fname" name="payment_fname" value ="" />
     </div>
@@ -103,7 +103,7 @@ function format_date ($data) {
             <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Autocertificazione buona salute per atleti stranieri" style="float: left;"/>
         </a>
     </div>
-    <label for="medical_certificate">Carica il tuo Certificato Medico</label>
+    <label for="medical_certificate">Allega il tuo Certificato Medico</label>
     <div class="fileinputs">
         <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
     </div>
@@ -128,7 +128,7 @@ function format_date ($data) {
             <img width="100" hight="142" src ="components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
         </a>
     </div>
-    <label for="game_card_fname">Carica il tuo cartellino di partecipazione compilato</label>
+    <label for="game_card_fname">Allega il tuo cartellino di partecipazione compilato</label>
     <div class="fileinputs">
         <input class="file" type="file" id="game_card_fname" name="game_card_fname" value ="" />
     </div>

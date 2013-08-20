@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 
 // No direct access to this file
@@ -14,7 +14,7 @@ jimport('joomla.application.component.modelitem');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 class MaratonRegisterModelMaratonRegister extends JModelItem
 {
@@ -143,10 +143,8 @@ class MaratonRegisterModelMaratonRegister extends JModelItem
                             if (!key_exists($column, $data)) 
                                 continue;
                             if (
-                                    $column == 'registration_datetime' ||
-                                    $column == 'medical_certificate_datetime' ||
-                                    $column == 'payment_datetime' ||
-                                    $column == 'game_card_datetime'
+                                    $data[$column] == 'NOW()' ||
+                                    $data[$column] == 'NULL'
                                 )
                                 $values[$column]=$data[$column];
                             else if ($column == 'num_tes')

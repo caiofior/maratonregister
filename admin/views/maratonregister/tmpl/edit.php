@@ -206,6 +206,8 @@ JHtml::_('behavior.tooltip');
     <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'money_order' ? 'checked="checked"' : ''); ?> type="radio" id="money_order" name="payment_type" value ="money_order" />
     <label for="paypal">Paypal</label>
     <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'paypal' ? 'checked="checked"' : ''); ?> type="radio" id="paypal" name="payment_type" value="paypal" />
+    <label for="other">Altro</label>
+    <input <?php echo $disabled;?> <?php echo ($this->item->payment_type == 'other' ? 'checked="checked"' : ''); ?> type="radio" id="other" name="payment_type" value="other" />
     
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
     <?php

@@ -2,7 +2,7 @@
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -11,7 +11,7 @@ jimport('joomla.application.component.modellist');
 /**
  * Maraton Register Model
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 class MaratonRegisterModelMaratonRegister extends JModelList
 {
@@ -373,13 +373,7 @@ EOT;
                                 $values[$column]='NULL';
                             } else {
                             if (
-                                    $column == 'registration_datetime' ||
-                                    $column == 'medical_certificate_datetime' ||
-                                    $column == 'medical_certificate_confirm_datetime' ||
-                                    $column == 'num_tes_datetime_confirmed' ||
-                                    $column == 'payment_datetime' ||
-                                    $column == 'payment_confirm_datetime' ||
-                                    $column == 'game_card_datetime' ||
+                                    $data[$column] == 'NOW()' ||
                                     $data[$column] == 'NULL'
                                 )
                                 $values[$column]=$data[$column];

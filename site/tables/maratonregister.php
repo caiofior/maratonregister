@@ -2,7 +2,7 @@
 /**
  * Maraton Register Table
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 // No direct access
 defined('_JEXEC') or die('Restricted access');
@@ -13,7 +13,7 @@ jimport('joomla.database.table');
 /**
  * Maraton Register Table
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 1.1
+ * @version 1.2
  */
 class MaratonRegisterTableMaratonRegister extends JTable
 {
