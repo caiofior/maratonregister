@@ -128,13 +128,17 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <label for="bank_transfer">Bonifico bancario</label>
     <input class="payment_type iban" type="radio" id="bank_transfer" name="payment_type" value ="bank_transfer" />
     <label for="money_order">Bollettino postale</label>
-    <input class="payment_type" type="radio" id="money_order" name="payment_type" value ="money_order" />
+    <input class="payment_type money_transfer" type="radio" id="money_order" name="payment_type" value ="money_order" />
     <label for="paypal">Paypal</label>
-    <input class="payment_type" type="radio" id="paypal" name="payment_type" value="paypal" />
+    <input class="payment_type paypal" type="radio" id="paypal" name="payment_type" value="paypal" />
     <label for="other">Altro</label>
     <input class="payment_type" type="radio" id="other" name="payment_type" value="other" />
     <?php $iban = JComponentHelper::getParams('com_maratonregister')->get('maraton_iban'); ?>
-    <div id="iban_code" style="display:none"><?php if ($iban != '') : ?>Il pagamento tramite bonifico va fatto sul conto con coordinate IBAN : <?php echo $iban;?><?php endif; ?></div>
+    <div id="iban_code" class="payment_code" style="display:none"><?php if ($iban != '') : ?>Il pagamento tramite bonifico va fatto sul conto con coordinate IBAN : <?php echo $iban;?><?php endif; ?></div>
+    <?php $mt = JComponentHelper::getParams('com_maratonregister')->get('maraton_mt'); ?>
+    <div id="mt_code" class="payment_code" style="display:none"><?php if ($mt != '') : ?>Il pagamento tramite Bollettino postale va fatto sul conto con coordinate : <?php echo $mt;?><?php endif; ?></div>
+    <?php $paypal = JComponentHelper::getParams('com_maratonregister')->get('maraton_paypal'); ?>
+    <div id="paypal_code" class="payment_code" style="display:none"><?php if ($paypal != '') : ?>Il pagamento tramite Paypal va fatto all'indirizzo : <?php echo $paypal;?><?php endif; ?></div>
     <?php if (key_exists('payment_type', $errors)) echo '<p class="error">'.$errors['payment_type']['message'].'</p>';?>
     <div>
     <label for="payment_fname">Allega la ricevuta di pagamento</label>

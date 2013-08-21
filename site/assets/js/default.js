@@ -210,10 +210,13 @@
         return false;
     });
     $$(".payment_type").addEvent("click", function(){
+        $$(".payment_code").setStyle("display", "none");
         if ($(this).hasClass("iban"))
             $("iban_code").setStyle("display", "block");
-        else
-            $("iban_code").setStyle("display", "none");
+        else if ($(this).hasClass("money_transfer"))
+            $("mt_code").setStyle("display", "block");
+        else if ($(this).hasClass("paypal"))
+            $("paypal_code").setStyle("display", "block");
     });
 
     $("submit").addEvent("click", function(){
