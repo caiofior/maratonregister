@@ -375,7 +375,7 @@ EOT;
                 );
             }
             if ($data['num_tes'] != '') {
-                if (!preg_match('/^[a-zA_Z0-9]{8}$/',$data['num_tes']))
+                if (!preg_match('/^[a-zA-Z0-9]{8}$/',$data['num_tes']))
                   $errors['num_tes']=array(
                       'message'=>'Il numero tessera è errato'
                   );  
@@ -437,7 +437,7 @@ EOT;
                        
                         if(!key_exists('group_fidal_container', $errors)) {
                             foreach($data['member_num_tes'] as $key=>$value) {
-                                if (!preg_match('/^[a-zA_Z0-9]{8}$/', $value)) {
+                                if (!preg_match('/^[a-zA-Z0-9]{8}$/', $value)) {
                                     $errors['group_fidal_container']=array(
                                      'message'=>'Il numero di tessera '.$value.'non è valido.'
                                     );

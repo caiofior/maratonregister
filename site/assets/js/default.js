@@ -111,7 +111,7 @@
                     status = false;
              }
              else if(input_coll[i].get("name") == "member_num_tes[]") {
-                 if(/^[a-zA_Z0-9]{8}$/.test(input_coll[i].get("value")) == false) {
+                 if(/^[a-zA-Z0-9]{8}$/.test(input_coll[i].get("value")) == false) {
                     el = new Element("p");
                     el.addClass("error");
                     el.appendText("Numero di tessera errato");
