@@ -429,7 +429,7 @@ EOT;
             foreach ($data as $key=>$value)
                 $data[$key]=  preg_replace('/[ ]+/',' ',trim ($value));
             if ($data['num_tes'] != '') {
-                if (!preg_match('/^[a-zA_Z0-9]{8}$/',$data['num_tes']))
+                if (!preg_match('/^[a-zA-Z0-9]{8}$/',$data['num_tes']))
                   $errors['num_tes']=array(
                       'message'=>'Il numero tessera è errato'
                   );  

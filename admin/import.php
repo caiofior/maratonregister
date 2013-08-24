@@ -76,6 +76,8 @@ while (($row = fgetcsv($file, 1000, ';')) !== false) {
                 $key_name == 'dat_nas'
             ) {
             $day = strptime($data,'%d/%m/%Y');
+            if ($day['tm_year'] < 0)
+                $day['tm_year'] += 1900;
             $day = mktime(0, 0, 0, $day['tm_mon']+1, $day['tm_mday'], $day['tm_year']+1900);
             $values[$key]=  '"'.addslashes(strftime('%Y-%m-%d', $day)).'"';
             

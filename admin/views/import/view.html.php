@@ -13,7 +13,7 @@ jimport('joomla.application.component.view');
 /**
  * Fidal View
  * @author Claudio Fior <caiofior@gmail.com>
- * @version 0.10
+ * @version 1.2
  */
 class MaratonRegisterViewImport extends JView
 {
