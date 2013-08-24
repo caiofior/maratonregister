@@ -19,8 +19,8 @@
         $("group_fidal_container").setStyle("display", "none");
         $("health_form_image").setStyle("display", "block");
         $("game_card_image").setStyle("display", "block");
-        $("game_card_label").setStyle("display", "block");
-        $("other_ass_card_label").setStyle("display", "none");
+        $$(".game_card_label").setStyle("display", "block");
+        $$(".other_ass_card_label").setStyle("display", "none");
         $("date_of_birth_container").setStyle("display", "block");
         return false;
     });
@@ -154,8 +154,8 @@
         $("group_fidal_container").setStyle("display", "block");
         $("health_form_image").setStyle("display", "block");
         $("game_card_image").setStyle("display", "block");
-        $("game_card_label").setStyle("display", "block");
-        $("other_ass_card_label").setStyle("display", "none");
+        $$(".game_card_label").setStyle("display", "block");
+        $$(".other_ass_card_label").setStyle("display", "none");
         $("date_of_birth_container").setStyle("display", "none");
         return false;
     });
@@ -179,8 +179,8 @@
         $("group_fidal_container").setStyle("display", "none");
         $("health_form_image").setStyle("display", "none");
         $("game_card_image").setStyle("display", "none");
-        $("game_card_label").setStyle("display", "none");
-        $("other_ass_card_label").setStyle("display", "block");
+        $$(".game_card_label").setStyle("display", "none");
+        $$(".other_ass_card_label").setStyle("display", "block");
         $("date_of_birth_container").setStyle("display", "block");
         return false;
     });
@@ -204,8 +204,8 @@
         $("group_fidal_container").setStyle("display", "none");
         $("health_form_image").setStyle("display", "block");
         $("game_card_image").setStyle("display", "block");
-        $("game_card_label").setStyle("display", "block");
-        $("other_ass_card_label").setStyle("display", "none");
+        $$(".game_card_label").setStyle("display", "block");
+        $$(".other_ass_card_label").setStyle("display", "none");
         $("date_of_birth_container").setStyle("display", "block");
         return false;
     });
@@ -255,6 +255,13 @@
 		if (x[i].type != "file") continue;
 		if (x[i].parentNode.className != "fileinputs") continue;
 		var clone = fakeFileUpload.cloneNode(true);
+                label = $(document.body).getElements("label[for="+x[i].get("id")+"]");
+                label_text = label.get("html");
+                
+                if (label_text != "") {
+                    label.setStyle("display", "none");
+                    clone.getElementsByTagName("span")[0].innerHTML = label_text;
+                }
                 x[i].setAttribute("style","display:none;");
 		x[i].parentNode.appendChild(clone);
                 clone.onclick = function () {

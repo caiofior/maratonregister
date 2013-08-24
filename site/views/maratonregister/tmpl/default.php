@@ -117,7 +117,7 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
             <img width="100" hight="142" src ="components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
         </a>
     </div>
-    <label for="game_card_fname"><span id="game_card_label">Allega il tuo cartellino di partecipazione compilato</span><span id="other_ass_card_label" style="display: none;">Copia della tessera societaria</span></label>
+    <label for="game_card_fname"><span class="game_card_label">Allega il tuo cartellino di partecipazione compilato</span><span class="other_ass_card_label" style="display: none;">Copia della tessera societaria</span></label>
     <div class="fileinputs">
         <input class="file" type="file" id="game_card_fname" name="game_card_fname" value ="" />
     </div>

@@ -7,7 +7,7 @@ $config_file = dirname(__FILE__).DIRECTORY_SEPARATOR.
         '..'.DIRECTORY_SEPARATOR.
         'configuration.php';
 if (!is_file($config_file)) 
-    $config_file = '/home/caiofior/public_html/maratoninadeiborghi.it.master/configuration.php';
+    $config_file = '/home/caiofior/public_html/maratoninadeiborghi.it/configuration.php';
     
 require ($config_file);
 
