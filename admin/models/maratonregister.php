@@ -272,7 +272,10 @@ EOT;
                 $data['payment_confirm_datetime']='NULL';
             else 
                 $data['payment_confirm_datetime']=$atlete->payment_confirm_datetime;
-            
+            if (is_null($data['num_tes_datetime_confirmed']))
+                $data['num_tes_datetime_confirmed']='NULL';
+            else 
+                $data['num_tes_datetime_confirmed']=$atlete->num_tes_datetime_confirmed;
             if (
                     $atlete->num_tes != '' && 
                     $atlete->date_of_birth == '' &&
@@ -297,8 +300,7 @@ EOT;
                         $mailer->Send();
                         }
                     }
-            else
-                 $data['num_tes_datetime_confirmed']=$atlete->num_tes_datetime_confirmed;
+            
 
             if (
                     $atlete->pectoral == '' && 
@@ -324,6 +326,7 @@ EOT;
                 
             if ($data['pectoral'] == '' || $data['pectoral'] == 0)
                 $data['pectoral']='NULL';
+
 
             if (sizeof($this->errors) == 0) {
                                 $columns = array(
