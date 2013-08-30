@@ -92,8 +92,8 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <fieldset id="medical_certificate_container">
     
     <div>
-        <a id="health_form_image" href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
-            <img width="100" hight="142" src ="components/com_maratonregister/images/health_form.jpg" alt="Autocertificazione buona salute per atleti stranieri" style="float: left;"/>
+        <a id="health_form_image" href="<?php echo JURI::root(); ?>components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
+            <img width="100" hight="142" src ="<?php echo JURI::root(); ?>components/com_maratonregister/images/health_form.jpg" alt="Autocertificazione buona salute per atleti stranieri" style="float: left;"/>
         </a>
 
         
@@ -102,7 +102,7 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
             <input class="file" type="file" id="medical_certificate" name="medical_certificate" value ="" />
         </div>
         <br/>
-        <a href="components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
+        <a href="<?php echo JURI::root(); ?>components/com_maratonregister/images/health_form.pdf" class="targetblank" title="Autocertificazione buona salute per atleti stranieri">
             Autocertificazione buona salute per atleti stranieri
         </a>
 
@@ -112,9 +112,9 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     </fieldset>
     <fieldset id="game_card_container">
     <div>
-        <a id="game_card_image" href="components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
+        <a id="game_card_image" href="<?php echo JURI::root(); ?>components/com_maratonregister/images/game_card.pdf" class="targetblank" title="Cartellino di partecipazione gare su strada">
             Cartellino di partecipazione gare su strada
-            <img width="100" hight="142" src ="components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
+            <img width="100" hight="142" src ="<?php echo JURI::root(); ?>components/com_maratonregister/images/game_card.jpg" alt="Cartellino di partecipazione gare su strada" style="float: left;"/>
         </a>
     </div>
     <label for="game_card_fname"><span class="game_card_label">Allega il tuo cartellino di partecipazione compilato</span><span class="other_ass_card_label" style="display: none;">Copia della tessera societaria</span></label>
