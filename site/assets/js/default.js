@@ -1,4 +1,4 @@
-    $(document.body).getElements("a.targetblank").setProperty("target","_blank");
+﻿    $(document.body).getElements("a.targetblank").setProperty("target","_blank");
     $("fidal").addEvent("click", function(){
         $$("input.wrong_field").removeClass("wrong_field");
         $("registration").getElements("p.error").destroy();
@@ -92,7 +92,7 @@
       * @returns {Boolean}
       */
      function check_empty_input () {
-         status = true;
+        status = true;
          if ($("type_of_check").get("value") != "group_fidal") 
              return status;
          num_tes_coll=[];
@@ -241,7 +241,8 @@
 
                }
             }).send();
-        status = (check_empty_input () == "true") && status;
+        input_status = check_empty_input ();
+        status = (input_status == "true" || check_empty_input () == "") && status;
         return status;
     });
     function initFileUploads() {
