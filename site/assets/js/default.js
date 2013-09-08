@@ -246,11 +246,9 @@
         return status;
     });
     function initFileUploads() {
-	var fakeFileUpload = document.createElement("a");
-        fakeFileUpload.setAttribute("href","#");
-        container = document.createElement("span");
-        container.innerHTML = "Scegli il documento";
-        fakeFileUpload.appendChild(container);
+	var fakeFileUpload = document.getElementById("uploader-template").cloneNode(true);
+        fakeFileUpload.setStyle("display", "block");
+        console.log(fakeFileUpload)
 	var x = document.getElementsByTagName("input");
 	for (var i=0;i<x.length;i++) {
 		if (x[i].type != "file") continue;

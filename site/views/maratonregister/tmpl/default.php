@@ -166,6 +166,7 @@ var maraton_amount = <?php echo JComponentHelper::getParams('com_maratonregister
     <input class="member_date_of_birth" title="" name="member_date_of_birth[]" id="member_date_of_birth" value="" type="text"><img src="media/system/images/calendar.png" alt="**Calendario**" class="calendar" id="member_date_of_birth_img">
     </div>
     </fieldset>
+    <a id="uploader-template" style="display:none;" href="#"><span>Scegli il documento</span></a>
     <input type="submit" id="submit" name="submit" value="Registrati"/>
     </form>
     <br/>
