@@ -248,7 +248,6 @@
     function initFileUploads() {
 	var fakeFileUpload = document.getElementById("uploader-template").cloneNode(true);
         fakeFileUpload.setStyle("display", "block");
-        console.log(fakeFileUpload)
 	var x = document.getElementsByTagName("input");
 	for (var i=0;i<x.length;i++) {
 		if (x[i].type != "file") continue;
